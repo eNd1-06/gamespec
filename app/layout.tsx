@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     template: "%s | GameSpec",
   },
   description: "重さ・センサー・接続方式・価格でゲーミングマウスを絞り込める日本語データベース。APEXやFPS向けのデバイス選びに。",
+  verification: {
+    google: "X6orpG-UcJpIZWQ8kOvac6XrXv7_GocQWCtvzKjtPw0",
+  },
   openGraph: {
     siteName: "GameSpec",
     locale: "ja_JP",
