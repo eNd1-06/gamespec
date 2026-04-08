@@ -9,6 +9,27 @@ import { controllers } from "@/data/controllers";
 import { earphones } from "@/data/earphones";
 import { chairs } from "@/data/chairs";
 
+// 各カテゴリの総合1位を算出
+function mouseScore(m: (typeof mice)[0]) {
+  return (Math.max(0, (120 - m.weight) / 80) * 30) + (Math.min(m.pollingRate / 8000, 1) * 20) + (Math.max(0, (30000 - m.price) / 30000) * 30) + (m.releaseYear >= 2024 ? 20 : m.releaseYear >= 2023 ? 12 : 6);
+}
+function monitorScore(m: (typeof monitors)[0]) {
+  return (Math.min(m.refreshRate / 390, 1) * 35) + (m.resolution === "4K" ? 20 : m.resolution === "1440p" ? 15 : 8) + (Math.max(0, (150000 - m.price) / 150000) * 25) + (m.panelType === "QD-OLED" || m.panelType === "OLED" ? 15 : 10) + (m.releaseYear >= 2024 ? 5 : 3);
+}
+function keyboardScore(k: (typeof keyboards)[0]) {
+  return (Math.min(k.pollingRate / 8000, 1) * 30) + (Math.max(0, (50000 - k.price) / 50000) * 30) + (k.hotswap ? 15 : 0) + (k.wireless ? 15 : 0) + (k.releaseYear >= 2024 ? 10 : 5);
+}
+function headsetScore(h: (typeof headsets)[0]) {
+  return (Math.max(0, (400 - h.weight) / 350) * 30) + (Math.max(0, (50000 - h.price) / 50000) * 25) + (h.connection !== "wired" ? 20 : 0) + (h.anc ? 15 : 0) + (h.releaseYear >= 2024 ? 10 : 5);
+}
+
+const rankingPicks = [
+  { ...([...mice].sort((a, b) => mouseScore(b) - mouseScore(a))[0]), category: "ゲーミングマウス", href: "/mice/ranking", listHref: "/mice" },
+  { ...([...monitors].sort((a, b) => monitorScore(b) - monitorScore(a))[0]), category: "ゲーミングモニター", href: "/monitors/ranking", listHref: "/monitors" },
+  { ...([...keyboards].sort((a, b) => keyboardScore(b) - keyboardScore(a))[0]), category: "キーボード", href: "/keyboards/ranking", listHref: "/keyboards" },
+  { ...([...headsets].sort((a, b) => headsetScore(b) - headsetScore(a))[0]), category: "ヘッドセット", href: "/headsets/ranking", listHref: "/headsets" },
+];
+
 const CATEGORIES = [
   { href: "/mice", icon: "🖱️", label: "ゲーミングマウス", desc: "重さ・センサー・接続方式・価格で絞り込み", count: mice.length },
   { href: "/monitors", icon: "🖥️", label: "ゲーミングモニター", desc: "Hz・解像度・パネル・価格で絞り込み", count: monitors.length },
@@ -56,6 +77,30 @@ export default function Home() {
               <p className="text-xs text-gray-500">{cat.desc}</p>
             </Link>
           ))}
+        </div>
+
+        {/* カテゴリ別おすすめ1位 */}
+        <div className="mb-12 text-left">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-gray-300">🏆 カテゴリ別おすすめ1位</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {rankingPicks.map((pick) => (
+              <Link
+                key={pick.href}
+                href={pick.href}
+                className="bg-gray-900 border border-gray-800 hover:border-yellow-500 rounded-xl p-3 transition-all group"
+              >
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-xs bg-yellow-600 text-white px-1.5 py-0.5 rounded font-bold">1位</span>
+                  <span className="text-xs text-gray-500">{pick.category}</span>
+                </div>
+                <p className="text-xs text-gray-400 mb-0.5">{pick.brand}</p>
+                <p className="text-xs font-bold text-white group-hover:text-yellow-400 leading-tight mb-1">{pick.name}</p>
+                <p className="text-xs text-gray-500 group-hover:text-yellow-500">ランキングを見る →</p>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* 新着・注目製品 */}
