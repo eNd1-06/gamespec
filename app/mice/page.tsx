@@ -16,6 +16,7 @@ export default function MicePage() {
   const [shape, setShape] = useState<Shape | "all">("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight">("price");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // URLパラメータを読み込む（マウント時）
   useEffect(() => {
@@ -63,7 +64,7 @@ export default function MicePage() {
   return (
     <div className="min-h-screen">
       {/* ヘッダー */}
-      <header className="border-b border-gray-800 bg-gray-900">
+      <header className="border-b border-gray-800 bg-gray-900 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
           <Link href="/" className="text-gray-400 hover:text-white text-sm">← GameSpec</Link>
           <span className="text-gray-700">|</span>
@@ -80,8 +81,8 @@ export default function MicePage() {
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* フィルターパネル */}
-        <aside className="w-full lg:w-56 shrink-0">
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-5 sticky top-4">
+        <aside className={`w-full lg:w-56 shrink-0 ${isFilterOpen ? "block" : "hidden"} lg:block`}>
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-5 lg:sticky lg:top-16">
             <h2 className="text-sm font-bold text-gray-300">絞り込み</h2>
 
             {/* 重さ */}
@@ -212,6 +213,15 @@ export default function MicePage() {
 
         {/* メインコンテンツ */}
         <main className="flex-1 min-w-0">
+          {/* モバイル用フィルタートグル */}
+          <div className="lg:hidden mb-4">
+            <button onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="w-full flex items-center justify-between bg-gray-900 border border-gray-700 text-gray-300 text-sm rounded-xl px-4 py-2.5">
+              <span>{isFilterOpen ? "▲ フィルターを閉じる" : "▼ 絞り込みフィルター"}</span>
+              <span className="text-xs text-gray-500">{filtered.length}件</span>
+            </button>
+          </div>
+
           {/* 検索バー */}
           <div className="mb-4">
             <input
@@ -248,7 +258,11 @@ export default function MicePage() {
           {/* マウス一覧 */}
           {filtered.length === 0 ? (
             <div className="text-center py-20 text-gray-500">
-              条件に一致するマウスが見つかりません
+              <p>条件に一致するマウスが見つかりません</p>
+              <button onClick={() => { setMaxWeight(120); setConnection("all"); setMaxPrice(30000); setGameTag("all"); setSensor("all"); setShape("all"); setSearch(""); }}
+                className="mt-3 text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-4 py-1.5">
+                フィルターをリセット
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -256,7 +270,7 @@ export default function MicePage() {
                 <Link
                   key={mouse.slug}
                   href={`/mice/${mouse.slug}`}
-                  className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group"
+                  className="bg-gray-900 border border-gray-800 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 rounded-xl p-4 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
