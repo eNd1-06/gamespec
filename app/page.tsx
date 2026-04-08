@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-white mb-3">GameSpec</h1>
         <p className="text-gray-400 mb-10 text-lg">スペックで絞り込む、ゲーミングデバイスDB</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link
             href="/mice"
             className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
@@ -24,6 +24,15 @@ export default function Home() {
             <div className="text-3xl mb-3">🖥️</div>
             <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングモニター</h2>
             <p className="text-sm text-gray-500">Hz・解像度・パネル・価格で絞り込み</p>
+          </Link>
+
+          <Link
+            href="/keyboards"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">⌨️</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングキーボード</h2>
+            <p className="text-sm text-gray-500">スイッチ・サイズ・無線・価格で絞り込み</p>
           </Link>
         </div>
       </div>
