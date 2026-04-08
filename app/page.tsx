@@ -17,12 +17,14 @@ export default function Home() {
             <p className="text-sm text-gray-500">重さ・センサー・接続方式・価格で絞り込み</p>
           </Link>
 
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-left opacity-40 cursor-not-allowed">
+          <Link
+            href="/monitors"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
             <div className="text-3xl mb-3">🖥️</div>
-            <h2 className="text-lg font-bold text-white mb-1">ゲーミングモニター</h2>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングモニター</h2>
             <p className="text-sm text-gray-500">Hz・解像度・パネル・価格で絞り込み</p>
-            <span className="text-xs text-gray-600 mt-2 block">近日公開</span>
-          </div>
+          </Link>
         </div>
       </div>
     </main>
