@@ -12,6 +12,7 @@ export default function HeadsetPage() {
   const [tag, setTag] = useState<HeadsetTag | "all">("all");
   const [ancOnly, setAncOnly] = useState(false);
   const [wirelessOnly, setWirelessOnly] = useState(false);
+  const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight" | "battery">("price");
 
   const filtered = useMemo(() => {
@@ -23,6 +24,7 @@ export default function HeadsetPage() {
         if (tag !== "all" && !h.recommendFor.includes(tag)) return false;
         if (ancOnly && !h.anc) return false;
         if (wirelessOnly && h.connection === "wired") return false;
+        if (search && !h.name.toLowerCase().includes(search.toLowerCase()) && !h.brand.toLowerCase().includes(search.toLowerCase())) return false;
         return true;
       })
       .sort((a, b) => {
@@ -30,7 +32,7 @@ export default function HeadsetPage() {
         if (sortBy === "weight") return a.weight - b.weight;
         return (b.batteryLife ?? 0) - (a.batteryLife ?? 0);
       });
-  }, [maxPrice, maxWeight, connection, tag, ancOnly, wirelessOnly, sortBy]);
+  }, [maxPrice, maxWeight, connection, tag, ancOnly, wirelessOnly, search, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -42,6 +44,12 @@ export default function HeadsetPage() {
           <h1 className="text-white font-bold">🎧 ゲーミングヘッドセット</h1>
         </div>
       </header>
+
+      <div className="border-b border-gray-800 bg-gray-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <p className="text-sm text-gray-400">重さ・接続方式・ANC・バッテリーでゲーミングヘッドセットを絞り込めるスペックデータベース。有線・ワイヤレス、競技向けから没入感重視まで<span className="text-white font-medium">{headsets.length}製品</span>を掲載。</p>
+        </div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* フィルターパネル */}
@@ -164,6 +172,17 @@ export default function HeadsetPage() {
 
         {/* メインコンテンツ */}
         <main className="flex-1 min-w-0">
+          {/* 検索バー */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="ヘッドセット名・ブランドで検索..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 text-gray-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 placeholder-gray-600"
+            />
+          </div>
+
           {/* ソートと件数 */}
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-gray-400">

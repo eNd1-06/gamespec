@@ -13,6 +13,7 @@ export default function MonitorPage() {
   const [tag, setTag] = useState<MonitorTag | "all">("all");
   const [sizeRange, setSizeRange] = useState<"all" | "small" | "mid" | "large" | "ultrawide">("all");
   const [curvedOnly, setCurvedOnly] = useState(false);
+  const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "hz">("price");
 
   const PANEL_TYPES: Array<PanelType | "all"> = ["all", "IPS", "Fast IPS", "Nano IPS", "OLED", "QD-OLED", "VA", "TN", "Fast TN"];
@@ -30,10 +31,11 @@ export default function MonitorPage() {
         if (sizeRange === "large" && (m.size < 28 || m.size > 32)) return false;
         if (sizeRange === "ultrawide" && m.size <= 32) return false;
         if (curvedOnly && !m.curved) return false;
+        if (search && !m.name.toLowerCase().includes(search.toLowerCase()) && !m.brand.toLowerCase().includes(search.toLowerCase())) return false;
         return true;
       })
       .sort((a, b) => sortBy === "price" ? a.price - b.price : b.refreshRate - a.refreshRate);
-  }, [maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, sortBy]);
+  }, [maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, search, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -45,6 +47,12 @@ export default function MonitorPage() {
           <h1 className="text-white font-bold">🖥️ ゲーミングモニター</h1>
         </div>
       </header>
+
+      <div className="border-b border-gray-800 bg-gray-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <p className="text-sm text-gray-400">Hz・解像度・パネル種類・画面サイズ・価格でゲーミングモニターを絞り込めるスペックデータベース。1080p〜4K、144Hz〜390Hz、IPS・OLED・QD-OLEDまで<span className="text-white font-medium">{monitors.length}製品</span>を掲載。</p>
+        </div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* フィルターパネル */}
@@ -193,6 +201,17 @@ export default function MonitorPage() {
 
         {/* メインコンテンツ */}
         <main className="flex-1 min-w-0">
+          {/* 検索バー */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="モニター名・ブランドで検索..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 text-gray-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 placeholder-gray-600"
+            />
+          </div>
+
           {/* ソートと件数 */}
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-gray-400">

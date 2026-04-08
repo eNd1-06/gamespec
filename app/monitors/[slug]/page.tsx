@@ -42,8 +42,19 @@ export default async function MonitorDetailPage({ params }: Props) {
     { label: "発売年", value: `${monitor.releaseYear}年` },
   ];
 
+  const panelLabel = monitor.panelType === "OLED" || monitor.panelType === "QD-OLED" ? `${monitor.panelType}パネル` : `${monitor.panelType}パネル`;
+  const hzLabel = monitor.refreshRate >= 360 ? "超高リフレッシュレート" : monitor.refreshRate >= 240 ? "高リフレッシュレート" : "標準リフレッシュレート";
+  const tags = monitor.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : "RPG/MMO").join("・");
+  const description = `${monitor.name}は${monitor.brand}が${monitor.releaseYear}年に発売した${monitor.size}型・${monitor.resolution}・${monitor.refreshRate}Hzの${hzLabel}ゲーミングモニターです。${panelLabel}を採用し、応答速度${monitor.responseTime}ms（GTG）を実現。${monitor.curved ? "曲面パネルで没入感が高く、" : ""}${tags}向けに最適化されており、参考価格は¥${monitor.price.toLocaleString()}です。`;
+
   const related = monitors
-    .filter((m) => m.slug !== monitor.slug && m.resolution === monitor.resolution)
+    .filter((m) => {
+      if (m.slug === monitor.slug) return false;
+      const sameRes = m.resolution === monitor.resolution;
+      const similarPrice = m.price >= monitor.price * 0.6 && m.price <= monitor.price * 1.6;
+      return sameRes || similarPrice;
+    })
+    .sort((a, b) => Math.abs(a.price - monitor.price) - Math.abs(b.price - monitor.price))
     .slice(0, 4);
 
   return (
@@ -100,6 +111,11 @@ export default async function MonitorDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+        </div>
+
         {/* スペック一覧 */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-white mb-4">スペック詳細</h2>
@@ -116,7 +132,7 @@ export default async function MonitorDetailPage({ params }: Props) {
         {/* 関連モニター */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同じ解像度のモニター</h2>
+            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同解像度のモニター</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((m) => (
                 <Link

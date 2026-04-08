@@ -44,8 +44,20 @@ export default async function KeyboardDetailPage({ params }: Props) {
     { label: "発売年", value: `${kb.releaseYear}年` },
   ];
 
+  const switchLabel = kb.switchType === "磁気式" ? "磁気式アナログスイッチ（アクチュエーション可変）" : `${kb.switchType}（${kb.switchName}）`;
+  const wirelessText = kb.wireless ? `ワイヤレス対応${kb.batteryLife ? `（最大${kb.batteryLife}時間）` : ""}、` : "有線接続、";
+  const hotswapText = kb.hotswap ? "ホットスワップ対応、" : "";
+  const tags = kb.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : t === "moba" ? "MOBA" : "タイピング").join("・");
+  const description = `${kb.name}は${kb.brand}が${kb.releaseYear}年に発売した${kb.layout}サイズのゲーミングキーボードです。${switchLabel}を採用し、アクチュエーション${kb.actuation}mm・ポーリングレート${kb.pollingRate}Hzに対応。${wirelessText}${hotswapText}${tags}向けに最適化されており、参考価格は¥${kb.price.toLocaleString()}です。`;
+
   const related = keyboards
-    .filter((k) => k.slug !== kb.slug && k.layout === kb.layout)
+    .filter((k) => {
+      if (k.slug === kb.slug) return false;
+      const sameLayout = k.layout === kb.layout;
+      const similarPrice = k.price >= kb.price * 0.6 && k.price <= kb.price * 1.6;
+      return sameLayout || similarPrice;
+    })
+    .sort((a, b) => Math.abs(a.price - kb.price) - Math.abs(b.price - kb.price))
     .slice(0, 4);
 
   return (
@@ -102,6 +114,11 @@ export default async function KeyboardDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+        </div>
+
         {/* スペック一覧 */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-white mb-4">スペック詳細</h2>
@@ -118,7 +135,7 @@ export default async function KeyboardDetailPage({ params }: Props) {
         {/* 関連キーボード */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同じサイズのキーボード</h2>
+            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同サイズのキーボード</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((k) => (
                 <Link

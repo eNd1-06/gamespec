@@ -14,6 +14,7 @@ export default function MicePage() {
   const [gameTag, setGameTag] = useState<GameTag | "all">("all");
   const [sensor, setSensor] = useState<string>("all");
   const [shape, setShape] = useState<Shape | "all">("all");
+  const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight">("price");
 
   const filtered = useMemo(() => {
@@ -25,10 +26,11 @@ export default function MicePage() {
         if (gameTag !== "all" && !m.recommendFor.includes(gameTag)) return false;
         if (sensor !== "all" && m.sensor !== sensor) return false;
         if (shape !== "all" && m.shape !== shape) return false;
+        if (search && !m.name.toLowerCase().includes(search.toLowerCase()) && !m.brand.toLowerCase().includes(search.toLowerCase())) return false;
         return true;
       })
       .sort((a, b) => sortBy === "price" ? a.price - b.price : a.weight - b.weight);
-  }, [maxWeight, connection, maxPrice, gameTag, sensor, shape, sortBy]);
+  }, [maxWeight, connection, maxPrice, gameTag, sensor, shape, search, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -40,6 +42,13 @@ export default function MicePage() {
           <h1 className="text-white font-bold">🖱️ ゲーミングマウス</h1>
         </div>
       </header>
+
+      {/* 説明文 */}
+      <div className="border-b border-gray-800 bg-gray-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <p className="text-sm text-gray-400">重さ・センサー・接続方式・価格でゲーミングマウスを絞り込めるスペックデータベース。APEXやFPS向けの軽量マウスから、MOBAやカジュアル向けの多ボタンマウスまで<span className="text-white font-medium">{mice.length}製品</span>を掲載。</p>
+        </div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* フィルターパネル */}
@@ -175,6 +184,17 @@ export default function MicePage() {
 
         {/* メインコンテンツ */}
         <main className="flex-1 min-w-0">
+          {/* 検索バー */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="マウス名・ブランドで検索..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 text-gray-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 placeholder-gray-600"
+            />
+          </div>
+
           {/* ソートと件数 */}
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-gray-400">

@@ -45,8 +45,18 @@ export default async function MousePage({ params }: Props) {
     { label: "発売年", value: `${mouse.releaseYear}年` },
   ];
 
+  const weightLabel = mouse.weight <= 55 ? "超軽量" : mouse.weight <= 70 ? "軽量" : mouse.weight <= 90 ? "標準" : "重め";
+  const tags = mouse.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "moba" ? "MOBA" : "カジュアル").join("・");
+  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIと${mouse.pollingRate}Hzポーリングレートに対応。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
+
   const related = mice
-    .filter((m) => m.slug !== mouse.slug && m.recommendFor.some((t) => mouse.recommendFor.includes(t)))
+    .filter((m) => {
+      if (m.slug === mouse.slug) return false;
+      const sameTag = m.recommendFor.some((t) => mouse.recommendFor.includes(t));
+      const similarPrice = m.price >= mouse.price * 0.6 && m.price <= mouse.price * 1.6;
+      return sameTag || similarPrice;
+    })
+    .sort((a, b) => Math.abs(a.price - mouse.price) - Math.abs(b.price - mouse.price))
     .slice(0, 4);
 
   return (
@@ -98,6 +108,11 @@ export default async function MousePage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+        </div>
+
         {/* スペック一覧 */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-white mb-4">スペック詳細</h2>
@@ -114,7 +129,7 @@ export default async function MousePage({ params }: Props) {
         {/* 関連マウス */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同じ用途のマウス</h2>
+            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同用途のマウス</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((m) => (
                 <Link

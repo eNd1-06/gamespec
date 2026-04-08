@@ -45,8 +45,20 @@ export default async function HeadsetDetailPage({ params }: Props) {
     { label: "発売年", value: `${headset.releaseYear}年` },
   ];
 
+  const weightLabel = headset.weight <= 250 ? "軽量" : headset.weight <= 320 ? "標準" : "重め";
+  const ancText = headset.anc ? "アクティブノイズキャンセリング（ANC）搭載、" : "";
+  const batteryText = headset.batteryLife ? `バッテリー最大${headset.batteryLife}時間、` : "";
+  const tags = headset.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : t === "immersive" ? "没入感重視" : t === "console" ? "コンソール" : "カジュアル").join("・");
+  const description = `${headset.name}は${headset.brand}が${headset.releaseYear}年に発売した${weightLabel}（${headset.weight}g）の${connectionLabel}ゲーミングヘッドセットです。${headset.driverSize}mmドライバーを搭載し、${ancText}${batteryText}${headset.virtualSurround ? "バーチャルサラウンドに対応。" : ""}${tags}向けに設計されており、参考価格は¥${headset.price.toLocaleString()}です。`;
+
   const related = headsets
-    .filter((h) => h.slug !== headset.slug && h.connection === headset.connection)
+    .filter((h) => {
+      if (h.slug === headset.slug) return false;
+      const sameConn = h.connection === headset.connection;
+      const similarPrice = h.price >= headset.price * 0.6 && h.price <= headset.price * 1.6;
+      return sameConn || similarPrice;
+    })
+    .sort((a, b) => Math.abs(a.price - headset.price) - Math.abs(b.price - headset.price))
     .slice(0, 4);
 
   return (
@@ -105,6 +117,11 @@ export default async function HeadsetDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+        </div>
+
         {/* スペック一覧 */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-white mb-4">スペック詳細</h2>
@@ -121,7 +138,7 @@ export default async function HeadsetDetailPage({ params }: Props) {
         {/* 関連ヘッドセット */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同じ接続方式のヘッドセット</h2>
+            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同接続方式のヘッドセット</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((h) => (
                 <Link
