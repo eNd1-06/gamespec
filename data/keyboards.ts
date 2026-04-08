@@ -1,4 +1,4 @@
-export type SwitchType = "赤軸" | "青軸" | "茶軸" | "銀軸" | "光学式" | "静電容量式" | "磁気式";
+export type SwitchType = "赤軸" | "青軸" | "茶軸" | "銀軸" | "緑軸" | "光学式" | "静電容量式" | "磁気式";
 export type KeyboardLayout = "フルサイズ" | "テンキーレス" | "75%" | "65%" | "60%";
 export type KeyboardConnection = "wired" | "wireless" | "both";
 export type KeyboardTag = "fps" | "apex" | "competitive" | "typing" | "moba";
