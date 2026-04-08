@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { keyboards, getKeyboardBySlug } from "@/data/keyboards";
+import { monitors } from "@/data/monitors";
+import { headsets } from "@/data/headsets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,6 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `${BASE_URL}/keyboards/${slug}` },
+    openGraph: { title, description, type: "website", url: `${BASE_URL}/keyboards/${slug}`, siteName: "GameSpec", locale: "ja_JP" },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -49,6 +53,18 @@ export default async function KeyboardDetailPage({ params }: Props) {
   const hotswapText = kb.hotswap ? "ホットスワップ対応、" : "";
   const tags = kb.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : t === "moba" ? "MOBA" : "タイピング").join("・");
   const description = `${kb.name}は${kb.brand}が${kb.releaseYear}年に発売した${kb.layout}サイズのゲーミングキーボードです。${switchLabel}を採用し、アクチュエーション${kb.actuation}mm・ポーリングレート${kb.pollingRate}Hzに対応。${wirelessText}${hotswapText}${tags}向けに最適化されており、参考価格は¥${kb.price.toLocaleString()}です。`;
+
+  // 相性の良いモニター（競技向けなら高Hz優先）
+  const relatedMonitors = monitors
+    .filter((m) => m.recommendFor.some((t) => (kb.recommendFor as string[]).includes(t)))
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 3);
+
+  // 相性の良いヘッドセット
+  const relatedHeadsets = headsets
+    .filter((h) => h.recommendFor.some((t) => (kb.recommendFor as string[]).includes(t)))
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 3);
 
   const related = keyboards
     .filter((k) => {
@@ -163,6 +179,48 @@ export default async function KeyboardDetailPage({ params }: Props) {
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{k.name}</p>
                   <p className="text-xs text-gray-400">{k.switchType}</p>
                   <p className="text-xs text-white font-bold">¥{k.price.toLocaleString()}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 相性の良いモニター */}
+        {relatedMonitors.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">相性の良いモニター</h2>
+              <Link href="/monitors" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {relatedMonitors.map((m) => (
+                <Link key={m.slug} href={`/monitors/${m.slug}`}
+                  className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
+                  <p className="text-xs text-gray-500 mb-1">{m.brand}</p>
+                  <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-1">{m.name}</p>
+                  <p className="text-xs text-gray-400">{m.size}型 · {m.refreshRate}Hz</p>
+                  <p className="text-xs text-white font-bold">¥{m.price.toLocaleString()}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 相性の良いヘッドセット */}
+        {relatedHeadsets.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">相性の良いヘッドセット</h2>
+              <Link href="/headsets" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {relatedHeadsets.map((h) => (
+                <Link key={h.slug} href={`/headsets/${h.slug}`}
+                  className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
+                  <p className="text-xs text-gray-500 mb-1">{h.brand}</p>
+                  <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-1">{h.name}</p>
+                  <p className="text-xs text-gray-400">{h.weight}g · {h.connection === "wireless" ? "無線" : "有線"}</p>
+                  <p className="text-xs text-white font-bold">¥{h.price.toLocaleString()}</p>
                 </Link>
               ))}
             </div>

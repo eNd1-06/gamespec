@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { earphones } from "@/data/earphones";
 import type { EarphoneConnection, EarphoneDriver, EarphoneTag } from "@/data/earphones";
@@ -14,6 +14,32 @@ export default function EarphonePage() {
   const [ancOnly, setAncOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight">("price");
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("conn")) setConnection(p.get("conn") as EarphoneConnection | "all");
+    if (p.get("driver")) setDriver(p.get("driver") as EarphoneDriver | "all");
+    if (p.get("tag")) setTag(p.get("tag") as EarphoneTag | "all");
+    if (p.get("mic")) setMicOnly(p.get("mic") === "1");
+    if (p.get("anc")) setAncOnly(p.get("anc") === "1");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "weight");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 40000) p.set("price", String(maxPrice));
+    if (connection !== "all") p.set("conn", connection);
+    if (driver !== "all") p.set("driver", driver);
+    if (tag !== "all") p.set("tag", tag);
+    if (micOnly) p.set("mic", "1");
+    if (ancOnly) p.set("anc", "1");
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, connection, driver, tag, micOnly, ancOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return earphones

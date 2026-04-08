@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { keyboards } from "@/data/keyboards";
 import type { KeyboardLayout, SwitchType, KeyboardTag } from "@/data/keyboards";
@@ -18,6 +18,34 @@ export default function KeyboardPage() {
   const [minPollingRate, setMinPollingRate] = useState<number>(0);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "actuation">("price");
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("layout")) setLayout(p.get("layout") as KeyboardLayout | "all");
+    if (p.get("sw")) setSwitchType(p.get("sw") as SwitchType | "all");
+    if (p.get("tag")) setTag(p.get("tag") as KeyboardTag | "all");
+    if (p.get("wireless")) setWirelessOnly(p.get("wireless") === "1");
+    if (p.get("hotswap")) setHotswapOnly(p.get("hotswap") === "1");
+    if (p.get("poll")) setMinPollingRate(Number(p.get("poll")));
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "actuation");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 35000) p.set("price", String(maxPrice));
+    if (layout !== "all") p.set("layout", layout);
+    if (switchType !== "all") p.set("sw", switchType);
+    if (tag !== "all") p.set("tag", tag);
+    if (wirelessOnly) p.set("wireless", "1");
+    if (hotswapOnly) p.set("hotswap", "1");
+    if (minPollingRate > 0) p.set("poll", String(minPollingRate));
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, layout, switchType, tag, wirelessOnly, hotswapOnly, minPollingRate, search, sortBy]);
 
   const filtered = useMemo(() => {
     return keyboards

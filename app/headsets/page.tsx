@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { headsets } from "@/data/headsets";
 import type { HeadsetConnection, HeadsetTag } from "@/data/headsets";
@@ -14,6 +14,32 @@ export default function HeadsetPage() {
   const [wirelessOnly, setWirelessOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight" | "battery">("price");
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("conn")) setConnection(p.get("conn") as HeadsetConnection | "all");
+    if (p.get("weight")) setMaxWeight(Number(p.get("weight")));
+    if (p.get("tag")) setTag(p.get("tag") as HeadsetTag | "all");
+    if (p.get("anc")) setAncOnly(p.get("anc") === "1");
+    if (p.get("wireless")) setWirelessOnly(p.get("wireless") === "1");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "weight" | "battery");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 55000) p.set("price", String(maxPrice));
+    if (connection !== "all") p.set("conn", connection);
+    if (maxWeight !== 400) p.set("weight", String(maxWeight));
+    if (tag !== "all") p.set("tag", tag);
+    if (ancOnly) p.set("anc", "1");
+    if (wirelessOnly) p.set("wireless", "1");
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, connection, maxWeight, tag, ancOnly, wirelessOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return headsets

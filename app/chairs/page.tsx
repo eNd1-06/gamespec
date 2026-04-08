@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { chairs } from "@/data/chairs";
 import type { ChairType, ChairMaterial, ChairTag } from "@/data/chairs";
@@ -14,6 +14,32 @@ export default function ChairPage() {
   const [footrestOnly, setFootrestOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "load">("price");
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("type")) setType(p.get("type") as ChairType | "all");
+    if (p.get("mat")) setMaterial(p.get("mat") as ChairMaterial | "all");
+    if (p.get("tag")) setTag(p.get("tag") as ChairTag | "all");
+    if (p.get("lumbar")) setBackButtonsOnly(p.get("lumbar") === "1");
+    if (p.get("foot")) setFootrestOnly(p.get("foot") === "1");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "load");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 200000) p.set("price", String(maxPrice));
+    if (type !== "all") p.set("type", type);
+    if (material !== "all") p.set("mat", material);
+    if (tag !== "all") p.set("tag", tag);
+    if (backButtonsOnly) p.set("lumbar", "1");
+    if (footrestOnly) p.set("foot", "1");
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, type, material, tag, backButtonsOnly, footrestOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return chairs

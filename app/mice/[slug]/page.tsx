@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { mice, getMouseBySlug } from "@/data/mice";
+import { mousepads } from "@/data/mousepads";
+import { headsets } from "@/data/headsets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,6 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `${BASE_URL}/mice/${slug}` },
+    openGraph: { title, description, type: "website", url: `${BASE_URL}/mice/${slug}`, siteName: "GameSpec", locale: "ja_JP" },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -58,6 +62,18 @@ export default async function MousePage({ params }: Props) {
     })
     .sort((a, b) => Math.abs(a.price - mouse.price) - Math.abs(b.price - mouse.price))
     .slice(0, 4);
+
+  // 相性の良いマウスパッド（同用途 or 価格帯が近い）
+  const relatedPads = mousepads
+    .filter((p) => p.recommendFor.some((t) => (mouse.recommendFor as string[]).includes(t)))
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 3);
+
+  // 相性の良いヘッドセット（同用途）
+  const relatedHeadsets = headsets
+    .filter((h) => h.recommendFor.some((t) => (mouse.recommendFor as string[]).includes(t)))
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -157,6 +173,48 @@ export default async function MousePage({ params }: Props) {
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{m.name}</p>
                   <p className="text-xs text-gray-400">{m.weight}g</p>
                   <p className="text-xs text-white font-bold">¥{m.price.toLocaleString()}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 相性の良いマウスパッド */}
+        {relatedPads.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">相性の良いマウスパッド</h2>
+              <Link href="/mousepads" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {relatedPads.map((p) => (
+                <Link key={p.slug} href={`/mousepads/${p.slug}`}
+                  className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
+                  <p className="text-xs text-gray-500 mb-1">{p.brand}</p>
+                  <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-1">{p.name}</p>
+                  <p className="text-xs text-gray-400">{p.size} · {p.surface}</p>
+                  <p className="text-xs text-white font-bold">¥{p.price.toLocaleString()}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 相性の良いヘッドセット */}
+        {relatedHeadsets.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">相性の良いヘッドセット</h2>
+              <Link href="/headsets" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {relatedHeadsets.map((h) => (
+                <Link key={h.slug} href={`/headsets/${h.slug}`}
+                  className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
+                  <p className="text-xs text-gray-500 mb-1">{h.brand}</p>
+                  <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-1">{h.name}</p>
+                  <p className="text-xs text-gray-400">{h.weight}g · {h.connection === "wireless" ? "無線" : "有線"}</p>
+                  <p className="text-xs text-white font-bold">¥{h.price.toLocaleString()}</p>
                 </Link>
               ))}
             </div>

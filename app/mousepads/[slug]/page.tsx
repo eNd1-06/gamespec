@@ -21,6 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `${BASE_URL}/mousepads/${slug}` },
+    openGraph: { title, description, type: "website", url: `${BASE_URL}/mousepads/${slug}`, siteName: "GameSpec", locale: "ja_JP" },
+    twitter: { card: "summary", title, description },
   };
 }
 

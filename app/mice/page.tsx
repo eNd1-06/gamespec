@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { mice } from "@/data/mice";
 import type { Connection, GameTag, Shape } from "@/data/mice";
@@ -16,6 +16,34 @@ export default function MicePage() {
   const [shape, setShape] = useState<Shape | "all">("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "weight">("price");
+
+  // URLパラメータを読み込む（マウント時）
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("weight")) setMaxWeight(Number(p.get("weight")));
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("conn")) setConnection(p.get("conn") as Connection | "all");
+    if (p.get("tag")) setGameTag(p.get("tag") as GameTag | "all");
+    if (p.get("sensor")) setSensor(p.get("sensor")!);
+    if (p.get("shape")) setShape(p.get("shape") as Shape | "all");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "weight");
+  }, []);
+
+  // フィルター変更時にURLを更新
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxWeight !== 120) p.set("weight", String(maxWeight));
+    if (maxPrice !== 45000) p.set("price", String(maxPrice));
+    if (connection !== "all") p.set("conn", connection);
+    if (gameTag !== "all") p.set("tag", gameTag);
+    if (sensor !== "all") p.set("sensor", sensor);
+    if (shape !== "all") p.set("shape", shape);
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxWeight, maxPrice, connection, gameTag, sensor, shape, search, sortBy]);
 
   const filtered = useMemo(() => {
     return mice

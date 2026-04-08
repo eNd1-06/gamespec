@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { gpus } from "@/data/gpus";
 import type { GpuBrand, GpuTier, GpuTag } from "@/data/gpus";
@@ -13,6 +13,30 @@ export default function GpuPage() {
   const [tag, setTag] = useState<GpuTag | "all">("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"price" | "vram" | "tdp">("price");
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("brand")) setGpuBrand(p.get("brand") as GpuBrand | "all");
+    if (p.get("tier")) setTier(p.get("tier") as GpuTier | "all");
+    if (p.get("vram")) setMinVram(Number(p.get("vram")));
+    if (p.get("tag")) setTag(p.get("tag") as GpuTag | "all");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "vram" | "tdp");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 400000) p.set("price", String(maxPrice));
+    if (gpuBrand !== "all") p.set("brand", gpuBrand);
+    if (tier !== "all") p.set("tier", tier);
+    if (minVram > 0) p.set("vram", String(minVram));
+    if (tag !== "all") p.set("tag", tag);
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, gpuBrand, tier, minVram, tag, search, sortBy]);
 
   const filtered = useMemo(() => {
     return gpus

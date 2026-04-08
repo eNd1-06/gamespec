@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { monitors } from "@/data/monitors";
 import type { Resolution, PanelType, MonitorTag } from "@/data/monitors";
@@ -17,6 +17,34 @@ export default function MonitorPage() {
   const [sortBy, setSortBy] = useState<"price" | "hz">("price");
 
   const PANEL_TYPES: Array<PanelType | "all"> = ["all", "IPS", "Fast IPS", "Nano IPS", "OLED", "QD-OLED", "VA", "TN", "Fast TN"];
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("price")) setMaxPrice(Number(p.get("price")));
+    if (p.get("res")) setResolution(p.get("res") as Resolution | "all");
+    if (p.get("hz")) setMinHz(Number(p.get("hz")));
+    if (p.get("panel")) setPanelType(p.get("panel") as PanelType | "all");
+    if (p.get("tag")) setTag(p.get("tag") as MonitorTag | "all");
+    if (p.get("size")) setSizeRange(p.get("size") as "all" | "small" | "mid" | "large" | "ultrawide");
+    if (p.get("curved")) setCurvedOnly(p.get("curved") === "1");
+    if (p.get("q")) setSearch(p.get("q")!);
+    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "hz");
+  }, []);
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (maxPrice !== 150000) p.set("price", String(maxPrice));
+    if (resolution !== "all") p.set("res", resolution);
+    if (minHz !== 60) p.set("hz", String(minHz));
+    if (panelType !== "all") p.set("panel", panelType);
+    if (tag !== "all") p.set("tag", tag);
+    if (sizeRange !== "all") p.set("size", sizeRange);
+    if (curvedOnly) p.set("curved", "1");
+    if (search) p.set("q", search);
+    if (sortBy !== "price") p.set("sort", sortBy);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return monitors
