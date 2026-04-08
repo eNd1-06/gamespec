@@ -6,6 +6,8 @@ import { headsets } from "@/data/headsets";
 import { mousepads } from "@/data/mousepads";
 import { gpus } from "@/data/gpus";
 import { controllers } from "@/data/controllers";
+import { earphones } from "@/data/earphones";
+import { chairs } from "@/data/chairs";
 
 const BASE_URL = "https://gamespec.vercel.app";
 
@@ -59,6 +61,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const earphonePages = earphones.map((e) => ({
+    url: `${BASE_URL}/earphones/${e.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const chairPages = chairs.map((c) => ({
+    url: `${BASE_URL}/chairs/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   return [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/mice`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
@@ -68,6 +84,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/mousepads`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/gpus`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/controllers`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/earphones`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/chairs`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     ...mousePages,
     ...monitorPages,
     ...keyboardPages,
@@ -75,5 +93,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...mousepadPages,
     ...gpuPages,
     ...controllerPages,
+    ...earphonePages,
+    ...chairPages,
   ];
 }

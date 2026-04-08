@@ -59,8 +59,24 @@ export default async function MousePage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - mouse.price) - Math.abs(b.price - mouse.price))
     .slice(0, 4);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": mouse.name,
+    "brand": { "@type": "Brand", "name": mouse.brand },
+    "description": description,
+    "offers": {
+      "@type": "Offer",
+      "price": mouse.price.toString(),
+      "priceCurrency": "JPY",
+      "availability": "https://schema.org/InStock",
+      "url": mouse.amazonUrl,
+    },
+  };
+
   return (
     <div className="min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="border-b border-gray-800 bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <nav className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">

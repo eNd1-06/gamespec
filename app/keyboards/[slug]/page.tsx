@@ -60,8 +60,24 @@ export default async function KeyboardDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - kb.price) - Math.abs(b.price - kb.price))
     .slice(0, 4);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": kb.name,
+    "brand": { "@type": "Brand", "name": kb.brand },
+    "description": description,
+    "offers": {
+      "@type": "Offer",
+      "price": kb.price.toString(),
+      "priceCurrency": "JPY",
+      "availability": "https://schema.org/InStock",
+      "url": kb.amazonUrl,
+    },
+  };
+
   return (
     <div className="min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="border-b border-gray-800 bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <nav className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">

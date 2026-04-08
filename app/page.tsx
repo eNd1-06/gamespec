@@ -71,6 +71,24 @@ export default function Home() {
             <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲームコントローラー</h2>
             <p className="text-sm text-gray-500">プラットフォーム・背面ボタン・価格で絞り込み</p>
           </Link>
+
+          <Link
+            href="/earphones"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">🎵</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングイヤホン</h2>
+            <p className="text-sm text-gray-500">ドライバー・有線/無線・ANC・価格で絞り込み</p>
+          </Link>
+
+          <Link
+            href="/chairs"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">🪑</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングチェア</h2>
+            <p className="text-sm text-gray-500">タイプ・素材・ランバーサポート・価格で絞り込み</p>
+          </Link>
         </div>
 
         {/* 特徴説明 */}
