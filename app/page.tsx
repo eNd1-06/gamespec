@@ -44,6 +44,33 @@ export default function Home() {
             <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングヘッドセット</h2>
             <p className="text-sm text-gray-500">重さ・無線・ANC・バッテリーで絞り込み</p>
           </Link>
+
+          <Link
+            href="/mousepads"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">🖱️</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲーミングマウスパッド</h2>
+            <p className="text-sm text-gray-500">サイズ・滑り感・素材・価格で絞り込み</p>
+          </Link>
+
+          <Link
+            href="/gpus"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">🖥️</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">グラフィックボード</h2>
+            <p className="text-sm text-gray-500">VRAM・チップセット・TDP・価格で絞り込み</p>
+          </Link>
+
+          <Link
+            href="/controllers"
+            className="bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-6 text-left transition-all group"
+          >
+            <div className="text-3xl mb-3">🎮</div>
+            <h2 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400">ゲームコントローラー</h2>
+            <p className="text-sm text-gray-500">プラットフォーム・背面ボタン・価格で絞り込み</p>
+          </Link>
         </div>
 
         {/* 特徴説明 */}
@@ -56,7 +83,7 @@ export default function Home() {
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
             <p className="text-blue-400 text-lg mb-2">📊</p>
             <h2 className="text-sm font-bold text-white mb-1">200製品以上を掲載</h2>
-            <p className="text-xs text-gray-500">マウス100件・モニター32件・キーボード32件・ヘッドセット31件</p>
+            <p className="text-xs text-gray-500">マウス・モニター・キーボード・ヘッドセット・マウスパッド・GPU・コントローラー</p>
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
             <p className="text-blue-400 text-lg mb-2">🛒</p>

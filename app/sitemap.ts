@@ -3,6 +3,9 @@ import { mice } from "@/data/mice";
 import { monitors } from "@/data/monitors";
 import { keyboards } from "@/data/keyboards";
 import { headsets } from "@/data/headsets";
+import { mousepads } from "@/data/mousepads";
+import { gpus } from "@/data/gpus";
+import { controllers } from "@/data/controllers";
 
 const BASE_URL = "https://gamespec.vercel.app";
 
@@ -35,15 +38,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const mousepadPages = mousepads.map((p) => ({
+    url: `${BASE_URL}/mousepads/${p.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const gpuPages = gpus.map((g) => ({
+    url: `${BASE_URL}/gpus/${g.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const controllerPages = controllers.map((c) => ({
+    url: `${BASE_URL}/controllers/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   return [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/mice`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/monitors`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/keyboards`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/headsets`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/mousepads`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/gpus`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/controllers`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     ...mousePages,
     ...monitorPages,
     ...keyboardPages,
     ...headsetPages,
+    ...mousepadPages,
+    ...gpuPages,
+    ...controllerPages,
   ];
 }
