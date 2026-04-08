@@ -3,16 +3,17 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { mice } from "@/data/mice";
-import type { Connection, GameTag } from "@/data/mice";
+import type { Connection, GameTag, Shape } from "@/data/mice";
 
 const SENSORS = [...new Set(mice.map((m) => m.sensor))].sort();
 
 export default function MicePage() {
   const [maxWeight, setMaxWeight] = useState<number>(120);
   const [connection, setConnection] = useState<Connection | "all">("all");
-  const [maxPrice, setMaxPrice] = useState<number>(30000);
+  const [maxPrice, setMaxPrice] = useState<number>(45000);
   const [gameTag, setGameTag] = useState<GameTag | "all">("all");
   const [sensor, setSensor] = useState<string>("all");
+  const [shape, setShape] = useState<Shape | "all">("all");
   const [sortBy, setSortBy] = useState<"price" | "weight">("price");
 
   const filtered = useMemo(() => {
@@ -23,10 +24,11 @@ export default function MicePage() {
         if (m.price > maxPrice) return false;
         if (gameTag !== "all" && !m.recommendFor.includes(gameTag)) return false;
         if (sensor !== "all" && m.sensor !== sensor) return false;
+        if (shape !== "all" && m.shape !== shape) return false;
         return true;
       })
       .sort((a, b) => sortBy === "price" ? a.price - b.price : a.weight - b.weight);
-  }, [maxWeight, connection, maxPrice, gameTag, sensor, sortBy]);
+  }, [maxWeight, connection, maxPrice, gameTag, sensor, shape, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -69,13 +71,13 @@ export default function MicePage() {
               </label>
               <input
                 type="range"
-                min={3000} max={40000} step={1000}
+                min={2000} max={45000} step={1000}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-blue-500"
               />
               <div className="flex justify-between text-xs text-gray-600 mt-1">
-                <span>¥3,000</span><span>¥40,000</span>
+                <span>¥2,000</span><span>¥45,000</span>
               </div>
             </div>
 
@@ -119,6 +121,26 @@ export default function MicePage() {
               </div>
             </div>
 
+            {/* 形状 */}
+            <div>
+              <label className="text-xs text-gray-400 mb-2 block">形状</label>
+              <div className="space-y-1">
+                {(["all", "symmetrical", "ergonomic"] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setShape(s)}
+                    className={`w-full text-left text-xs px-3 py-1.5 rounded-lg transition-all ${
+                      shape === s
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-400 hover:text-white hover:bg-gray-800"
+                    }`}
+                  >
+                    {s === "all" ? "すべて" : s === "symmetrical" ? "左右対称" : "エルゴノミクス"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* センサー */}
             <div>
               <label className="text-xs text-gray-400 mb-2 block">センサー</label>
@@ -142,6 +164,7 @@ export default function MicePage() {
                 setMaxPrice(30000);
                 setGameTag("all");
                 setSensor("all");
+                setShape("all");
               }}
               className="w-full text-xs text-gray-500 hover:text-gray-300 border border-gray-700 rounded-lg py-1.5 transition-all"
             >

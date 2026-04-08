@@ -11,6 +11,8 @@ export default function MonitorPage() {
   const [minHz, setMinHz] = useState<number>(60);
   const [panelType, setPanelType] = useState<PanelType | "all">("all");
   const [tag, setTag] = useState<MonitorTag | "all">("all");
+  const [sizeRange, setSizeRange] = useState<"all" | "small" | "mid" | "large" | "ultrawide">("all");
+  const [curvedOnly, setCurvedOnly] = useState(false);
   const [sortBy, setSortBy] = useState<"price" | "hz">("price");
 
   const PANEL_TYPES: Array<PanelType | "all"> = ["all", "IPS", "Fast IPS", "Nano IPS", "OLED", "QD-OLED", "VA", "TN", "Fast TN"];
@@ -23,10 +25,15 @@ export default function MonitorPage() {
         if (m.refreshRate < minHz) return false;
         if (panelType !== "all" && m.panelType !== panelType) return false;
         if (tag !== "all" && !m.recommendFor.includes(tag)) return false;
+        if (sizeRange === "small" && m.size > 24) return false;
+        if (sizeRange === "mid" && (m.size < 25 || m.size > 27)) return false;
+        if (sizeRange === "large" && (m.size < 28 || m.size > 32)) return false;
+        if (sizeRange === "ultrawide" && m.size <= 32) return false;
+        if (curvedOnly && !m.curved) return false;
         return true;
       })
       .sort((a, b) => sortBy === "price" ? a.price - b.price : b.refreshRate - a.refreshRate);
-  }, [maxPrice, resolution, minHz, panelType, tag, sortBy]);
+  }, [maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -99,6 +106,26 @@ export default function MonitorPage() {
               </div>
             </div>
 
+            {/* サイズ */}
+            <div>
+              <label className="text-xs text-gray-400 mb-2 block">画面サイズ</label>
+              <div className="space-y-1">
+                {(["all", "small", "mid", "large", "ultrawide"] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSizeRange(s)}
+                    className={`w-full text-left text-xs px-3 py-1.5 rounded-lg transition-all ${
+                      sizeRange === s
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-400 hover:text-white hover:bg-gray-800"
+                    }`}
+                  >
+                    {s === "all" ? "すべて" : s === "small" ? "〜24型" : s === "mid" ? "25〜27型" : s === "large" ? "28〜32型" : "33型以上"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* パネル */}
             <div>
               <label className="text-xs text-gray-400 mb-2 block">パネル種類</label>
@@ -133,6 +160,19 @@ export default function MonitorPage() {
               </div>
             </div>
 
+            {/* トグル */}
+            <div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={curvedOnly}
+                  onChange={(e) => setCurvedOnly(e.target.checked)}
+                  className="accent-blue-500"
+                />
+                <span className="text-xs text-gray-400">曲面モニターのみ</span>
+              </label>
+            </div>
+
             {/* リセット */}
             <button
               onClick={() => {
@@ -141,6 +181,8 @@ export default function MonitorPage() {
                 setMinHz(60);
                 setPanelType("all");
                 setTag("all");
+                setSizeRange("all");
+                setCurvedOnly(false);
               }}
               className="w-full text-xs text-gray-500 hover:text-gray-300 border border-gray-700 rounded-lg py-1.5 transition-all"
             >

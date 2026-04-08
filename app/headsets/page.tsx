@@ -128,6 +128,15 @@ export default function HeadsetPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
+                  checked={wirelessOnly}
+                  onChange={(e) => setWirelessOnly(e.target.checked)}
+                  className="accent-blue-500"
+                />
+                <span className="text-xs text-gray-400">ワイヤレスのみ</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
                   checked={ancOnly}
                   onChange={(e) => setAncOnly(e.target.checked)}
                   className="accent-blue-500"

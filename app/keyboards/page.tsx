@@ -15,6 +15,7 @@ export default function KeyboardPage() {
   const [tag, setTag] = useState<KeyboardTag | "all">("all");
   const [wirelessOnly, setWirelessOnly] = useState(false);
   const [hotswapOnly, setHotswapOnly] = useState(false);
+  const [minPollingRate, setMinPollingRate] = useState<number>(0);
   const [sortBy, setSortBy] = useState<"price" | "actuation">("price");
 
   const filtered = useMemo(() => {
@@ -26,10 +27,11 @@ export default function KeyboardPage() {
         if (tag !== "all" && !k.recommendFor.includes(tag)) return false;
         if (wirelessOnly && !k.wireless) return false;
         if (hotswapOnly && !k.hotswap) return false;
+        if (minPollingRate > 0 && k.pollingRate < minPollingRate) return false;
         return true;
       })
       .sort((a, b) => sortBy === "price" ? a.price - b.price : a.actuation - b.actuation);
-  }, [maxPrice, layout, switchType, tag, wirelessOnly, hotswapOnly, sortBy]);
+  }, [maxPrice, layout, switchType, tag, wirelessOnly, hotswapOnly, minPollingRate, sortBy]);
 
   return (
     <div className="min-h-screen">
@@ -119,6 +121,26 @@ export default function KeyboardPage() {
               </div>
             </div>
 
+            {/* ポーリングレート */}
+            <div>
+              <label className="text-xs text-gray-400 mb-2 block">最低ポーリングレート</label>
+              <div className="space-y-1">
+                {([0, 1000, 4000, 8000] as const).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setMinPollingRate(r)}
+                    className={`w-full text-left text-xs px-3 py-1.5 rounded-lg transition-all ${
+                      minPollingRate === r
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-400 hover:text-white hover:bg-gray-800"
+                    }`}
+                  >
+                    {r === 0 ? "すべて" : `${r.toLocaleString()}Hz以上`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* トグル */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -150,6 +172,7 @@ export default function KeyboardPage() {
                 setTag("all");
                 setWirelessOnly(false);
                 setHotswapOnly(false);
+                setMinPollingRate(0);
               }}
               className="w-full text-xs text-gray-500 hover:text-gray-300 border border-gray-700 rounded-lg py-1.5 transition-all"
             >
