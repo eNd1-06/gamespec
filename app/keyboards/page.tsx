@@ -76,8 +76,9 @@ export default function KeyboardPage() {
       </header>
 
       <div className="border-b border-gray-800 bg-gray-900/50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm text-gray-400">スイッチ・サイズ・ポーリングレート・価格でゲーミングキーボードを絞り込めるスペックデータベース。60%〜フルサイズ、赤軸・光学式・磁気式アナログまで<span className="text-white font-medium">{keyboards.length}製品</span>を掲載。</p>
+          <Link href="/keyboards/ranking" className="shrink-0 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 おすすめランキングを見る</Link>
         </div>
       </div>
 
