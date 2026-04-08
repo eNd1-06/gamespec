@@ -1,5 +1,5 @@
 export type HeadsetConnection = "wired" | "wireless" | "both";
-export type HeadsetTag = "fps" | "apex" | "competitive" | "immersive" | "console";
+export type HeadsetTag = "fps" | "apex" | "competitive" | "immersive" | "console" | "casual";
 
 export type GamingHeadset = {
   slug: string;

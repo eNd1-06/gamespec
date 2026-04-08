@@ -107,7 +107,7 @@ export default function HeadsetPage() {
             <div>
               <label className="text-xs text-gray-400 mb-2 block">おすすめ用途</label>
               <div className="space-y-1">
-                {(["all", "apex", "fps", "competitive", "immersive", "console"] as const).map((t) => (
+                {(["all", "apex", "fps", "competitive", "immersive", "console", "casual"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setTag(t)}
@@ -117,7 +117,7 @@ export default function HeadsetPage() {
                         : "text-gray-400 hover:text-white hover:bg-gray-800"
                     }`}
                   >
-                    {t === "all" ? "すべて" : t === "apex" ? "APEX" : t === "fps" ? "FPS全般" : t === "competitive" ? "競技向け" : t === "immersive" ? "没入感重視" : "コンソール"}
+                    {t === "all" ? "すべて" : t === "apex" ? "APEX" : t === "fps" ? "FPS全般" : t === "competitive" ? "競技向け" : t === "immersive" ? "没入感重視" : t === "console" ? "コンソール" : "カジュアル"}
                   </button>
                 ))}
               </div>

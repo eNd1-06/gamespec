@@ -84,7 +84,7 @@ export default async function HeadsetDetailPage({ params }: Props) {
             )}
             {headset.recommendFor.map((t) => (
               <span key={t} className="bg-green-900 text-green-300 text-sm px-3 py-1 rounded-full">
-                {t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技向け" : t === "immersive" ? "没入感重視" : "コンソール"}向け
+                {t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技向け" : t === "immersive" ? "没入感重視" : t === "console" ? "コンソール" : "カジュアル"}向け
               </span>
             ))}
           </div>
