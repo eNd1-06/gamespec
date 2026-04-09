@@ -59,20 +59,31 @@ export default async function MonitorDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - monitor.price) - Math.abs(b.price - monitor.price))
     .slice(0, 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": monitor.name,
-    "brand": { "@type": "Brand", "name": monitor.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": monitor.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": monitor.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": monitor.name,
+      "brand": { "@type": "Brand", "name": monitor.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": monitor.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": monitor.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲーミングモニター", "item": `${BASE_URL}/monitors` },
+        { "@type": "ListItem", "position": 3, "name": monitor.name, "item": `${BASE_URL}/monitors/${monitor.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -150,18 +161,22 @@ export default async function MonitorDetailPage({ params }: Props) {
         {/* 関連モニター */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同解像度のモニター</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同解像度のモニター</h2>
+              <Link href={`/monitors/compare?a=${monitor.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((m) => (
                 <Link
                   key={m.slug}
-                  href={`/monitors/${m.slug}`}
+                  href={`/monitors/compare?a=${monitor.slug}&b=${m.slug}`}
                   className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
                 >
                   <p className="text-xs text-gray-500 mb-1">{m.brand}</p>
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{m.name}</p>
                   <p className="text-xs text-gray-400">{m.refreshRate}Hz</p>
                   <p className="text-xs text-white font-bold">¥{m.price.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
             </div>

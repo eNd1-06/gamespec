@@ -76,20 +76,31 @@ export default async function KeyboardDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - kb.price) - Math.abs(b.price - kb.price))
     .slice(0, 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": kb.name,
-    "brand": { "@type": "Brand", "name": kb.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": kb.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": kb.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": kb.name,
+      "brand": { "@type": "Brand", "name": kb.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": kb.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": kb.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲーミングキーボード", "item": `${BASE_URL}/keyboards` },
+        { "@type": "ListItem", "position": 3, "name": kb.name, "item": `${BASE_URL}/keyboards/${kb.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -167,18 +178,22 @@ export default async function KeyboardDetailPage({ params }: Props) {
         {/* 関連キーボード */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同サイズのキーボード</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同サイズのキーボード</h2>
+              <Link href={`/keyboards/compare?a=${kb.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((k) => (
                 <Link
                   key={k.slug}
-                  href={`/keyboards/${k.slug}`}
+                  href={`/keyboards/compare?a=${kb.slug}&b=${k.slug}`}
                   className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
                 >
                   <p className="text-xs text-gray-500 mb-1">{k.brand}</p>
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{k.name}</p>
                   <p className="text-xs text-gray-400">{k.switchType}</p>
                   <p className="text-xs text-white font-bold">¥{k.price.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
             </div>

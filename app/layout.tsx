@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: "GameSpec | ゲーミングデバイス スペック絞り込みDB",
     template: "%s | GameSpec",
   },
-  description: "重さ・センサー・接続方式・価格でゲーミングマウスを絞り込める日本語データベース。APEXやFPS向けのデバイス選びに。",
+  description: "重さ・Hz・スイッチ・価格などのスペックで絞り込めるゲーミングデバイスDB。マウス・モニター・キーボード・ヘッドセット・GPU・チェアなど9カテゴリ約340製品を日本語で比較。",
   verification: {
     google: "X6orpG-UcJpIZWQ8kOvac6XrXv7_GocQWCtvzKjtPw0",
   },

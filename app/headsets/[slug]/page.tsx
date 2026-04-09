@@ -63,20 +63,31 @@ export default async function HeadsetDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - headset.price) - Math.abs(b.price - headset.price))
     .slice(0, 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": headset.name,
-    "brand": { "@type": "Brand", "name": headset.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": headset.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": headset.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": headset.name,
+      "brand": { "@type": "Brand", "name": headset.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": headset.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": headset.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲーミングヘッドセット", "item": `${BASE_URL}/headsets` },
+        { "@type": "ListItem", "position": 3, "name": headset.name, "item": `${BASE_URL}/headsets/${headset.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -156,18 +167,22 @@ export default async function HeadsetDetailPage({ params }: Props) {
         {/* 関連ヘッドセット */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同接続方式のヘッドセット</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同接続方式のヘッドセット</h2>
+              <Link href={`/headsets/compare?a=${headset.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((h) => (
                 <Link
                   key={h.slug}
-                  href={`/headsets/${h.slug}`}
+                  href={`/headsets/compare?a=${headset.slug}&b=${h.slug}`}
                   className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
                 >
                   <p className="text-xs text-gray-500 mb-1">{h.brand}</p>
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{h.name}</p>
                   <p className="text-xs text-gray-400">{h.weight}g</p>
                   <p className="text-xs text-white font-bold">¥{h.price.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
             </div>

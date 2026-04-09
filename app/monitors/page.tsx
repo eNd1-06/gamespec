@@ -80,7 +80,10 @@ export default function MonitorPage() {
       <div className="border-b border-gray-800 bg-gray-900/50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm text-gray-400">Hz・解像度・パネル種類・画面サイズ・価格でゲーミングモニターを絞り込めるスペックデータベース。1080p〜4K、144Hz〜390Hz、IPS・OLED・QD-OLEDまで<span className="text-white font-medium">{monitors.length}製品</span>を掲載。</p>
-          <Link href="/monitors/ranking" className="shrink-0 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 おすすめランキングを見る</Link>
+          <div className="flex gap-2 shrink-0">
+            <Link href="/monitors/compare" className="text-xs border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">⚖️ 比較する</Link>
+            <Link href="/monitors/ranking" className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 ランキング</Link>
+          </div>
         </div>
       </div>
 

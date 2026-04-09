@@ -74,7 +74,10 @@ export default function ControllerPage() {
       <div className="border-b border-gray-800 bg-gray-900/50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm text-gray-400">プラットフォーム・背面ボタン・接続方式・価格でゲームコントローラーを絞り込めるスペックデータベース。PS5・Xbox・PC対応から競技向けプロコンまで<span className="text-white font-medium">{controllers.length}製品</span>を掲載。</p>
-          <Link href="/controllers/ranking" className="shrink-0 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 おすすめランキングを見る</Link>
+          <div className="flex gap-2 shrink-0">
+            <Link href="/controllers/compare" className="text-xs border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">⚖️ 比較する</Link>
+            <Link href="/controllers/ranking" className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 ランキング</Link>
+          </div>
         </div>
       </div>
 

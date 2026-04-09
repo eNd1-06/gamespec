@@ -75,20 +75,31 @@ export default async function MousePage({ params }: Props) {
     .sort((a, b) => a.price - b.price)
     .slice(0, 3);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": mouse.name,
-    "brand": { "@type": "Brand", "name": mouse.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": mouse.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": mouse.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": mouse.name,
+      "brand": { "@type": "Brand", "name": mouse.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": mouse.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": mouse.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲーミングマウス", "item": `${BASE_URL}/mice` },
+        { "@type": "ListItem", "position": 3, "name": mouse.name, "item": `${BASE_URL}/mice/${mouse.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">

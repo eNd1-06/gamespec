@@ -56,20 +56,31 @@ export default async function MousepadDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - pad.price) - Math.abs(b.price - pad.price))
     .slice(0, 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": pad.name,
-    "brand": { "@type": "Brand", "name": pad.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": pad.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": pad.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": pad.name,
+      "brand": { "@type": "Brand", "name": pad.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": pad.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": pad.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲーミングマウスパッド", "item": `${BASE_URL}/mousepads` },
+        { "@type": "ListItem", "position": 3, "name": pad.name, "item": `${BASE_URL}/mousepads/${pad.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -152,18 +163,22 @@ export default async function MousepadDetailPage({ params }: Props) {
         {/* 関連マウスパッド */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同用途のマウスパッド</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同用途のマウスパッド</h2>
+              <Link href={`/mousepads/compare?a=${pad.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((p) => (
                 <Link
                   key={p.slug}
-                  href={`/mousepads/${p.slug}`}
+                  href={`/mousepads/compare?a=${pad.slug}&b=${p.slug}`}
                   className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
                 >
                   <p className="text-xs text-gray-500 mb-1">{p.brand}</p>
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{p.name}</p>
                   <p className="text-xs text-gray-400">{p.size}サイズ</p>
                   <p className="text-xs text-white font-bold">¥{p.price.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
             </div>

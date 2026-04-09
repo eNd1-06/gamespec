@@ -61,20 +61,31 @@ export default async function ControllerDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - ctrl.price) - Math.abs(b.price - ctrl.price))
     .slice(0, 4);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": ctrl.name,
-    "brand": { "@type": "Brand", "name": ctrl.brand },
-    "description": description,
-    "offers": {
-      "@type": "Offer",
-      "price": ctrl.price.toString(),
-      "priceCurrency": "JPY",
-      "availability": "https://schema.org/InStock",
-      "url": ctrl.amazonUrl,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": ctrl.name,
+      "brand": { "@type": "Brand", "name": ctrl.brand },
+      "description": description,
+      "offers": {
+        "@type": "Offer",
+        "price": ctrl.price.toString(),
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "url": ctrl.amazonUrl,
+      },
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "GameSpec", "item": `${BASE_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "ゲームコントローラー", "item": `${BASE_URL}/controllers` },
+        { "@type": "ListItem", "position": 3, "name": ctrl.name, "item": `${BASE_URL}/controllers/${ctrl.slug}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -145,18 +156,22 @@ export default async function ControllerDetailPage({ params }: Props) {
 
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同プラットフォームのコントローラー</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同プラットフォームのコントローラー</h2>
+              <Link href={`/controllers/compare?a=${ctrl.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((c) => (
                 <Link
                   key={c.slug}
-                  href={`/controllers/${c.slug}`}
+                  href={`/controllers/compare?a=${ctrl.slug}&b=${c.slug}`}
                   className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
                 >
                   <p className="text-xs text-gray-500 mb-1">{c.brand}</p>
                   <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{c.name}</p>
                   <p className="text-xs text-gray-400">{c.platform}</p>
                   <p className="text-xs text-white font-bold">¥{c.price.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
             </div>
