@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={`${notoSansJP.className} bg-gray-950 text-gray-100 min-h-screen antialiased`}>{children}</body>
+      <GoogleAnalytics gaId="G-5MOM9GV1RS" />
     </html>
   );
 }
