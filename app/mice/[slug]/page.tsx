@@ -161,19 +161,24 @@ export default async function MousePage({ params }: Props) {
         {/* 関連マウス */}
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">同価格帯・同用途のマウス</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-white">同価格帯・同用途のマウス</h2>
+              <Link href={`/mice/compare?a=${mouse.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((m) => (
-                <Link
-                  key={m.slug}
-                  href={`/mice/${m.slug}`}
-                  className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group"
-                >
-                  <p className="text-xs text-gray-500 mb-1">{m.brand}</p>
-                  <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{m.name}</p>
-                  <p className="text-xs text-gray-400">{m.weight}g</p>
-                  <p className="text-xs text-white font-bold">¥{m.price.toLocaleString()}</p>
-                </Link>
+                <div key={m.slug} className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
+                  <Link href={`/mice/${m.slug}`} className="block">
+                    <p className="text-xs text-gray-500 mb-1">{m.brand}</p>
+                    <p className="text-xs font-medium text-white group-hover:text-blue-400 leading-tight mb-2">{m.name}</p>
+                    <p className="text-xs text-gray-400">{m.weight}g</p>
+                    <p className="text-xs text-white font-bold">¥{m.price.toLocaleString()}</p>
+                  </Link>
+                  <Link href={`/mice/compare?a=${mouse.slug}&b=${m.slug}`}
+                    className="mt-2 block text-xs text-gray-600 hover:text-blue-400 transition-all">
+                    比較 →
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
