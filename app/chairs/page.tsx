@@ -71,8 +71,9 @@ export default function ChairPage() {
       </header>
 
       <div className="border-b border-gray-800 bg-gray-900/50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm text-gray-400">タイプ・素材・価格でゲーミングチェアを絞り込めるスペックデータベース。レーシング型・エルゴノミクス型・座椅子型、AKRacing・Secretlab・Herman Millerまで<span className="text-white font-medium">{chairs.length}製品</span>を掲載。</p>
+          <Link href="/chairs/ranking" className="shrink-0 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-all">🏆 おすすめランキングを見る</Link>
         </div>
       </div>
 
