@@ -217,6 +217,25 @@ export default function ChairPage() {
           )}
         </main>
       </div>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングチェアの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">タイプで選ぶ（ゲーミング型 vs エルゴノミクス型）</h3>
+            <p>レーシングシート型は包まれる感覚でゲームに没入しやすい。エルゴノミクス型はオフィスワーク兼用や長時間作業向けで腰・背中への負担が少ないのが特徴です。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">素材で選ぶ</h3>
+            <p>PUレザーは高級感がありお手入れ簡単。ファブリック（布）は通気性が高く蒸れにくく夏場も快適。メッシュ素材は最高の通気性でオールシーズン使いやすいです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">ランバーサポート・アームレストで選ぶ</h3>
+            <p>腰部ランバーサポートは姿勢維持に必須。4Dアームレストは高さ・角度・前後・左右の調整が可能で手首・肘の疲れを軽減。長時間ゲームには調整機能の多いモデルがおすすめです。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

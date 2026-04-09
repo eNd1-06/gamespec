@@ -290,6 +290,25 @@ export default function GpuPage() {
           )}
         </main>
       </div>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングGPUの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">VRAM容量で選ぶ</h3>
+            <p>フルHDゲームなら8GB、WQHD・4Kや高解像度テクスチャには16GB以上推奨。VRAMが多いほど高解像度・高品質設定でのフレームレート低下を防げます。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">チップセット（NVIDIA vs AMD）で選ぶ</h3>
+            <p>NVIDIAはDLSS・レイトレーシング対応が充実しFPS重視向け。AMDはコスパに優れRadeon RX 7000シリーズがおすすめ。用途と予算で選び分けましょう。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">TDP・消費電力で選ぶ</h3>
+            <p>ハイエンドGPUは300W超えも。電源ユニットの容量確認が必須です。ミドルレンジは150〜200W程度でコスパ・静音性のバランスが良く人気です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -306,6 +306,25 @@ export default function ControllerPage() {
           )}
         </main>
       </div>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングコントローラーの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">プラットフォーム対応で選ぶ</h3>
+            <p>PS5・Xbox・PC・Switchなど対応機種を必ず確認。デュアルセンスはPS5専用機能（アダプティブトリガー）が魅力。汎用コントローラーはPC・Switch両対応が便利です。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">背面ボタン・カスタマイズで選ぶ</h3>
+            <p>プロ向けは背面ボタン・トリガーストップ・スティック交換が可能なモデルが豊富。FPSやアクションゲームで有利な操作性を追求したい方におすすめです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">価格帯で選ぶ</h3>
+            <p>3,000円台の入門モデルから20,000円超のプロ仕様まで幅広い。ライトユーザーはPS5純正・Xbox純正が安定。本格的に使うならElite・DualSense Edgeが候補です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

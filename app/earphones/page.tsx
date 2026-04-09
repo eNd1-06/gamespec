@@ -219,6 +219,25 @@ export default function EarphonePage() {
           )}
         </main>
       </div>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングイヤホンの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">接続方式で選ぶ</h3>
+            <p>有線は遅延ゼロで安定、無線は快適な装着感が魅力。2.4GHz帯ワイヤレスは低遅延でFPSにも対応。Bluetooth接続は利便性重視のカジュアルゲーマー向けです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">ドライバー・音質で選ぶ</h3>
+            <p>ダイナミックドライバーは迫力ある低音、バランスドアーマチュアは解像度の高いクリアな音質。足音・銃声の定位感を重視するならフラットな音域のモデルがおすすめです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">ANC・マイクで選ぶ</h3>
+            <p>アクティブノイズキャンセリング（ANC）搭載モデルは集中プレイに最適。マイク付きモデルはボイスチャット専用機材不要で手軽。取り外し式マイクは音楽兼用に便利です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
