@@ -35,10 +35,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   function gtag(){dataLayer.push(arguments);}
   window.gtag=gtag;
   gtag('js',new Date());
-  gtag('config','G-5MOM9GV1RS');
+  gtag('config','G-5M0M9GV1RS');
   var s=document.createElement('script');
   s.async=true;
-  s.src='https://www.googletagmanager.com/gtag/js?id=G-5MOM9GV1RS';
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-5M0M9GV1RS';
   document.head.appendChild(s);
 })();
         `}} />
