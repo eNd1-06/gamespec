@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
-import { GoogleAnalytics } from "./components/GoogleAnalytics";
+import Script from "next/script";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -30,8 +30,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja">
       <body className={`${notoSansJP.className} bg-gray-950 text-gray-100 min-h-screen antialiased`}>
         {children}
-        <GoogleAnalytics gaId="G-5MOM9GV1RS" />
       </body>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-5MOM9GV1RS"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-5MOM9GV1RS');
+          console.log('GA initialized');
+        `}
+      </Script>
     </html>
   );
 }
