@@ -22,12 +22,32 @@ function keyboardScore(k: (typeof keyboards)[0]) {
 function headsetScore(h: (typeof headsets)[0]) {
   return (Math.max(0, (400 - h.weight) / 350) * 30) + (Math.max(0, (50000 - h.price) / 50000) * 25) + (h.connection !== "wired" ? 20 : 0) + (h.anc ? 15 : 0) + (h.releaseYear >= 2024 ? 10 : 5);
 }
+function mousepadScore(p: (typeof mousepads)[0]) {
+  return (Math.max(0, (5000 - p.price) / 5000) * 40) + (p.stitchedEdge ? 20 : 0) + (p.surface === "コントロール系" ? 10 : 15) + (p.releaseYear >= 2024 ? 15 : 8);
+}
+function gpuScore(g: (typeof gpus)[0]) {
+  return (Math.min(g.vram / 32, 1) * 30) + (Math.max(0, (400000 - g.price) / 400000) * 30) + (Math.max(0, (600 - g.tdp) / 600) * 20) + (g.releaseYear >= 2025 ? 20 : g.releaseYear >= 2024 ? 12 : 6);
+}
+function controllerScore(c: (typeof controllers)[0]) {
+  return (c.backButtons ? 25 : 0) + (c.haptic ? 20 : 0) + (c.adaptiveTriggers ? 15 : 0) + (c.gyro ? 10 : 0) + (Math.max(0, (20000 - c.price) / 20000) * 30);
+}
+function earphoneScore(e: (typeof earphones)[0]) {
+  return (e.anc ? 20 : 0) + (e.microphone ? 15 : 0) + (Math.max(0, (40000 - e.price) / 40000) * 35) + (e.releaseYear >= 2024 ? 20 : e.releaseYear >= 2023 ? 12 : 6) + (e.connection === "wireless" ? 10 : 0);
+}
+function chairScore(c: (typeof chairs)[0]) {
+  return (c.armrest === "4D" ? 25 : c.armrest === "3D" ? 15 : c.armrest === "2D" ? 8 : 0) + (c.lumbarSupport ? 20 : 0) + (Math.max(0, (200000 - c.price) / 200000) * 35) + (c.type === "エルゴノミクス型" ? 15 : 5) + (c.releaseYear >= 2024 ? 5 : 0);
+}
 
 const rankingPicks = [
-  { ...([...mice].sort((a, b) => mouseScore(b) - mouseScore(a))[0]), category: "ゲーミングマウス", href: "/mice/ranking", listHref: "/mice" },
-  { ...([...monitors].sort((a, b) => monitorScore(b) - monitorScore(a))[0]), category: "ゲーミングモニター", href: "/monitors/ranking", listHref: "/monitors" },
-  { ...([...keyboards].sort((a, b) => keyboardScore(b) - keyboardScore(a))[0]), category: "キーボード", href: "/keyboards/ranking", listHref: "/keyboards" },
-  { ...([...headsets].sort((a, b) => headsetScore(b) - headsetScore(a))[0]), category: "ヘッドセット", href: "/headsets/ranking", listHref: "/headsets" },
+  { ...([...mice].sort((a, b) => mouseScore(b) - mouseScore(a))[0]), category: "ゲーミングマウス", icon: "🖱️", href: "/mice/ranking" },
+  { ...([...monitors].sort((a, b) => monitorScore(b) - monitorScore(a))[0]), category: "ゲーミングモニター", icon: "🖥️", href: "/monitors/ranking" },
+  { ...([...keyboards].sort((a, b) => keyboardScore(b) - keyboardScore(a))[0]), category: "キーボード", icon: "⌨️", href: "/keyboards/ranking" },
+  { ...([...headsets].sort((a, b) => headsetScore(b) - headsetScore(a))[0]), category: "ヘッドセット", icon: "🎧", href: "/headsets/ranking" },
+  { ...([...mousepads].sort((a, b) => mousepadScore(b) - mousepadScore(a))[0]), category: "マウスパッド", icon: "🟦", href: "/mousepads/ranking" },
+  { ...([...gpus].sort((a, b) => gpuScore(b) - gpuScore(a))[0]), category: "GPU", icon: "🎮", href: "/gpus/ranking" },
+  { ...([...controllers].sort((a, b) => controllerScore(b) - controllerScore(a))[0]), category: "コントローラー", icon: "🕹️", href: "/controllers/ranking" },
+  { ...([...earphones].sort((a, b) => earphoneScore(b) - earphoneScore(a))[0]), category: "イヤホン", icon: "🎵", href: "/earphones/ranking" },
+  { ...([...chairs].sort((a, b) => chairScore(b) - chairScore(a))[0]), category: "チェア", icon: "🪑", href: "/chairs/ranking" },
 ];
 
 const CATEGORIES = [
@@ -35,9 +55,9 @@ const CATEGORIES = [
   { href: "/monitors", icon: "🖥️", label: "ゲーミングモニター", desc: "Hz・解像度・パネル・価格で絞り込み", count: monitors.length },
   { href: "/keyboards", icon: "⌨️", label: "ゲーミングキーボード", desc: "スイッチ・サイズ・無線・価格で絞り込み", count: keyboards.length },
   { href: "/headsets", icon: "🎧", label: "ゲーミングヘッドセット", desc: "重さ・無線・ANC・バッテリーで絞り込み", count: headsets.length },
-  { href: "/mousepads", icon: "🖱️", label: "ゲーミングマウスパッド", desc: "サイズ・滑り感・素材・価格で絞り込み", count: mousepads.length },
-  { href: "/gpus", icon: "🖥️", label: "グラフィックボード", desc: "VRAM・チップセット・TDP・価格で絞り込み", count: gpus.length },
-  { href: "/controllers", icon: "🎮", label: "ゲームコントローラー", desc: "プラットフォーム・背面ボタン・価格で絞り込み", count: controllers.length },
+  { href: "/mousepads", icon: "🟦", label: "ゲーミングマウスパッド", desc: "サイズ・滑り感・素材・価格で絞り込み", count: mousepads.length },
+  { href: "/gpus", icon: "🎮", label: "グラフィックボード", desc: "VRAM・チップセット・TDP・価格で絞り込み", count: gpus.length },
+  { href: "/controllers", icon: "🕹️", label: "ゲームコントローラー", desc: "プラットフォーム・背面ボタン・価格で絞り込み", count: controllers.length },
   { href: "/earphones", icon: "🎵", label: "ゲーミングイヤホン", desc: "ドライバー・有線/無線・ANC・価格で絞り込み", count: earphones.length },
   { href: "/chairs", icon: "🪑", label: "ゲーミングチェア", desc: "タイプ・素材・ランバーサポート・価格で絞り込み", count: chairs.length },
 ];
@@ -83,8 +103,9 @@ export default function Home() {
         <div className="mb-12 text-left">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-gray-300">🏆 カテゴリ別おすすめ1位</h2>
+            <span className="text-xs text-gray-600">スペックスコアで自動算出</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
             {rankingPicks.map((pick) => (
               <Link
                 key={pick.href}
@@ -93,10 +114,11 @@ export default function Home() {
               >
                 <div className="flex items-center gap-1.5 mb-2">
                   <span className="text-xs bg-yellow-600 text-white px-1.5 py-0.5 rounded font-bold">1位</span>
+                  <span className="text-xs">{pick.icon}</span>
                   <span className="text-xs text-gray-500">{pick.category}</span>
                 </div>
                 <p className="text-xs text-gray-400 mb-0.5">{pick.brand}</p>
-                <p className="text-xs font-bold text-white group-hover:text-yellow-400 leading-tight mb-1">{pick.name}</p>
+                <p className="text-xs font-bold text-white group-hover:text-yellow-400 leading-tight mb-1">{(pick as {name?: string; chipset?: string}).name ?? (pick as {chipset?: string}).chipset ?? ""}</p>
                 <p className="text-xs text-gray-500 group-hover:text-yellow-500">ランキングを見る →</p>
               </Link>
             ))}
