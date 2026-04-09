@@ -9,7 +9,7 @@ import { controllers } from "@/data/controllers";
 import { earphones } from "@/data/earphones";
 import { chairs } from "@/data/chairs";
 
-const BASE_URL = "https://gamespec.vercel.app";
+const BASE_URL = "https://gamespec.vercel.app"; // updated 2026-04-10
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const mousePages = mice.map((m) => ({
