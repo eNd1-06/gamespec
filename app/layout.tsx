@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -28,21 +27,25 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script dangerouslySetInnerHTML={{ __html: `
+(function(){
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  window.gtag=gtag;
+  gtag('js',new Date());
+  gtag('config','G-5MOM9GV1RS');
+  var s=document.createElement('script');
+  s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-5MOM9GV1RS';
+  document.head.appendChild(s);
+})();
+        `}} />
+      </head>
       <body className={`${notoSansJP.className} bg-gray-950 text-gray-100 min-h-screen antialiased`}>
         {children}
       </body>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-5MOM9GV1RS"
-        strategy="beforeInteractive"
-      />
-      <Script id="google-analytics" strategy="beforeInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-5MOM9GV1RS');
-        `}
-      </Script>
     </html>
   );
 }
