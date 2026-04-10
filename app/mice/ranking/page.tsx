@@ -23,14 +23,58 @@ export const metadata: Metadata = {
   },
 };
 
+// コミュニティ評価スコア（0-100）
+// 出典: ProSettings.net（2248人のプロゲーマー使用率, 2025年末）・r/MouseReview・価格.com
+// 未収集製品はデフォルト70。プロ使用率が高いほど高スコア。
+const proScores: Record<string, number> = {
+  "razer-viper-v3-pro": 95,             // 単体最多使用（全体の21%）
+  "logicool-g-pro-x-superlight-2": 92,  // Superlightシリーズ合計29%、主力モデル
+  "pulsar-x2-mini": 87,                 // 競技コミュニティ最人気
+  "pulsar-x2v2-wireless": 85,
+  "lamzu-thorn": 83,
+  "logicool-g-pro-x-superlight": 82,    // 初代も現役プロが多用
+  "finalmouse-starlight-12": 80,
+  "razer-viper-v2-pro": 80,
+  "zowie-ec2-c": 79,
+  "razer-deathadder-v3": 77,
+  "ninjutso-sora-v2": 76,
+  "zowie-s2-c": 76,
+  "pulsar-x2-wireless": 73,
+  "lamzu-atlantis-mini": 74,
+  "lamzu-maya": 73,
+  "asus-rog-harpe-ace-aim-lab": 73,
+  "zowie-fk2-c": 74,
+  "zowie-ec1-c": 74,
+  "hyperx-pulsefire-haste-2-wireless": 72,
+  "asus-rog-keris-ii-ace": 72,
+  "pulsar-xlite-v3": 71,
+  "endgame-gear-op1we": 71,
+  "endgame-gear-xm2we": 70,
+  "xtrfy-m8-wireless": 70,
+  "mountain-makalu-max": 69,
+  "corsair-m75-air-wireless": 68,
+  "glorious-model-o-wireless": 67,
+  "corsair-m75-wireless": 67,
+  "attack-shark-x5": 64,
+  "logicool-g-pro-x2-lightspeed": 64,
+  "attack-shark-r3-pro": 62,
+  "logicool-g502x-plus": 58,            // 重量級、カジュアル・MMO向き
+  "razer-basilisk-v3-pro": 55,
+  "razer-naga-v2-pro": 45,              // MMO特化、FPS不向き
+};
+
 // 総合スコア算出の考え方:
-// ① センサー品質: プロゲーマーが使用する最高精度センサーを最優先。PAW3395/PAW3950/HERO 2が現行競技標準。
-// ② 重さ: 55-70gが競技標準域。軽量モデル（45-54g）も競技向きだが剛性感が下がる場合あり。100g超は大きく減点。
-// ③ ポーリングレート: 1000Hzが競技基準。2000Hz・4000Hzは入力遅延をさらに削減。
-// ④ 接続方式: 現代の2.4GHzワイヤレスはケーブルなしで有線同等。むしろプロの標準。
-// ⑤ 発売年: 新センサー・新技術の恩恵を反映。価格は品質指標に含めない。
+// ① コミュニティ評価(proScore): プロ使用率・コミュニティ評価を30%ウェイトで加算
+// ② センサー品質: PAW3395/PAW3950/HERO 2が現行競技標準センサー
+// ③ 重さ: 55-70gが競技標準域。100g超は大きく減点。
+// ④ ポーリングレート: 1000Hz基準、2000Hz/4000Hzで段階加点
+// ⑤ 接続方式: 2.4GHzワイヤレスがプロの主流
+// ⑥ 発売年: 新センサー・新技術の恩恵。価格は品質指標に含めない。
 function calcScore(m: (typeof mice)[0]): number {
-  // センサー品質: 競技向けセンサーの世代・精度を評価（最重要）
+  // コミュニティ評価ボーナス（proScore 50→0pt, 70→16pt, 95→36pt）
+  const communityBonus = ((proScores[m.slug] ?? 70) - 50) / 50 * 40;
+
+  // センサー品質: 競技向けセンサーの世代・精度を評価
   const topSensors = ["PAW3395", "PAW3950", "HERO 2", "Focus Pro 35K", "AimPoint Pro", "26K Pulsefire"];
   const midSensors = ["PAW3370", "HERO 25K", "Focus Pro 30K", "TrueMove Air", "BAMF 2.0", "Marksman", "AimPoint", "Owl-Eye 19K", "3610", "FinaltouchPro", "TrueMove Pro", "BAMF", "PAW3335"];
   const sensorScore = topSensors.some(s => m.sensor.includes(s)) ? 25 :
@@ -59,7 +103,7 @@ function calcScore(m: (typeof mice)[0]): number {
   // 発売年: 直近2年以内の設計思想・センサー世代を評価
   const newScore = m.releaseYear >= 2025 ? 15 : m.releaseYear >= 2024 ? 12 : m.releaseYear >= 2023 ? 7 : 3;
 
-  return sensorScore + weightScore + pollingScore + connectionScore + newScore;
+  return communityBonus + sensorScore + weightScore + pollingScore + connectionScore + newScore;
 }
 
 const overall = [...mice]

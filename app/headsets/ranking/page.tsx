@@ -23,13 +23,55 @@ export const metadata: Metadata = {
   },
 };
 
+// コミュニティ評価スコア（0-100）
+// 出典: ProSettings.net（2251人プロゲーマー使用データ, 2025年末）・rtings.com・価格.com
+// Razer BlackShark V2 Proが2025年#1最多使用（HyperX Cloud IIに10%以上の差）。
+const proScores: Record<string, number> = {
+  "razer-blackshark-v2-pro": 93,         // 2025年#1最多使用（単体・ブランド両方でリード）
+  "steelseries-arctis-nova-pro-wireless": 84, // プレミアム最高機能、高評価
+  "steelseries-arctis-nova-7": 80,       // コスパ高評価、コミュニティ人気
+  "hyperx-cloud-alpha-wireless": 77,     // HyperX系で安定した評価
+  "sony-inzone-h9": 74,
+  "logicool-g-pro-x-2-lightspeed": 74,   // Logicoolはシェア低下傾向
+  "astro-a50-x": 70,
+  "corsair-hs80-rgb-wireless": 66,
+  "steelseries-arctis-nova-pro": 80,
+};
+
+// 総合スコア算出の考え方:
+// ① コミュニティ評価(proScore): ProSettings.netプロ使用率を約30%ウェイトで加算
+// ② 重さ: 長時間装着の快適性に直結。ヘッドセットは300g台でも許容範囲。
+// ③ バーチャルサラウンド: FPSでの足音・銃声の定位感に直結。最重要音響機能。
+// ④ 接続品質: 2.4GHzワイヤレスは有線と同等。Bluetooth単体は遅延リスク。
+// ⑤ ANCはゲーム向けでは加点しない。発売年・マイクを補助指標として評価。
 function calcScore(h: (typeof headsets)[0]): number {
-  const weightScore = Math.max(0, (400 - h.weight) / 350) * 30;
-  const priceScore = Math.max(0, (50000 - h.price) / 50000) * 25;
-  const wirelessScore = h.connection !== "wired" ? 20 : 0;
-  const ancScore = h.anc ? 15 : 0;
-  const newScore = h.releaseYear >= 2024 ? 10 : h.releaseYear >= 2023 ? 5 : 0;
-  return weightScore + priceScore + wirelessScore + ancScore + newScore;
+  // コミュニティ評価ボーナス（proScore 50→0pt, 70→16pt, 93→34.4pt）
+  const communityBonus = ((proScores[h.slug] ?? 70) - 50) / 50 * 40;
+
+  // 重さ: 250g以下が最高、350g以下を合格ライン（ヘッドセットは300g台が標準）
+  const weightScore =
+    h.weight <= 250 ? 35 :
+    h.weight <= 300 ? 28 :
+    h.weight <= 350 ? 22 :
+    h.weight <= 400 ? 14 :
+    6;
+
+  // バーチャルサラウンド: FPSでの定位感に最重要
+  const surroundScore = h.virtualSurround ? 25 : 0;
+
+  // 接続品質: 2.4GHz無線=有線同等、Bluetooth単体は遅延リスクで評価落とす
+  const connectionScore =
+    h.connection === "wired" ? 20 :
+    h.wirelessProtocol?.includes("2.4GHz") ? 22 : // 2.4GHz専用は有線より僅かに上
+    12; // Bluetooth単体
+
+  // マイク付きは汎用性ボーナス
+  const micScore = h.microphone ? 8 : 0;
+
+  // 発売年
+  const newScore = h.releaseYear >= 2025 ? 10 : h.releaseYear >= 2024 ? 7 : h.releaseYear >= 2023 ? 4 : 1;
+
+  return communityBonus + weightScore + surroundScore + connectionScore + micScore + newScore;
 }
 
 const overall = [...headsets].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);

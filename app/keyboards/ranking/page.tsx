@@ -23,13 +23,60 @@ export const metadata: Metadata = {
   },
 };
 
+// コミュニティ評価スコア（0-100）
+// 出典: ProSettings.net（2251人プロゲーマー使用データ, 2025年末）・r/MechanicalKeyboards・価格.com
+// Wootingが2025年#1ブランドシェア。Razer Huntsman V3 Pro TKLがCS2プロに最人気。
+const proScores: Record<string, number> = {
+  "wooting-60he": 98,                     // 2025年プロ使用率#1、ラピッドトリガーの先駆者
+  "wooting-60he-v2": 97,                  // 60HE後継（8000Hz、アルミ筐体、2025年末発売）
+  "razer-huntsman-v3-pro-tkl": 92,        // CS2プロに最人気のアナログ光学式
+  "steelseries-apex-pro-tkl-wireless": 87,// ワイヤレス最高峰、OmniPoint 2.0
+  "wooting-two-he": 86,                   // TKL版Wooting、プロ・コミュニティ両方で高評価
+  "steelseries-apex-pro-tkl": 82,         // 有線版Apex Pro TKL
+  "steelseries-apex-pro": 80,             // フルサイズ版、FPSには若干大きい
+  "logicool-g-pro-x-tkl-lightspeed": 72,
+  "corsair-k65-rgb-mini": 67,
+  "ducky-one-3-tkl": 68,
+  "asus-rog-falchion-ace": 64,
+  "razer-blackwidow-v4-pro": 60,          // フルサイズ、競技には不向き
+};
+
+// 総合スコア算出の考え方:
+// ① コミュニティ評価(proScore): プロ使用率・コミュニティ評価を約30%ウェイトで加算
+// ② アクチュエーションポイント: 0.1mmの磁気式・光学式（ラピッドトリガー対応）が競技最強
+// ③ ポーリングレート: 8000Hzが最高クラス。1000Hzも競技で十分実用的
+// ④ ホットスワップ: カスタマイズ性を評価
+// ⑤ 無線: 利便性ボーナス。価格は品質指標に含めない。
 function calcScore(k: (typeof keyboards)[0]): number {
-  const pollingScore = Math.min(k.pollingRate / 8000, 1) * 30;
-  const priceScore = Math.max(0, (50000 - k.price) / 50000) * 30;
+  // コミュニティ評価ボーナス（proScore 50→0pt, 70→16pt, 98→38.4pt）
+  const communityBonus = ((proScores[k.slug] ?? 70) - 50) / 50 * 40;
+
+  // アクチュエーションポイント: 短いほど高得点（ラピッドトリガーの核心）
+  const actuationScore =
+    k.actuation <= 0.2 ? 35 :
+    k.actuation <= 0.5 ? 30 :
+    k.actuation <= 1.0 ? 25 :
+    k.actuation <= 1.5 ? 18 :
+    k.actuation <= 2.0 ? 12 :
+    5;
+
+  // ポーリングレート: 段階評価
+  const pollingScore =
+    k.pollingRate >= 8000 ? 30 :
+    k.pollingRate >= 4000 ? 26 :
+    k.pollingRate >= 1000 ? 20 :
+    10;
+
+  // ホットスワップ: カスタマイズ性
   const hotswapScore = k.hotswap ? 15 : 0;
-  const wirelessScore = k.wireless ? 15 : 0;
-  const newScore = k.releaseYear >= 2024 ? 10 : k.releaseYear >= 2023 ? 5 : 0;
-  return pollingScore + priceScore + hotswapScore + wirelessScore + newScore;
+
+  // 無線: 利便性ボーナス
+  const wirelessScore = k.wireless ? 10 : 0;
+
+  // 発売年
+  const newScore = k.releaseYear >= 2025 ? 10 : k.releaseYear >= 2024 ? 7 : k.releaseYear >= 2023 ? 4 : 1;
+
+  return communityBonus + actuationScore + pollingScore + hotswapScore + wirelessScore + newScore;
 }
 
 const overall = [...keyboards].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);

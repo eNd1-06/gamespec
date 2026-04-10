@@ -23,15 +23,36 @@ export const metadata: Metadata = {
   },
 };
 
+// コミュニティ評価スコア（0-100）
+// 出典: ProSettings.net（プロゲーマー使用率）・rtings.com・r/Monitors・価格.com
+// プロFPS大会（ESL/BLAST）での採用実績を重視。
+const proScores: Record<string, number> = {
+  "benq-zowie-xl2586xplus": 92,          // 600Hz 世界最速、ZOWIEのプロ標準
+  "asus-rog-swift-pro-pg248qp": 90,      // 540Hz ESL/BLASTプロリーグ採用
+  "benq-zowie-xl2566k": 88,              // 360Hz CS2プロの定番モニター
+  "alienware-aw2524h": 86,               // 500Hz Dell Alienware、プロピック
+  "benq-zowie-xl2546k": 83,              // 240Hz 根強いプロ人気（DyAc+）
+  "alienware-aw2523hf": 80,              // 360Hz Fast IPS、評価高い
+  "lg-27gr95qe": 78,                     // OLED 240Hz、rtings.com高評価
+  "asus-rog-pg27aqdm": 77,               // OLED 240Hz、ゲーマー高評価
+  "acer-nitro-xv252q": 76,               // 390Hz コスパ高評価
+  "samsung-odyssey-g4-25": 74,           // 240Hz コスパ競技向け人気
+  "asus-rog-swift-pg259qn": 73,          // 360Hz 旧世代も現役
+  "benq-zowie-xl2411k": 72,              // 144Hz CS2初心者の定番
+  "asus-rog-swift-pg259qnr": 71,
+  "lg-27gp850-b": 68,
+  "asus-rog-strix-xg27aqm": 67,
+};
+
 // 総合スコア算出の考え方:
-// ① 応答速度(GTG): ゲームでの残像・遅延に直結。最重要指標。
-// ② リフレッシュレート: 段階評価。144→240の差は大きく、240→360は小さい。
-// ③ パネル品質: OLED/QD-OLEDは応答・コントラスト最高。Fast IPS > IPS > VA > TN。
-// ④ 解像度: FPS観点では高リフレッシュを優先。1440pは1080pとほぼ同点（解像度で有利不利は出さない）。
+// ① コミュニティ評価(proScore): プロ使用率・rtings.com等評価を約30%ウェイトで加算
+// ② リフレッシュレート: 500Hz以上が競技最高峰。144→240の差は特に大きい。
+// ③ 応答速度(GTG): OLED 0.03msが最高。残像・ゴースト削減に直結。
+// ④ パネル品質: OLED/QD-OLEDが視認性最高。競技ではFast IPSも有力。
 // ⑤ 発売年: 新世代パネル技術を評価。価格は品質指標に含めない。
 function calcScore(m: (typeof monitors)[0]): number {
-  // 応答速度: 0.03ms(OLED)〜5ms以上まで。低いほど高得点。
-  const responseScore = m.responseTime <= 0.1 ? 30 : m.responseTime <= 1 ? 25 : m.responseTime <= 3 ? 15 : 8;
+  // コミュニティ評価ボーナス（proScore 50→0pt, 70→16pt, 92→33.6pt）
+  const communityBonus = ((proScores[m.slug] ?? 70) - 50) / 50 * 40;
 
   // リフレッシュレート: 段階評価で実感差を反映。500Hz以上はプロ競技の最高峰。
   const hzScore =
@@ -42,20 +63,23 @@ function calcScore(m: (typeof monitors)[0]): number {
     m.refreshRate >= 144 ? 15 :
     5;
 
+  // 応答速度: 0.03ms(OLED)〜5ms以上まで。低いほど高得点。
+  const responseScore = m.responseTime <= 0.1 ? 25 : m.responseTime <= 1 ? 20 : m.responseTime <= 3 ? 12 : 6;
+
   // パネル品質: 応答速度・コントラスト・視野角を総合評価
   const panelScore =
-    m.panelType === "QD-OLED" ? 20 :
-    m.panelType === "OLED" ? 18 :
-    m.panelType === "Fast IPS" || m.panelType === "Fast TN" ? 12 :
-    m.panelType === "Nano IPS" ? 11 :
-    m.panelType === "IPS" ? 9 :
-    m.panelType === "VA" ? 6 :
+    m.panelType === "QD-OLED" ? 18 :
+    m.panelType === "OLED" ? 16 :
+    m.panelType === "Fast IPS" || m.panelType === "Fast TN" ? 11 :
+    m.panelType === "Nano IPS" ? 10 :
+    m.panelType === "IPS" ? 8 :
+    m.panelType === "VA" ? 5 :
     4; // TN
 
   // 発売年: 新世代パネル・回路設計の恩恵
-  const newScore = m.releaseYear >= 2025 ? 15 : m.releaseYear >= 2024 ? 10 : m.releaseYear >= 2023 ? 5 : 2;
+  const newScore = m.releaseYear >= 2025 ? 12 : m.releaseYear >= 2024 ? 8 : m.releaseYear >= 2023 ? 4 : 2;
 
-  return responseScore + hzScore + panelScore + newScore;
+  return communityBonus + hzScore + responseScore + panelScore + newScore;
 }
 
 const overall = [...monitors].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
