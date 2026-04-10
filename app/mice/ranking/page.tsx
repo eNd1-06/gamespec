@@ -23,13 +23,43 @@ export const metadata: Metadata = {
   },
 };
 
-// 総合スコア（重さ・ポーリングレート・価格・新しさで算出）
+// 総合スコア算出の考え方:
+// ① センサー品質: プロゲーマーが使用する最高精度センサーを最優先。PAW3395/PAW3950/HERO 2が現行競技標準。
+// ② 重さ: 55-70gが競技標準域。軽量モデル（45-54g）も競技向きだが剛性感が下がる場合あり。100g超は大きく減点。
+// ③ ポーリングレート: 1000Hzが競技基準。2000Hz・4000Hzは入力遅延をさらに削減。
+// ④ 接続方式: 現代の2.4GHzワイヤレスはケーブルなしで有線同等。むしろプロの標準。
+// ⑤ 発売年: 新センサー・新技術の恩恵を反映。価格は品質指標に含めない。
 function calcScore(m: (typeof mice)[0]): number {
-  const weightScore = Math.max(0, (120 - m.weight) / 80) * 30;
-  const pollingScore = Math.min(m.pollingRate / 8000, 1) * 20;
-  const priceScore = Math.max(0, (30000 - m.price) / 30000) * 30;
-  const newScore = (m.releaseYear >= 2024 ? 20 : m.releaseYear >= 2023 ? 12 : m.releaseYear >= 2022 ? 6 : 0);
-  return weightScore + pollingScore + priceScore + newScore;
+  // センサー品質: 競技向けセンサーの世代・精度を評価（最重要）
+  const topSensors = ["PAW3395", "PAW3950", "HERO 2", "Focus Pro 35K", "AimPoint Pro", "26K Pulsefire"];
+  const midSensors = ["PAW3370", "HERO 25K", "Focus Pro 30K", "TrueMove Air", "BAMF 2.0", "Marksman", "AimPoint", "Owl-Eye 19K", "3610", "FinaltouchPro", "TrueMove Pro", "BAMF", "PAW3335"];
+  const sensorScore = topSensors.some(s => m.sensor.includes(s)) ? 25 :
+    midSensors.some(s => m.sensor.includes(s)) ? 15 : 8;
+
+  // 重さ: 55-70gが競技標準域。45-54gの超軽量も競技向き
+  const weightScore =
+    m.weight >= 55 && m.weight <= 70 ? 30 :
+    m.weight >= 45 && m.weight < 55 ? 25 :
+    m.weight < 45 ? 20 :
+    m.weight <= 80 ? 20 :
+    m.weight <= 90 ? 12 :
+    5;
+
+  // ポーリングレート: 高いほど入力遅延が減る
+  const pollingScore =
+    m.pollingRate >= 8000 ? 25 :
+    m.pollingRate >= 4000 ? 22 :
+    m.pollingRate >= 2000 ? 18 :
+    m.pollingRate >= 1000 ? 12 :
+    5;
+
+  // 接続方式: ワイヤレス（2.4GHz）はケーブルドラッグなしでプロの主流
+  const connectionScore = (m.connection === "wireless" || m.connection === "both") ? 18 : 8;
+
+  // 発売年: 直近2年以内の設計思想・センサー世代を評価
+  const newScore = m.releaseYear >= 2025 ? 15 : m.releaseYear >= 2024 ? 12 : m.releaseYear >= 2023 ? 7 : 3;
+
+  return sensorScore + weightScore + pollingScore + connectionScore + newScore;
 }
 
 const overall = [...mice]
@@ -111,7 +141,7 @@ export default function MiceRankingPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-white mb-2">ゲーミングマウス おすすめランキング2026</h1>
-        <p className="text-sm text-gray-400 mb-8">重さ・ポーリングレート・価格・発売年のスペックデータをもとに客観的に算出したランキングです。全{mice.length}製品から厳選。</p>
+        <p className="text-sm text-gray-400 mb-8">センサー品質・重さ・ポーリングレート・接続方式・発売年のスペックデータをもとに算出したランキングです。全{mice.length}製品から厳選。</p>
 
         {/* 目次 */}
         <nav className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-10">

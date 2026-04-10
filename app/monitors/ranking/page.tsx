@@ -23,13 +23,39 @@ export const metadata: Metadata = {
   },
 };
 
+// 総合スコア算出の考え方:
+// ① 応答速度(GTG): ゲームでの残像・遅延に直結。最重要指標。
+// ② リフレッシュレート: 段階評価。144→240の差は大きく、240→360は小さい。
+// ③ パネル品質: OLED/QD-OLEDは応答・コントラスト最高。Fast IPS > IPS > VA > TN。
+// ④ 解像度: FPS観点では高リフレッシュを優先。1440pは1080pとほぼ同点（解像度で有利不利は出さない）。
+// ⑤ 発売年: 新世代パネル技術を評価。価格は品質指標に含めない。
 function calcScore(m: (typeof monitors)[0]): number {
-  const hzScore = Math.min(m.refreshRate / 390, 1) * 35;
-  const resScore = m.resolution === "4K" ? 20 : m.resolution === "1440p" ? 15 : 8;
-  const priceScore = Math.max(0, (150000 - m.price) / 150000) * 25;
-  const panelScore = m.panelType === "QD-OLED" || m.panelType === "OLED" ? 15 : m.panelType === "Fast IPS" || m.panelType === "Nano IPS" ? 10 : 5;
-  const newScore = m.releaseYear >= 2024 ? 5 : m.releaseYear >= 2023 ? 3 : 0;
-  return hzScore + resScore + priceScore + panelScore + newScore;
+  // 応答速度: 0.03ms(OLED)〜5ms以上まで。低いほど高得点。
+  const responseScore = m.responseTime <= 0.1 ? 30 : m.responseTime <= 1 ? 25 : m.responseTime <= 3 ? 15 : 8;
+
+  // リフレッシュレート: 段階評価で実感差を反映。500Hz以上はプロ競技の最高峰。
+  const hzScore =
+    m.refreshRate >= 500 ? 40 :
+    m.refreshRate >= 360 ? 35 :
+    m.refreshRate >= 240 ? 30 :
+    m.refreshRate >= 165 ? 20 :
+    m.refreshRate >= 144 ? 15 :
+    5;
+
+  // パネル品質: 応答速度・コントラスト・視野角を総合評価
+  const panelScore =
+    m.panelType === "QD-OLED" ? 20 :
+    m.panelType === "OLED" ? 18 :
+    m.panelType === "Fast IPS" || m.panelType === "Fast TN" ? 12 :
+    m.panelType === "Nano IPS" ? 11 :
+    m.panelType === "IPS" ? 9 :
+    m.panelType === "VA" ? 6 :
+    4; // TN
+
+  // 発売年: 新世代パネル・回路設計の恩恵
+  const newScore = m.releaseYear >= 2025 ? 15 : m.releaseYear >= 2024 ? 10 : m.releaseYear >= 2023 ? 5 : 2;
+
+  return responseScore + hzScore + panelScore + newScore;
 }
 
 const overall = [...monitors].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);

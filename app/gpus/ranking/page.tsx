@@ -12,13 +12,33 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "グラフィックボード おすすめランキング2026 | GameSpec", description: "コスパ・VRAM・ゲーム用途別のGPUランキング。" },
 };
 
+// 総合スコア算出の考え方:
+// ① 実効性能 = クロック × ティア乗数: クロック速度だけではCUDAコア数・ROP数の差が反映されないため、
+//    ティア（フラッグシップ/ハイエンド/ミドル/エントリー）を乗数として掛けることで実ゲーム性能を補正。
+// ② VRAM: 4K・高品質テクスチャ・DLSS/FSRのフレーム生成に直結。16GB以上が2026年基準で推奨。
+// ③ 発売年（アーキテクチャ世代）: 新世代ほどIPC・AI推論・レイトレ効率が向上。ただし旧世代フラッグシップも評価。
+// ④ 消費電力効率は除外（ゲーム用途では性能が最優先）。価格も品質指標に含めない。
 function calcScore(g: (typeof gpus)[0]): number {
-  const clockScore = Math.min(g.boostClock / 3000, 1) * 30;
-  const vramScore = Math.min(g.vram / 24, 1) * 20;
-  const priceScore = Math.max(0, (300000 - g.price) / 300000) * 30;
-  const tdpScore = Math.max(0, (600 - g.tdp) / 600) * 10;
-  const newScore = g.releaseYear >= 2025 ? 10 : g.releaseYear >= 2024 ? 5 : 0;
-  return clockScore + vramScore + priceScore + tdpScore + newScore;
+  // 実効性能: クロック × ティア乗数（アーキテクチャ・コア数差を補正）
+  const tierMultiplier =
+    g.tier === "フラッグシップ" ? 1.0 :
+    g.tier === "ハイエンド" ? 0.85 :
+    g.tier === "ミドル" ? 0.6 :
+    0.4;
+  const perfScore = Math.min(g.boostClock / 2700, 1) * 35 * tierMultiplier;
+
+  // VRAM: 高解像度・高品質テクスチャ・AI生成機能への対応
+  const vramScore =
+    g.vram >= 24 ? 30 :
+    g.vram >= 16 ? 25 :
+    g.vram >= 12 ? 18 :
+    g.vram >= 8 ? 10 :
+    4;
+
+  // 発売年（アーキテクチャ世代の恩恵）
+  const newScore = g.releaseYear >= 2025 ? 8 : g.releaseYear >= 2024 ? 6 : g.releaseYear >= 2023 ? 4 : 2;
+
+  return perfScore + vramScore + newScore;
 }
 
 const overall = [...gpus].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
