@@ -22,6 +22,7 @@ export type GamingMouse = {
   recommendFor: GameTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export const mice: GamingMouse[] = [
@@ -45,6 +46,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: false,
+    feelTags: ["プロ使用率世界2位", "60g超軽量", "バッテリー70時間", "2000Hz対応", "FPS定番"],
   },
   {
     slug: "razer-deathadder-v3-hyperspeed",
@@ -87,6 +89,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2024,
     isNew: true,
+    feelTags: ["プロ使用率世界1位", "8000Hz対応", "フラット形状", "Focus Pro 35K", "CS2定番"],
   },
   {
     slug: "pulsar-xlite-v3",
@@ -108,6 +111,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: false,
+    feelTags: ["7000円以下PAW3395", "55g軽量有線", "コスパ高い競技向け"],
   },
   {
     slug: "finalmouse-starlight-12",
@@ -171,6 +175,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["エルゴノミクス定番形状", "59g軽量有線", "8000Hz対応", "右手持ち最適"],
   },
   {
     slug: "steelseries-prime-wireless",
@@ -297,6 +302,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: false,
+    feelTags: ["52g超軽量", "コンパクト設計", "PAW3395搭載", "競技コミュニティ人気"],
   },
   {
     slug: "attack-shark-x6",
@@ -423,6 +429,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: true,
+    feelTags: ["45g超軽量", "4000Hzワイヤレス", "コンパクト超軽量", "FPS競技向け"],
   },
   {
     slug: "zowie-s2-c",
@@ -612,6 +619,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: true,
+    feelTags: ["Aim Lab共同設計", "8000Hzワイヤレス", "54g軽量", "AimPoint Proセンサー"],
   },
   {
     slug: "corsair-m75-wireless",
@@ -654,6 +662,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: true,
+    feelTags: ["45g超軽量", "コンパクト形状", "4000Hzワイヤレス", "小さめ手向け"],
   },
   {
     slug: "roccat-burst-pro-air",
@@ -927,6 +936,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2024,
     isNew: true,
+    feelTags: ["5000円以下最安PAW3395", "52g超軽量ワイヤレス", "コスパ最強"],
   },
   {
     slug: "steelseries-aerox-3-wireless",
@@ -1074,6 +1084,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2024,
     isNew: true,
+    feelTags: ["51g超軽量", "PAW3950最上位センサー", "4000Hz対応", "フラット操作感"],
   },
   {
     slug: "razer-viper-v2-pro",

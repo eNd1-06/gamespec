@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
 
+const BASE_URL = "https://gamespec.vercel.app";
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://gamespec.vercel.app/sitemap.xml",
+    rules: {
+      userAgent: "*",
+      allow: "/",
+    },
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

@@ -79,7 +79,12 @@ function calcScore(m: (typeof monitors)[0]): number {
   // 発売年: 新世代パネル・回路設計の恩恵
   const newScore = m.releaseYear >= 2025 ? 12 : m.releaseYear >= 2024 ? 8 : m.releaseYear >= 2023 ? 4 : 2;
 
-  return communityBonus + hzScore + responseScore + panelScore + newScore;
+  // rtings.comスコアボーナス（実機テスト・客観的評価）
+  const rtingsBonus = m.rtingsScore
+    ? m.rtingsScore >= 8.8 ? 12 : m.rtingsScore >= 8.3 ? 8 : m.rtingsScore >= 7.8 ? 5 : m.rtingsScore >= 7.0 ? 2 : 0
+    : 0;
+
+  return communityBonus + hzScore + responseScore + panelScore + newScore + rtingsBonus;
 }
 
 const overall = [...monitors].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
@@ -105,14 +110,21 @@ function RankCard({ rank, monitor, badge }: { rank: number; monitor: (typeof mon
           {badge && <span className="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded">{badge}</span>}
           {monitor.isNew && <span className="text-xs bg-green-700 text-white px-1.5 py-0.5 rounded">NEW</span>}
         </div>
-        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-2">{monitor.name}</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-1.5">{monitor.name}</h3>
+        <div className="flex flex-wrap gap-1.5 mb-1.5">
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{monitor.refreshRate}Hz</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{monitor.resolution}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{monitor.panelType}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{monitor.size}インチ</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{monitor.price.toLocaleString()}</span>
         </div>
+        {monitor.feelTags && monitor.feelTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {monitor.feelTags.map((tag) => (
+              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

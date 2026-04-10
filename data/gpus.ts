@@ -20,6 +20,7 @@ export type GamingGpu = {
   recommendFor: GpuTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export function getGpuBySlug(slug: string): GamingGpu | undefined {

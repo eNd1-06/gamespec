@@ -105,14 +105,21 @@ function RankCard({ rank, keyboard, badge }: { rank: number; keyboard: (typeof k
           {badge && <span className="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded">{badge}</span>}
           {keyboard.isNew && <span className="text-xs bg-green-700 text-white px-1.5 py-0.5 rounded">NEW</span>}
         </div>
-        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-2">{keyboard.name}</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-1.5">{keyboard.name}</h3>
+        <div className="flex flex-wrap gap-1.5 mb-1.5">
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{keyboard.layout}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{keyboard.switchType}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{connectionLabel(keyboard)}</span>
           {keyboard.hotswap && <span className="text-xs bg-purple-900 text-purple-300 px-2 py-0.5 rounded-full">ホットスワップ</span>}
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{keyboard.price.toLocaleString()}</span>
         </div>
+        {keyboard.feelTags && keyboard.feelTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {keyboard.feelTags.map((tag) => (
+              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

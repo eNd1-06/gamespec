@@ -21,6 +21,7 @@ export type GamingEarphone = {
   recommendFor: EarphoneTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export function getEarphoneBySlug(slug: string): GamingEarphone | undefined {

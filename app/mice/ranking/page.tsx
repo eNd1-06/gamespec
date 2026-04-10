@@ -158,13 +158,20 @@ function RankCard({
           {badge && <span className="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded">{badge}</span>}
           {mouse.isNew && <span className="text-xs bg-green-700 text-white px-1.5 py-0.5 rounded">NEW</span>}
         </div>
-        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-2">{mouse.name}</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-1.5">{mouse.name}</h3>
+        <div className="flex flex-wrap gap-1.5 mb-1.5">
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{mouse.weight}g · {weightLabel}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{connectionLabel(mouse.connection)}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{mouse.pollingRate}Hz</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{mouse.price.toLocaleString()}</span>
         </div>
+        {mouse.feelTags && mouse.feelTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {mouse.feelTags.map((tag) => (
+              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

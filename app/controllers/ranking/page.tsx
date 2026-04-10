@@ -12,14 +12,33 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "ゲームコントローラー おすすめランキング2026 | GameSpec", description: "PS5・Xbox・PC対応別のゲームコントローラーランキング。" },
 };
 
+// 総合スコア算出の考え方:
+// ① 背面ボタン: FPS最重要。親指をスティックから離さずアクションできる。
+// ② トリガーストップ: 射撃速度に直結。FPS競技プレイには必須級。
+// ③ 重さ: 長時間プレイの快適性。軽すぎても剛性感が損なわれるため適正域で評価。
+// ④ ジャイロ: エイム補助として利用者増加中。加点要素として評価。
+// ⑤ haptic（振動）はFPSランキングでは評価しない。価格も品質指標に含めない。
 function calcScore(c: (typeof controllers)[0]): number {
-  const weightScore = Math.max(0, (350 - c.weight) / 300) * 20;
-  const priceScore = Math.max(0, (30000 - c.price) / 30000) * 30;
-  const backScore = c.backButtons ? 20 : 0;
-  const hapticScore = c.haptic ? 15 : 0;
-  const triggerScore = c.triggerStop ? 10 : 0;
-  const newScore = c.releaseYear >= 2024 ? 5 : c.releaseYear >= 2023 ? 3 : 0;
-  return weightScore + priceScore + backScore + hapticScore + triggerScore + newScore;
+  // 背面ボタン: FPS競技で最も差がつく機能
+  const backScore = c.backButtons ? 35 : 0;
+
+  // トリガーストップ: 射撃速度向上
+  const triggerScore = c.triggerStop ? 28 : 0;
+
+  // 重さ: 200-320gを適正域とする
+  const weightScore =
+    c.weight >= 200 && c.weight <= 300 ? 20 :
+    c.weight < 200 ? 14 :
+    c.weight <= 350 ? 12 :
+    6;
+
+  // ジャイロ: エイム補助として有用
+  const gyroScore = c.gyro ? 10 : 0;
+
+  // 発売年
+  const newScore = c.releaseYear >= 2025 ? 7 : c.releaseYear >= 2024 ? 5 : c.releaseYear >= 2023 ? 3 : 1;
+
+  return backScore + triggerScore + weightScore + gyroScore + newScore;
 }
 
 const overall = [...controllers].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
@@ -42,8 +61,8 @@ function RankCard({ rank, controller, badge }: { rank: number; controller: (type
           {badge && <span className="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded">{badge}</span>}
           {controller.isNew && <span className="text-xs bg-green-700 text-white px-1.5 py-0.5 rounded">NEW</span>}
         </div>
-        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-2">{controller.name}</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-1.5">{controller.name}</h3>
+        <div className="flex flex-wrap gap-1.5 mb-1.5">
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{controller.platform}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{connectionLabel(controller.connection)}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{controller.weight}g</span>
@@ -51,6 +70,13 @@ function RankCard({ rank, controller, badge }: { rank: number; controller: (type
           {controller.haptic && <span className="text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">ハプティック</span>}
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{controller.price.toLocaleString()}</span>
         </div>
+        {controller.feelTags && controller.feelTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {controller.feelTags.map((tag) => (
+              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

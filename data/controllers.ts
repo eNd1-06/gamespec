@@ -20,6 +20,7 @@ export type GamingController = {
   recommendFor: ControllerTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export function getControllerBySlug(slug: string): GamingController | undefined {

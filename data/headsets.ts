@@ -20,6 +20,8 @@ export type GamingHeadset = {
   recommendFor: HeadsetTag[];
   releaseYear: number;
   isNew?: boolean;
+  rtingsScore?: number;        // rtings.com 総合スコア（0-10）
+  feelTags?: string[];         // ゲーマーコミュニティが評価するポイント
 };
 
 export function getHeadsetBySlug(slug: string): GamingHeadset | undefined {
@@ -46,6 +48,8 @@ export const headsets: GamingHeadset[] = [
     recommendFor: ["fps", "immersive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 8.4,
+    feelTags: ["rtings 8.4点", "ANC搭載ゲーミング最高峰", "デュアルバッテリー交換式", "サラウンド音質良好"],
   },
   {
     slug: "steelseries-arctis-nova-7",
@@ -66,6 +70,8 @@ export const headsets: GamingHeadset[] = [
     recommendFor: ["fps", "apex", "immersive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 7.8,
+    feelTags: ["コスパ無線ヘッドセット", "バッテリー38時間", "軽量290g", "コミュニティ高評価"],
   },
   {
     slug: "logicool-g-pro-x-2-lightspeed",
@@ -106,6 +112,8 @@ export const headsets: GamingHeadset[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 8.1,
+    feelTags: ["プロ使用率2025年1位", "バッテリー70時間", "クリアなマイク音質", "FPS特化チューニング"],
   },
   {
     slug: "hyperx-cloud-alpha-wireless",
@@ -126,6 +134,8 @@ export const headsets: GamingHeadset[] = [
     recommendFor: ["fps", "immersive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 7.6,
+    feelTags: ["バッテリー最長300時間", "デュアルチャンバードライバー", "高コスパ無線"],
   },
   {
     slug: "corsair-hs80-rgb-wireless",
@@ -186,6 +196,8 @@ export const headsets: GamingHeadset[] = [
     recommendFor: ["fps", "immersive", "console"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 7.7,
+    feelTags: ["ANC搭載", "PS5連携最適", "Sony空間音響対応", "コンソール向け"],
   },
   {
     slug: "sony-inzone-h7",

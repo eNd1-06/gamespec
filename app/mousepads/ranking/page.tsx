@@ -12,13 +12,39 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "ゲーミングマウスパッド おすすめランキング2026 | GameSpec", description: "サイズ・素材・滑り感別のゲーミングマウスパッドランキング。" },
 };
 
+// 総合スコア算出の考え方:
+// ① サイズ: 大きいほどマウスの可動域が広がる。XL以上が競技標準。価格は品質指標に含めない。
+// ② 縫い目加工: 端のほつれ防止で耐久性が大幅向上。長期コスパに直結する重要指標。
+// ③ 厚み: 3-4mmがクッション性・安定性・センサー読み取りのバランス最良。
+// ④ 素材: 布が主流でゲーム向き。ガラスは超高速だが一部向け。ハイブリッドは中間。
 function calcScore(p: (typeof mousepads)[0]): number {
-  const sizeScore = p.size === "XXL" ? 30 : p.size === "XL" ? 25 : p.size === "L" ? 18 : p.size === "M" ? 10 : 5;
-  const priceScore = Math.max(0, (15000 - p.price) / 15000) * 35;
-  const thicknessScore = p.thickness >= 4 ? 15 : p.thickness >= 3 ? 10 : 5;
-  const edgeScore = p.stitchedEdge ? 15 : 0;
-  const newScore = p.releaseYear >= 2024 ? 5 : p.releaseYear >= 2023 ? 3 : 0;
-  return sizeScore + priceScore + thicknessScore + edgeScore + newScore;
+  // サイズ: ゲームでの可動域に直結（最重要）
+  const sizeScore =
+    p.size === "XXL" ? 40 :
+    p.size === "XL" ? 33 :
+    p.size === "L" ? 23 :
+    p.size === "M" ? 12 :
+    5;
+
+  // 縫い目加工: 耐久性・使用感の長期品質
+  const edgeScore = p.stitchedEdge ? 28 : 0;
+
+  // 厚み: 3-4mmを最適とする
+  const thicknessScore =
+    p.thickness >= 3 && p.thickness <= 4 ? 20 :
+    p.thickness >= 2 ? 12 :
+    6;
+
+  // 素材: 布が競技主流
+  const materialScore =
+    p.material === "布" ? 8 :
+    p.material === "ガラス" ? 5 :
+    6;
+
+  // 発売年
+  const newScore = p.releaseYear >= 2025 ? 4 : p.releaseYear >= 2024 ? 3 : 1;
+
+  return sizeScore + edgeScore + thicknessScore + materialScore + newScore;
 }
 
 const overall = [...mousepads].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
@@ -39,14 +65,21 @@ function RankCard({ rank, pad, badge }: { rank: number; pad: (typeof mousepads)[
           {badge && <span className="text-xs bg-blue-600 text-white px-1.5 py-0.5 rounded">{badge}</span>}
           {pad.isNew && <span className="text-xs bg-green-700 text-white px-1.5 py-0.5 rounded">NEW</span>}
         </div>
-        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-2">{pad.name}</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="text-sm font-bold text-white group-hover:text-blue-400 leading-tight mb-1.5">{pad.name}</h3>
+        <div className="flex flex-wrap gap-1.5 mb-1.5">
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{pad.size}サイズ</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{pad.surface}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{pad.material}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{pad.width}×{pad.height}mm</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{pad.price.toLocaleString()}</span>
         </div>
+        {pad.feelTags && pad.feelTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {pad.feelTags.map((tag) => (
+              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

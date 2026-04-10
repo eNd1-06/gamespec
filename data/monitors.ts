@@ -20,6 +20,8 @@ export type GamingMonitor = {
   recommendFor: MonitorTag[];
   releaseYear: number;
   isNew?: boolean;
+  rtingsScore?: number;   // rtings.com 総合スコア（0-10）
+  feelTags?: string[];    // ゲーマーコミュニティが評価するポイント
 };
 
 export function getMonitorBySlug(slug: string): GamingMonitor | undefined {
@@ -136,6 +138,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 8.4,
+    feelTags: ["rtings 8.4点", "360Hz Fast IPS", "色鮮やか・残像なし", "FreeSync対応コスパ"],
   },
   {
     slug: "lg-27gr95qe",
@@ -155,6 +159,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "rpg", "competitive"],
     releaseYear: 2023,
     isNew: false,
+    rtingsScore: 8.8,
+    feelTags: ["rtings 8.8点", "OLED完全な黒", "応答0.03ms", "没入感最高"],
   },
   {
     slug: "samsung-odyssey-g7-27",
@@ -246,6 +252,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "rpg", "competitive"],
     releaseYear: 2023,
     isNew: false,
+    rtingsScore: 8.7,
+    feelTags: ["rtings 8.7点", "QD-OLED鮮烈な色彩", "G-Sync対応", "ゲーマー高評価"],
   },
   {
     slug: "lg-27gp950-b",
@@ -283,6 +291,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 7.4,
+    feelTags: ["コスパ競技モニター", "240Hz IPS", "スリムデザイン", "入門競技向け"],
   },
   {
     slug: "asus-rog-strix-xg27aqm",
@@ -320,6 +330,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 7.8,
+    feelTags: ["360Hz DyAc+残像なし", "CS2プロの定番", "プラグ&プレイ設計", "ブラーリダクション"],
   },
   {
     slug: "lg-24gn600-b",
@@ -357,6 +369,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["apex", "fps", "competitive"],
     releaseYear: 2023,
     isNew: true,
+    rtingsScore: 7.7,
+    feelTags: ["390Hz Fast IPS", "コスパ高評価", "中価格帯最速クラス", "FreeSync対応"],
   },
   {
     slug: "msi-mag272cqr",
@@ -448,6 +462,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["rpg", "fps"],
     releaseYear: 2022,
     isNew: false,
+    rtingsScore: 9.0,
+    feelTags: ["rtings 9.0点超", "QD-OLED最高画質", "34型超没入感", "映画もゲームも最高"],
   },
   {
     slug: "samsung-odyssey-oled-g8",
@@ -616,6 +632,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2025,
     isNew: true,
+    rtingsScore: 8.1,
+    feelTags: ["世界最速600Hz", "CS2プロ大会標準", "DyAc Ultra搭載", "ブラー感ゼロ"],
   },
   {
     slug: "asus-rog-swift-pro-pg248qp",
@@ -635,6 +653,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2024,
     isNew: true,
+    rtingsScore: 8.3,
+    feelTags: ["540Hz Fast IPS", "ESL/BLASTプロリーグ採用", "Reflex Latency Analyzer", "鮮明な発色"],
   },
   {
     slug: "alienware-aw2524h",
@@ -654,6 +674,8 @@ export const monitors: GamingMonitor[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
     isNew: false,
+    rtingsScore: 8.2,
+    feelTags: ["500Hz Fast IPS", "プロが選ぶAlienware", "応答0.5ms", "G-Sync対応"],
   },
   {
     slug: "acer-predator-xb323u",

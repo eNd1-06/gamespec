@@ -21,6 +21,7 @@ export type GamingChair = {
   recommendFor: ChairTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export function getChairBySlug(slug: string): GamingChair | undefined {

@@ -20,6 +20,7 @@ export type GamingMousepad = {
   recommendFor: MousepadTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];   // ゲーマーコミュニティが評価するポイント
 };
 
 export function getMousepadBySlug(slug: string): GamingMousepad | undefined {

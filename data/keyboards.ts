@@ -22,6 +22,7 @@ export type GamingKeyboard = {
   recommendFor: KeyboardTag[];
   releaseYear: number;
   isNew?: boolean;
+  feelTags?: string[];     // ゲーマーコミュニティが評価するポイント
 };
 
 export function getKeyboardBySlug(slug: string): GamingKeyboard | undefined {
@@ -67,6 +68,7 @@ export const keyboards: GamingKeyboard[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
     isNew: true,
+    feelTags: ["CS2プロ最人気", "アナログ光学式", "8000Hz対応", "ラピッドトリガー0.1mm"],
   },
   {
     slug: "steelseries-apex-pro-tkl-wireless",
@@ -87,6 +89,7 @@ export const keyboards: GamingKeyboard[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["ワイヤレス最高峰", "OmniPoint 2.0磁気式", "8000Hzワイヤレス", "バッテリー45時間"],
   },
   {
     slug: "asus-rog-falchion-ace",
@@ -395,6 +398,7 @@ export const keyboards: GamingKeyboard[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2025,
     isNew: true,
+    feelTags: ["8000Hzポーリング", "0.1mmラピッドトリガー", "アルミ筐体", "2025年最上位"],
   },
   {
     slug: "wooting-60he",
@@ -414,6 +418,7 @@ export const keyboards: GamingKeyboard[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["プロ使用率2025年1位", "ラピッドトリガー先駆者", "0.1mm磁気式", "APEX定番"],
   },
   {
     slug: "wooting-two-he",
@@ -433,6 +438,7 @@ export const keyboards: GamingKeyboard[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
     isNew: false,
+    feelTags: ["TKLラピッドトリガー", "0.1mm磁気式", "テンキーレスで使いやすい"],
   },
   {
     slug: "steelseries-apex-3-tkl",
