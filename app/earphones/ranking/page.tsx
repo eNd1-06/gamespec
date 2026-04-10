@@ -12,14 +12,41 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "ゲーミングイヤホン おすすめランキング2026 | GameSpec", description: "有線・無線・ANC別のゲーミングイヤホンランキング。" },
 };
 
+// 総合スコア算出の考え方:
+// ① 接続方式: 有線＝遅延ゼロで競技では最高評価。2.4GHz無線も実用上ほぼ同等。Bluetooth単体は遅延リスクで減点。
+// ② 重さ: イヤホンは軽さが命。5g以下が理想。重いほど長時間使用で疲労が増す。
+// ③ ドライバー方式: ダイナミック＝低音豊か・BA＝解像度高い・ハイブリッドは両方の特性。音の分離感が定位に影響。
+// ④ マイク: ゲーム中のコミュニケーション必須。チームプレイなら加点要素。
+// ⑤ ANCはゲーム（特にFPS）では競技上のメリットが薄いため評価しない。価格は品質指標に含めない。
 function calcScore(e: (typeof earphones)[0]): number {
-  const weightScore = Math.max(0, (50 - e.weight) / 50) * 25;
-  const priceScore = Math.max(0, (50000 - e.price) / 50000) * 30;
-  const wirelessScore = e.connection !== "wired" ? 20 : 10;
-  const ancScore = e.anc ? 15 : 0;
-  const micScore = e.microphone ? 5 : 0;
-  const newScore = e.releaseYear >= 2024 ? 5 : e.releaseYear >= 2023 ? 3 : 0;
-  return weightScore + priceScore + wirelessScore + ancScore + micScore + newScore;
+  // 接続方式: 遅延の観点から有線を最高評価
+  const connectionScore =
+    e.connection === "wired" ? 38 :
+    e.connection === "both" ? 35 : // 両対応は有線も使えるため次点
+    22; // wireless単体（Bluetoothは遅延リスク）
+
+  // 重さ: イヤホンは5g以下が快適域。重さが増すほど減点
+  const weightScore =
+    e.weight <= 5 ? 30 :
+    e.weight <= 8 ? 25 :
+    e.weight <= 12 ? 18 :
+    e.weight <= 20 ? 10 :
+    5;
+
+  // ドライバー方式: ゲームでの音の分離感・定位感を評価
+  const driverScore =
+    e.driver === "ハイブリッド型" ? 15 :
+    e.driver === "BA型" ? 12 :
+    e.driver === "ダイナミック型" ? 10 :
+    8;
+
+  // マイク: チームプレイ必須装備
+  const micScore = e.microphone ? 10 : 0;
+
+  // 発売年
+  const newScore = e.releaseYear >= 2025 ? 7 : e.releaseYear >= 2024 ? 5 : e.releaseYear >= 2023 ? 3 : 1;
+
+  return connectionScore + weightScore + driverScore + micScore + newScore;
 }
 
 const overall = [...earphones].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
@@ -70,7 +97,7 @@ export default function EarphonesRankingPage() {
       </header>
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-white mb-2">ゲーミングイヤホン おすすめランキング2026</h1>
-        <p className="text-sm text-gray-400 mb-8">有線・無線・ANC・価格のスペックデータをもとに算出。全{earphones.length}製品から厳選。</p>
+        <p className="text-sm text-gray-400 mb-8">接続方式・重さ・ドライバー・マイク・発売年のスペックデータをもとに算出。全{earphones.length}製品から厳選。</p>
         <nav className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-10">
           <p className="text-xs text-gray-500 mb-2">目次</p>
           <ul className="space-y-1">
@@ -82,7 +109,7 @@ export default function EarphonesRankingPage() {
         </nav>
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
-          <p className="text-xs text-gray-500 mb-4">接続方式・ANC・重さ・価格・発売年を総合スコア化して順位付け</p>
+          <p className="text-xs text-gray-500 mb-4">接続方式・重さ・ドライバー方式・マイク・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">{overall.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} />)}</div>
         </section>
         <section id="wired" className="mb-12">

@@ -12,14 +12,34 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "ゲーミングチェア おすすめランキング2026 | GameSpec", description: "腰痛・長時間・コスパ別のゲーミングチェアランキング。" },
 };
 
+// 総合スコア算出の考え方:
+// ① ランバーサポート: 長時間プレイの腰痛予防に最重要。なしは論外レベルの減点。
+// ② アームレスト自由度: 4D（高さ・奥行・角度・横）が最高。肩こり・腱鞘炎対策に直結。
+// ③ 素材・通気性: メッシュ＝夏に強い。PUレザーは手入れ簡単だが蒸れる。長時間プレイでは通気性が体力消耗に影響。
+// ④ ヘッドレスト: 長時間の首・肩サポートとして重要。調整できるモデルを高評価。
+// ⑤ リクライニング角度・フットレスト・価格は品質指標に含めない（用途次第のオプション機能）。
 function calcScore(c: (typeof chairs)[0]): number {
-  const priceScore = Math.max(0, (100000 - c.price) / 100000) * 30;
-  const lumbarScore = c.lumbarSupport ? 20 : 0;
-  const armrestScore = c.armrest === "4D" ? 20 : c.armrest === "3D" ? 15 : c.armrest === "2D" ? 8 : 0;
-  const recliningScore = Math.min((c.recliningAngle - 90) / 80, 1) * 15;
-  const newScore = c.releaseYear >= 2024 ? 10 : c.releaseYear >= 2023 ? 5 : 0;
-  const footrestScore = c.footrest ? 5 : 0;
-  return priceScore + lumbarScore + armrestScore + recliningScore + newScore + footrestScore;
+  // ランバーサポート: 腰痛予防の最重要指標
+  const lumbarScore = c.lumbarSupport ? 40 : 0;
+
+  // アームレスト: 自由度が高いほど長時間プレイでの疲労軽減
+  const armrestScore =
+    c.armrest === "4D" ? 30 :
+    c.armrest === "3D" ? 22 :
+    c.armrest === "2D" ? 12 :
+    0;
+
+  // 素材・通気性: 長時間プレイでの快適性
+  const materialScore =
+    c.material === "メッシュ" ? 18 :
+    c.material === "ファブリック" ? 14 :
+    c.material === "PUレザー" ? 10 :
+    8;
+
+  // 発売年（最新の人間工学・設計を反映）
+  const newScore = c.releaseYear >= 2025 ? 12 : c.releaseYear >= 2024 ? 8 : c.releaseYear >= 2023 ? 4 : 1;
+
+  return lumbarScore + armrestScore + materialScore + newScore;
 }
 
 const overall = [...chairs].sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 10);
@@ -68,7 +88,7 @@ export default function ChairsRankingPage() {
       </header>
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-white mb-2">ゲーミングチェア おすすめランキング2026</h1>
-        <p className="text-sm text-gray-400 mb-8">ランバーサポート・アームレスト・リクライニング角度・価格のスペックデータをもとに算出。全{chairs.length}製品から厳選。</p>
+        <p className="text-sm text-gray-400 mb-8">ランバーサポート・アームレスト自由度・素材・発売年のスペックデータをもとに算出。全{chairs.length}製品から厳選。</p>
         <nav className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-10">
           <p className="text-xs text-gray-500 mb-2">目次</p>
           <ul className="space-y-1">
@@ -80,7 +100,7 @@ export default function ChairsRankingPage() {
         </nav>
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
-          <p className="text-xs text-gray-500 mb-4">ランバーサポート・アームレスト・リクライニング・価格・発売年を総合スコア化</p>
+          <p className="text-xs text-gray-500 mb-4">ランバーサポート・アームレスト自由度・素材・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">{overall.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} />)}</div>
         </section>
         <section id="backpain" className="mb-12">
