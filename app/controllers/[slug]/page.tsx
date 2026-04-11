@@ -38,6 +38,16 @@ export default async function ControllerDetailPage({ params }: Props) {
 
   const description = `${ctrl.name}は${ctrl.brand}が${ctrl.releaseYear}年にリリースした${ctrl.platform}対応の${connectionLabel}ゲームコントローラーです。重さ${ctrl.weight}gで${tags}向けに設計されています。${ctrl.backButtons ? "背面ボタンを搭載し、" : ""}${ctrl.triggerStop ? "トリガーストップで素早い射撃操作が可能。" : ""}${ctrl.adaptiveTriggers ? "アダプティブトリガーにより臨場感のある触覚フィードバックを実現。" : ""}参考価格は¥${ctrl.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (ctrl.backButtons) forWhom.push("スティックから親指を離さずにジャンプ・リロードを操作したい方");
+  if (ctrl.triggerStop) forWhom.push("FPSで射撃トリガーを最短ストロークで素早く引きたい方");
+  if (ctrl.gyro) forWhom.push("ジャイロエイムでより直感的なエイム操作を求める方");
+  if (ctrl.adaptiveTriggers) forWhom.push("アダプティブトリガーで没入感のある触覚体験を楽しみたい方");
+  if (ctrl.connection === "wireless") forWhom.push("ケーブルなしでソファやベッドから快適にプレイしたい方");
+  if (ctrl.price <= 8000) forWhom.push("コストを抑えながらゲームパッドを始めたい方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームを楽しみたい方`);
+
   const specs = [
     { label: "プラットフォーム", value: ctrl.platform },
     { label: "接続方式", value: connectionLabel },
@@ -122,6 +132,15 @@ export default async function ControllerDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {ctrl.feelTags && ctrl.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {ctrl.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -138,8 +157,29 @@ export default async function ControllerDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{ctrl.name}をランキングで比較する</p>
+          <Link href="/controllers/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            コントローラー ランキングを見る →
+          </Link>
         </div>
 
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">

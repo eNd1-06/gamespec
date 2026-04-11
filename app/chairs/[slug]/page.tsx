@@ -37,6 +37,16 @@ export default async function ChairDetailPage({ params }: Props) {
 
   const description = `${chair.name}は${chair.brand}が${chair.releaseYear}年にリリースした${chair.type}のゲーミングチェアです。${chair.material}素材を採用し、耐荷重${chair.maxLoadWeight}kg・最大リクライニング${chair.recliningAngle}°に対応。アームレストは${chair.armrest}で${chair.lumbarSupport ? "ランバーサポートクッション付き、" : ""}${chair.footrest ? "フットレスト付きで長時間のプレイも快適、" : ""}${tags}向けに設計されています。参考価格は¥${chair.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (chair.lumbarSupport) forWhom.push("長時間プレイ中の腰の負担を軽減して腰痛を予防したい方");
+  if (chair.armrest === "4D") forWhom.push("アームレストを細かく調整して肩・腕の疲れを最小化したい方");
+  if (chair.material === "メッシュ") forWhom.push("通気性の高いメッシュ素材で夏でも蒸れずに快適にプレイしたい方");
+  if (chair.footrest) forWhom.push("フットレストを使って足を伸ばしながらリラックスしてプレイしたい方");
+  if (chair.recliningAngle >= 160) forWhom.push("プレイ後にしっかりリクライニングして体を休めたい方");
+  if (chair.price <= 40000) forWhom.push("コスパ重視で機能充実のゲーミングチェアを探している方");
+  if (forWhom.length === 0) forWhom.push(`${tags}を楽しむ方`);
+
   const specs = [
     { label: "タイプ", value: chair.type },
     { label: "素材", value: chair.material },
@@ -121,6 +131,15 @@ export default async function ChairDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {chair.feelTags && chair.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {chair.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -133,8 +152,29 @@ export default async function ChairDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{chair.name}をランキングで比較する</p>
+          <Link href="/chairs/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            チェア ランキングを見る →
+          </Link>
         </div>
 
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">

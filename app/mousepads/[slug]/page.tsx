@@ -35,6 +35,17 @@ export default async function MousepadDetailPage({ params }: Props) {
   const tags = pad.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : "カジュアルゲーム").join("・");
   const description = `${pad.name}は${pad.brand}が${pad.releaseYear}年にリリースした${sizeLabel}の${pad.material}製ゲーミングマウスパッドです。${pad.surface}タイプで${tags}向けに設計されており、サイズは${pad.width}×${pad.height}mm・厚さ${pad.thickness}mm。${pad.stitchedEdge ? "ほつれを防ぐステッチ加工済みで" : ""}参考価格は¥${pad.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (pad.surface === "速度系") forWhom.push("滑らかな動きで素早いエイム操作を重視する方");
+  if (pad.surface === "コントロール系") forWhom.push("マウスの止まりを重視してエイムを安定させたい方");
+  if (pad.size === "XL" || pad.size === "XXL") forWhom.push("マウスとキーボードをまとめて置ける広いデスク環境を整えたい方");
+  if (pad.size === "S" || pad.size === "M") forWhom.push("限られたデスクスペースでもしっかりしたパッドを使いたい方");
+  if (pad.stitchedEdge) forWhom.push("端のほつれを防いで長期間きれいに使い続けたい方");
+  if (pad.rgb) forWhom.push("デスクのRGBセットアップに統一感を出したい方");
+  if (pad.price <= 3000) forWhom.push("コストを抑えながらクオリティの高いマウスパッドを探している方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームをプレイする方`);
+
   const specs = [
     { label: "サイズ区分", value: pad.size },
     { label: "幅 × 高さ", value: `${pad.width} × ${pad.height} mm` },
@@ -126,6 +137,15 @@ export default async function MousepadDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {pad.feelTags && pad.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {pad.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -142,9 +162,29 @@ export default async function MousepadDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* 説明文 */}
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{pad.name}をランキングで比較する</p>
+          <Link href="/mousepads/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            マウスパッド ランキングを見る →
+          </Link>
         </div>
 
         {/* スペック一覧 */}

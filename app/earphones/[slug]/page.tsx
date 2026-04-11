@@ -38,6 +38,16 @@ export default async function EarphoneDetailPage({ params }: Props) {
 
   const description = `${ep.name}は${ep.brand}の${connectionLabel}ゲーミングイヤホンです。${ep.driver}を採用し、重さ${ep.weight}gの軽量設計。${ep.microphone ? "マイクを搭載し通話・ボイスチャットに対応、" : ""}${ep.anc ? "アクティブノイズキャンセリング（ANC）搭載、" : ""}${ep.batteryLife ? `バッテリー最大${ep.batteryLife}時間（ワイヤレス時）、` : ""}${ep.latency ? `低遅延${ep.latency}ms対応、` : ""}${tags}向けに最適化されています。参考価格は¥${ep.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (ep.anc) forWhom.push("周囲の騒音をカットして集中してゲームに臨みたい方");
+  if (ep.connection === "wireless" && ep.latency && ep.latency <= 20) forWhom.push("ワイヤレスでも低遅延を重視してFPS・APEXをプレイしたい方");
+  if (ep.weight <= 5) forWhom.push("長時間装着しても耳・頭が疲れにくい超軽量イヤホンを求める方");
+  if (ep.microphone) forWhom.push("ゲーム中のボイスチャットやストリーミング配信に使いたい方");
+  if (ep.batteryLife && ep.batteryLife >= 30) forWhom.push("充電を気にせず長時間ワイヤレスで使い続けたい方");
+  if (ep.price <= 10000) forWhom.push("コスパ重視でゲーミングイヤホンを始めたい方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームを楽しむ方`);
+
   const specs = [
     { label: "接続方式", value: connectionLabel },
     { label: "ドライバー", value: ep.driver },
@@ -122,6 +132,15 @@ export default async function EarphoneDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {ep.feelTags && ep.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {ep.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -134,8 +153,29 @@ export default async function EarphoneDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{ep.name}をランキングで比較する</p>
+          <Link href="/earphones/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            イヤホン ランキングを見る →
+          </Link>
         </div>
 
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">

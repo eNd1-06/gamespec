@@ -53,6 +53,17 @@ export default async function MousePage({ params }: Props) {
   const tags = mouse.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "moba" ? "MOBA" : "カジュアル").join("・");
   const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIと${mouse.pollingRate}Hzポーリングレートに対応。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ テキスト生成
+  const forWhom: string[] = [];
+  if (mouse.weight <= 60) forWhom.push("長時間プレイで腕・手首の疲れを減らしたい方");
+  else if (mouse.weight <= 75) forWhom.push("軽量重視でFPS・APEXをプレイする方");
+  if (mouse.pollingRate >= 4000) forWhom.push("入力遅延を極限まで減らしたい競技プレイヤー");
+  if (mouse.pollingRate >= 8000) forWhom.push("8000Hzの超高精度入力を求めるプロ志向の方");
+  if (mouse.connection === "wireless") forWhom.push("ケーブルの引っかかりをなくしてエイムを安定させたい方");
+  if (mouse.shape === "ergonomic") forWhom.push("右手にフィットするエルゴノミクス形状を好む方");
+  if (mouse.price <= 8000) forWhom.push("コストを抑えながら競技品質のマウスを探している方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームをプレイする方`);
+
   const related = mice
     .filter((m) => {
       if (m.slug === mouse.slug) return false;
@@ -135,6 +146,15 @@ export default async function MousePage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {mouse.feelTags && mouse.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {mouse.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -151,9 +171,29 @@ export default async function MousePage({ params }: Props) {
           </div>
         </div>
 
-        {/* 説明文 */}
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{mouse.name}をランキングで比較する</p>
+          <Link href="/mice/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            マウス ランキングを見る →
+          </Link>
         </div>
 
         {/* スペック一覧 */}

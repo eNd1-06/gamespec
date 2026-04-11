@@ -53,6 +53,16 @@ export default async function HeadsetDetailPage({ params }: Props) {
   const tags = headset.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : t === "immersive" ? "没入感重視" : t === "console" ? "コンソール" : "カジュアル").join("・");
   const description = `${headset.name}は${headset.brand}が${headset.releaseYear}年に発売した${weightLabel}（${headset.weight}g）の${connectionLabel}ゲーミングヘッドセットです。${headset.driverSize}mmドライバーを搭載し、${ancText}${batteryText}${headset.virtualSurround ? "バーチャルサラウンドに対応。" : ""}${tags}向けに設計されており、参考価格は¥${headset.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (headset.anc) forWhom.push("周囲の騒音を遮断して集中してゲームに臨みたい方");
+  if (headset.connection === "wireless") forWhom.push("ケーブルなしで自由に動きながらゲームしたい方");
+  if (headset.batteryLife && headset.batteryLife >= 40) forWhom.push("充電を気にせず長時間プレイしたい方");
+  if (headset.virtualSurround) forWhom.push("FPS・APEXで敵の足音・銃声の方向を正確に把握したい方");
+  if (headset.weight <= 280) forWhom.push("軽量設計で長時間装着しても頭・首が疲れにくい環境を求める方");
+  if (headset.price <= 15000) forWhom.push("コストを抑えながら無線ゲーミングヘッドセットを始めたい方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームを楽しむ方`);
+
   const related = headsets
     .filter((h) => {
       if (h.slug === headset.slug) return false;
@@ -130,6 +140,15 @@ export default async function HeadsetDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {headset.feelTags && headset.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {headset.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -146,9 +165,29 @@ export default async function HeadsetDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* 説明文 */}
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{headset.name}をランキングで比較する</p>
+          <Link href="/headsets/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            ヘッドセット ランキングを見る →
+          </Link>
         </div>
 
         {/* スペック一覧 */}

@@ -49,6 +49,17 @@ export default async function MonitorDetailPage({ params }: Props) {
   const tags = monitor.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : "RPG/MMO").join("・");
   const description = `${monitor.name}は${monitor.brand}が${monitor.releaseYear}年に発売した${monitor.size}型・${monitor.resolution}・${monitor.refreshRate}Hzの${hzLabel}ゲーミングモニターです。${panelLabel}を採用し、応答速度${monitor.responseTime}ms（GTG）を実現。${monitor.curved ? "曲面パネルで没入感が高く、" : ""}${tags}向けに最適化されており、参考価格は¥${monitor.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (monitor.refreshRate >= 500) forWhom.push("CS2・APEXなど競技FPSでプロレベルの環境を求める方");
+  else if (monitor.refreshRate >= 240) forWhom.push("FPS・APEXで高リフレッシュレートによる滑らかな映像を求める方");
+  if (monitor.panelType === "OLED" || monitor.panelType === "QD-OLED") forWhom.push("完全な黒と圧倒的なコントラストで没入感を高めたい方");
+  if (monitor.responseTime <= 0.1) forWhom.push("残像・ゴーストのない超高速応答を求める方");
+  if (monitor.curved) forWhom.push("湾曲パネルで視野角を広げ、包まれるような没入感を得たい方");
+  if (monitor.resolution === "4K") forWhom.push("4K高解像度で映像制作・RPGを最高画質で楽しみたい方");
+  if (monitor.price <= 35000) forWhom.push("コストを抑えながらゲーミングモニターを始めたい方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームをプレイする方`);
+
   const related = monitors
     .filter((m) => {
       if (m.slug === monitor.slug) return false;
@@ -124,6 +135,15 @@ export default async function MonitorDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {monitor.feelTags && monitor.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {monitor.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -140,9 +160,29 @@ export default async function MonitorDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* 説明文 */}
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{monitor.name}をランキングで比較する</p>
+          <Link href="/monitors/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            モニター ランキングを見る →
+          </Link>
         </div>
 
         {/* スペック一覧 */}

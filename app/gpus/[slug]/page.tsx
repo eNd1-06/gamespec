@@ -38,6 +38,16 @@ export default async function GpuDetailPage({ params }: Props) {
 
   const description = `${gpu.name}は${gpu.brand}製の${gpu.gpuBrand} ${gpu.chipset}搭載グラフィックボードです。VRAM ${gpu.vram}GB（${gpu.memoryType}）を${gpu.memoryBus}bitバスで搭載し、ブーストクロックは${gpu.boostClock.toLocaleString()}MHz。TDPは${gpu.tdp}Wで${tags}向けの性能を持ちます。参考価格は¥${gpu.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (gpu.recommendFor.includes("4k")) forWhom.push("4K解像度で高画質ゲームや映像制作を楽しみたい方");
+  if (gpu.recommendFor.includes("1440p")) forWhom.push("1440p・高リフレッシュレート環境でゲームを最大限楽しみたい方");
+  if (gpu.recommendFor.includes("competitive") || gpu.recommendFor.includes("fps")) forWhom.push("FPS・APEXで高フレームレートを安定させて競技優位性を高めたい方");
+  if (gpu.vram >= 16) forWhom.push("大容量VRAMで4K・高解像度テクスチャを快適に扱いたい方");
+  if (gpu.tdp <= 150) forWhom.push("消費電力を抑えた省エネ構成でコンパクトPCを組みたい方");
+  if (gpu.price <= 60000) forWhom.push("コスパ重視でミドルレンジの高性能GPUを探している方");
+  if (forWhom.length === 0) forWhom.push(`${tags}向けゲームを快適にプレイしたい方`);
+
   const specs = [
     { label: "チップセット", value: gpu.chipset },
     { label: "GPUメーカー", value: gpu.gpuBrand },
@@ -117,6 +127,15 @@ export default async function GpuDetailPage({ params }: Props) {
             {gpu.isNew && <span className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full">NEW</span>}
           </div>
 
+          {/* 使用感タグ */}
+          {gpu.feelTags && gpu.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {gpu.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -133,8 +152,29 @@ export default async function GpuDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{gpu.name}をランキングで比較する</p>
+          <Link href="/gpus/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            GPU ランキングを見る →
+          </Link>
         </div>
 
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">

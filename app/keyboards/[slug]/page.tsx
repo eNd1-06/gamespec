@@ -54,6 +54,17 @@ export default async function KeyboardDetailPage({ params }: Props) {
   const tags = kb.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "competitive" ? "競技" : t === "moba" ? "MOBA" : "タイピング").join("・");
   const description = `${kb.name}は${kb.brand}が${kb.releaseYear}年に発売した${kb.layout}サイズのゲーミングキーボードです。${switchLabel}を採用し、アクチュエーション${kb.actuation}mm・ポーリングレート${kb.pollingRate}Hzに対応。${wirelessText}${hotswapText}${tags}向けに最適化されており、参考価格は¥${kb.price.toLocaleString()}です。`;
 
+  // こんな人におすすめ
+  const forWhom: string[] = [];
+  if (kb.switchType === "磁気式") forWhom.push("アクチュエーション深さを自由に調整してエイムを最適化したい方");
+  if (kb.pollingRate >= 4000) forWhom.push("入力遅延を極限まで削減したい競技プレイヤー");
+  if (kb.wireless) forWhom.push("ケーブルなしですっきりしたデスク環境でプレイしたい方");
+  if (kb.hotswap) forWhom.push("スイッチを自分好みに交換してカスタマイズしたい方");
+  if (kb.layout === "60%" || kb.layout === "65%") forWhom.push("コンパクトなレイアウトでマウス可動域を最大限に確保したい方");
+  if (kb.actuation <= 0.2) forWhom.push("超高速アクチュエーションで競技FPSの反応速度を高めたい方");
+  if (kb.price <= 15000) forWhom.push("コストを抑えながら競技品質のキーボードを探している方");
+  if (forWhom.length === 0) forWhom.push(`${tags}ゲームをプレイする方`);
+
   // 相性の良いモニター（競技向けなら高Hz優先）
   const relatedMonitors = monitors
     .filter((m) => m.recommendFor.some((t) => (kb.recommendFor as string[]).includes(t)))
@@ -141,6 +152,15 @@ export default async function KeyboardDetailPage({ params }: Props) {
             ))}
           </div>
 
+          {/* 使用感タグ */}
+          {kb.feelTags && kb.feelTags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {kb.feelTags.map((tag) => (
+                <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
@@ -157,9 +177,29 @@ export default async function KeyboardDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* 説明文 */}
+        {/* 説明文 + こんな人におすすめ */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-300 leading-relaxed mb-4">{description}</p>
+          {forWhom.length > 0 && (
+            <>
+              <h2 className="text-sm font-bold text-white mb-2">こんな方におすすめ</h2>
+              <ul className="space-y-1">
+                {forWhom.map((item) => (
+                  <li key={item} className="text-sm text-gray-400 flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        {/* ランキングへの導線 */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-gray-400">{kb.name}をランキングで比較する</p>
+          <Link href="/keyboards/ranking" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5 shrink-0">
+            キーボード ランキングを見る →
+          </Link>
         </div>
 
         {/* スペック一覧 */}
