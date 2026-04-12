@@ -103,6 +103,7 @@ export const gpus: GamingGpu[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=RTX+5060+Ti&tag=gamespec-22",
     recommendFor: ["1080p", "1440p", "fps", "apex", "competitive"],
     releaseYear: 2025, isNew: true,
+    feelTags: ["GDDR7新世代・高速メモリ帯域", "DLSS 4 Multi Frame Generation対応", "16GB VRAMで1440p以降も余裕"],
   },
   {
     slug: "asus-rtx5060-dual-oc",
@@ -179,6 +180,7 @@ export const gpus: GamingGpu[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=RTX+4070+SUPER+ZOTAC&tag=gamespec-22",
     recommendFor: ["1440p", "fps"],
     releaseYear: 2024,
+    feelTags: ["1440pゲームの最有力候補", "DLSS 3 Frame Generation対応", "ワットパフォーマンス優秀"],
   },
   {
     slug: "msi-rtx4070-gaming-x-trio",
@@ -224,6 +226,7 @@ export const gpus: GamingGpu[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=RTX+4060+MSI+GAMING&tag=gamespec-22",
     recommendFor: ["1080p", "fps", "apex", "competitive"],
     releaseYear: 2023,
+    feelTags: ["1080pゲームに必要十分", "DLSS 3対応", "115W省電力・静音性◎", "FPS入門コスパ最高クラス"],
   },
   {
     slug: "gigabyte-rtx4060-eagle-oc",
@@ -255,6 +258,7 @@ export const gpus: GamingGpu[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=RX+9070+XT+Sapphire&tag=gamespec-22",
     recommendFor: ["1440p", "4k", "fps"],
     releaseYear: 2025, isNew: true,
+    feelTags: ["2025年最注目・RTX 5070に迫る性能", "16GB大容量VRAMで将来性◎", "FSR 4対応", "コスパ最強クラス"],
   },
   {
     slug: "powercolor-rx9070-hellhound",
@@ -361,6 +365,7 @@ export const gpus: GamingGpu[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=RX+7600+Sapphire&tag=gamespec-22",
     recommendFor: ["1080p", "fps", "competitive"],
     releaseYear: 2023,
+    feelTags: ["3万円以下で1080p最強クラス", "低消費電力で省エネ", "FPS入門GPU最有力候補"],
   },
   // --- その他 NVIDIA ---
   {

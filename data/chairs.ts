@@ -105,6 +105,7 @@ export const chairs: GamingChair[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=Secretlab+TITAN+Evo+2022&tag=gamespec-22",
     recommendFor: ["fps", "long-session"],
     releaseYear: 2022,
+    feelTags: ["世界No.1プロゲーマー使用率", "縫製・仕上げが高品質", "磁気ヘッドクッションが便利", "長期使用での劣化が少ない"],
   },
   {
     slug: "secretlab-magnus-pro",
@@ -120,6 +121,7 @@ export const chairs: GamingChair[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=Secretlab+MAGNUS+Pro&tag=gamespec-22",
     recommendFor: ["long-session", "back-pain", "office"],
     releaseYear: 2023,
+    feelTags: ["メッシュで蒸れにくい", "エルゴノミクス設計で姿勢サポート", "夏でも快適なゲーミングチェア"],
   },
   // --- DXRacer ---
   {
@@ -229,6 +231,7 @@ export const chairs: GamingChair[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=Herman+Miller+Aeron+Gaming&tag=gamespec-22",
     recommendFor: ["long-session", "back-pain", "office"],
     releaseYear: 2021,
+    feelTags: ["長時間着座の最高峰", "完全メッシュで蒸れゼロ", "腰痛持ちプロゲーマーの定番", "12年保証"],
   },
   {
     slug: "steelcase-leap-v2",
@@ -367,6 +370,7 @@ export const chairs: GamingChair[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=FlexiSpot+OC14&tag=gamespec-22",
     recommendFor: ["long-session", "back-pain", "office"],
     releaseYear: 2023, isNew: true,
+    feelTags: ["4万円以下のエルゴノミクス最有力候補", "メッシュで夏も快適", "腰痛対策コスパNo.1クラス"],
   },
   {
     slug: "bauhutte-bsl-900-gaming",
@@ -412,6 +416,7 @@ export const chairs: GamingChair[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=IKEA+MATCHSPEL&tag=gamespec-22",
     recommendFor: ["casual", "office"],
     releaseYear: 2021,
+    feelTags: ["IKEA品質でコスパ抜群", "ファブリックで通気性あり", "シンプルデザインでオフィス兼用"],
   },
   {
     slug: "dxracer-formula-f11-nv",

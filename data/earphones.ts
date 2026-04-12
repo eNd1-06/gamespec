@@ -44,6 +44,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=final+VR3000&tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2021,
+    feelTags: ["足音・銃声の定位が優秀", "ゲーミング専用チューニング", "日本ブランドの高品質", "有線で遅延ゼロ"],
   },
   {
     slug: "razer-moray",
@@ -104,6 +105,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=final+E500&tag=gamespec-22",
     recommendFor: ["fps", "competitive", "casual"],
     releaseYear: 2017,
+    feelTags: ["超コスパ・2500円以下で定位優秀", "低音控えめで足音が聞こえやすい", "FPS入門イヤホンの定番"],
   },
   {
     slug: "moondrop-aria-2",
@@ -163,6 +165,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=Sony+INZONE+Buds&tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive", "console"],
     releaseYear: 2023,
+    feelTags: ["PS5完全最適化・12ms超低遅延", "ANC付きで没入感◎", "ワイヤレス最高クラスの音質", "専用アプリで詳細設定可能"],
   },
   {
     slug: "asus-rog-cetra-true-wireless-speednova",
@@ -191,6 +194,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=SteelSeries+Arctis+GameBuds&tag=gamespec-22",
     recommendFor: ["fps", "competitive", "console"],
     releaseYear: 2024, isNew: true,
+    feelTags: ["16ms低遅延で競技に使えるレベル", "PC・PS5・Switchマルチ対応", "ANC付きゲーミングイヤホンの新定番"],
   },
   {
     slug: "jabra-evolve2-buds-gaming",
@@ -249,6 +253,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=final+VR2000+Gaming&tag=gamespec-22",
     recommendFor: ["fps", "competitive"],
     releaseYear: 2020,
+    feelTags: ["マイク付きゲーミング特化", "足音定位が優秀", "コスパ最高クラス"],
   },
   {
     slug: "hyperx-cloud-earbuds-2",
@@ -397,6 +402,7 @@ export const earphones: GamingEarphone[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=final+ZE3000+SPD&tag=gamespec-22",
     recommendFor: ["fps", "competitive", "casual"],
     releaseYear: 2024, isNew: true,
+    feelTags: ["20ms低遅延・ゲーミング対応ワイヤレス", "日本ブランドの音質", "コスパ◎"],
   },
   {
     slug: "sennheiser-ie-300",

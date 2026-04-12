@@ -39,6 +39,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B000UEZ36W?tag=gamespec-22",
     recommendFor: ["fps", "competitive"],
     releaseYear: 2018,
+    feelTags: ["プロ定番", "安定したコントロール", "厚み6mmで安定感◎", "コスパ最高"],
   },
   {
     slug: "steelseries-qck-plus",
@@ -148,6 +149,7 @@ export const mousepads: GamingMousepad[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["速度と止まりを両立", "ハイブリッドで撥水性あり", "広デスクをカバー"],
   },
   {
     slug: "razer-atlas",
@@ -161,6 +163,7 @@ export const mousepads: GamingMousepad[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
     isNew: false,
+    feelTags: ["ガラス製・超低摩擦", "汚れが拭き取りやすい", "独特の滑り感", "慣れが必要"],
   },
   {
     slug: "artisan-hayate-otsu-mid-m",
@@ -173,6 +176,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B00N2ZFFYQ?tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2016,
+    feelTags: ["日本製高品質", "速度寄りのバランス感", "独特のザラツキ感", "プロ使用実績あり"],
   },
   {
     slug: "artisan-zero-soft-xl",
@@ -185,6 +189,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B00N2ZI3BS?tag=gamespec-22",
     recommendFor: ["fps", "competitive"],
     releaseYear: 2016,
+    feelTags: ["日本製高品質", "しっかり止まる", "ローセンシ向け", "ふわふわした感触"],
   },
   {
     slug: "artisan-hien-soft-l",
@@ -197,6 +202,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B00N2ZFXGA?tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2016,
+    feelTags: ["日本製高品質", "超低摩擦でスムーズ", "ハイセンシ向け", "プロ使用実績あり"],
   },
   {
     slug: "zowie-g-sr",
@@ -209,6 +215,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B00QHVB5KS?tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2015,
+    feelTags: ["プロシーン定番", "一貫した止まり感", "劣化しにくい", "CSGOプロ御用達"],
   },
   {
     slug: "zowie-gtf-x-l",
@@ -246,6 +253,7 @@ export const mousepads: GamingMousepad[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["ハイブリッドで撥水性あり", "速度感があるのに止まる", "コスパ良好"],
   },
   {
     slug: "hyperx-fury-s-pro-xl",
@@ -330,6 +338,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B09H8FX5WV?tag=gamespec-22",
     recommendFor: ["fps", "competitive"],
     releaseYear: 2021,
+    feelTags: ["コーデュラ素材で超耐久", "洗濯可能", "劣化が非常に遅い", "ハードコアゲーマー向け"],
   },
   {
     slug: "endgame-gear-mpx390",
@@ -366,6 +375,7 @@ export const mousepads: GamingMousepad[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B09KNCF73H?tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2021,
+    feelTags: ["速度と止まりのバランスが絶妙", "APEXプロ使用実績", "しなやかで扱いやすい"],
   },
   {
     slug: "vaxee-zydeco-l",
@@ -391,6 +401,7 @@ export const mousepads: GamingMousepad[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2022,
     isNew: false,
+    feelTags: ["最高クラスの低摩擦", "ガラス製・半永久的耐久性", "超ハイセンシ向け", "慣れるまで時間がかかる"],
   },
   {
     slug: "mountain-basecamp-xl",
@@ -479,6 +490,7 @@ export const mousepads: GamingMousepad[] = [
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2024,
     isNew: true,
+    feelTags: ["ハイブリッドの新定番", "速度とコントロールを高次元で両立", "撥水加工済み"],
   },
   {
     slug: "asus-rog-baldur-qi-xl",

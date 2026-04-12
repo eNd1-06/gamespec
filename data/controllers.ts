@@ -43,6 +43,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B08H99BPJN?tag=gamespec-22",
     recommendFor: ["rpg", "casual"],
     releaseYear: 2020,
+    feelTags: ["アダプティブトリガーで没入感◎", "ハプティックが業界最高クラス", "PS5純正の安心感"],
   },
   {
     slug: "sony-dualsense-midnight-black",
@@ -73,6 +74,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B0BQKXJ3K8?tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
+    feelTags: ["PS5プロコンの最高峰", "背面ボタン＋トリガーストップ搭載", "バッテリーが短め（6時間）が唯一の弱点"],
   },
   {
     slug: "sony-dualsense-cobalt-blue",
@@ -134,6 +136,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/dp/B07SFKTLZM?tag=gamespec-22",
     recommendFor: ["fps", "competitive", "rpg"],
     releaseYear: 2019,
+    feelTags: ["Xbox最高峰・カスタマイズ性抜群", "交換可能なスティック・パドル", "バッテリー最大40時間", "プロゲーマー御用達"],
   },
   {
     slug: "microsoft-xbox-elite-series2-core",
@@ -165,6 +168,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=Razer+Wolverine+V3+Pro&tag=gamespec-22",
     recommendFor: ["fps", "apex", "competitive"],
     releaseYear: 2023,
+    feelTags: ["PS5・PC両対応の競技向け最強クラス", "Mecha-Tactileボタンで素早い入力", "軽量268gで扱いやすい"],
   },
   {
     slug: "razer-wolverine-v2-pro",
@@ -389,6 +393,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=8BitDo+Ultimate+Bluetooth&tag=gamespec-22",
     recommendFor: ["fps", "rpg", "casual", "competitive"],
     releaseYear: 2022,
+    feelTags: ["PC・Switch・Android幅広く対応", "コスパ◎で多機能", "ホールセンサー採用・ドリフトしにくい"],
   },
   {
     slug: "gulikit-kingkong-3-pro",
@@ -404,6 +409,7 @@ export const controllers: GamingController[] = [
     amazonUrl: "https://www.amazon.co.jp/s?k=GuliKit+KingKong+3+Pro&tag=gamespec-22",
     recommendFor: ["fps", "competitive", "casual"],
     releaseYear: 2023,
+    feelTags: ["ホールセンサーでスティックドリフト永久防止", "コスパ最高クラス", "背面ボタン付きで1万円以下"],
   },
   {
     slug: "hori-fighting-commander-octa-ps5",
