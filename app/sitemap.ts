@@ -12,6 +12,11 @@ import { VS_PAIRS } from "@/app/mice/vs/[pair]/page";
 import { VS_PAIRS as MONITOR_VS_PAIRS } from "@/app/monitors/vs/[pair]/page";
 import { VS_PAIRS as KEYBOARD_VS_PAIRS } from "@/app/keyboards/vs/[pair]/page";
 import { VS_PAIRS as HEADSET_VS_PAIRS } from "@/app/headsets/vs/[pair]/page";
+import { VS_PAIRS as MOUSEPAD_VS_PAIRS } from "@/app/mousepads/vs/[pair]/page";
+import { VS_PAIRS as GPU_VS_PAIRS } from "@/app/gpus/vs/[pair]/page";
+import { VS_PAIRS as CONTROLLER_VS_PAIRS } from "@/app/controllers/vs/[pair]/page";
+import { VS_PAIRS as EARPHONE_VS_PAIRS } from "@/app/earphones/vs/[pair]/page";
+import { VS_PAIRS as CHAIR_VS_PAIRS } from "@/app/chairs/vs/[pair]/page";
 
 const BASE_URL = "https://gamespec.vercel.app"; // updated 2026-04-10
 
@@ -113,6 +118,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
+  const mousepadVsPages = MOUSEPAD_VS_PAIRS.filter(([a, b]) =>
+    mousepads.find((m) => m.slug === a) && mousepads.find((m) => m.slug === b)
+  ).map(([a, b]) => ({
+    url: `${BASE_URL}/mousepads/vs/${a}-vs-${b}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  const gpuVsPages = GPU_VS_PAIRS.filter(([a, b]) =>
+    gpus.find((g) => g.slug === a) && gpus.find((g) => g.slug === b)
+  ).map(([a, b]) => ({
+    url: `${BASE_URL}/gpus/vs/${a}-vs-${b}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  const controllerVsPages = CONTROLLER_VS_PAIRS.filter(([a, b]) =>
+    controllers.find((c) => c.slug === a) && controllers.find((c) => c.slug === b)
+  ).map(([a, b]) => ({
+    url: `${BASE_URL}/controllers/vs/${a}-vs-${b}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  const earphoneVsPages = EARPHONE_VS_PAIRS.filter(([a, b]) =>
+    earphones.find((e) => e.slug === a) && earphones.find((e) => e.slug === b)
+  ).map(([a, b]) => ({
+    url: `${BASE_URL}/earphones/vs/${a}-vs-${b}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  const chairVsPages = CHAIR_VS_PAIRS.filter(([a, b]) =>
+    chairs.find((c) => c.slug === a) && chairs.find((c) => c.slug === b)
+  ).map(([a, b]) => ({
+    url: `${BASE_URL}/chairs/vs/${a}-vs-${b}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
   return [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/mice`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
@@ -147,29 +197,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/mousepads`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/mousepads/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/mousepads/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/mousepads/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/mousepads/fps`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/gpus`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/gpus/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/gpus/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/gpus/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/gpus/midrange`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/gpus/nvidia`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/gpus/amd`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/controllers`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/controllers/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/controllers/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/controllers/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/controllers/fps`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/earphones`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/earphones/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/earphones/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/earphones/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/earphones/gaming`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/chairs`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/chairs/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/chairs/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/chairs/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/chairs/ergonomic`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     ...miceVsPages,
     ...monitorVsPages,
     ...keyboardVsPages,
     ...headsetVsPages,
+    ...mousepadVsPages,
+    ...gpuVsPages,
+    ...controllerVsPages,
+    ...earphoneVsPages,
+    ...chairVsPages,
     ...mousePages,
     ...monitorPages,
     ...keyboardPages,

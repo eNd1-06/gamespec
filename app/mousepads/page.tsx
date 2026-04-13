@@ -331,6 +331,25 @@ export default function MousepadPage() {
           )}
         </main>
       </div>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングマウスパッドの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">サイズで選ぶ</h3>
+            <p>Lサイズ（400×450mm以上）は低DPI・大きなマウス操作をするFPS・APEXプレイヤーの定番。Mサイズは机が狭い環境や高DPI設定のゲーマーに適しています。XLサイズはキーボードまでカバーするデスクマット型です。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">滑り感・素材で選ぶ</h3>
+            <p>スピード系（布・ハード）は素早いマウス操作に向き、コントロール系は正確なエイム調整がしやすいです。クロス素材は柔らかく扱いやすく、ハード素材は耐久性が高く一定の滑りを長期間維持します。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">縫い目・厚みで選ぶ</h3>
+            <p>ステッチエッジ（縫い目加工）はほつれを防ぎ長持ちします。厚み3〜4mmのモデルはクッション性が高く手首への負担を軽減。薄型（2mm以下）はマウスを持ち上げるリフトオフ操作がしやすいです。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
