@@ -7,39 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-// 静的生成する比較ペア（slugA-vs-slugB）
-export const VS_PAIRS: [string, string][] = [
-  ["logicool-g-pro-x-superlight-2", "razer-viper-v3-pro"],
-  ["logicool-g-pro-x-superlight-2", "finalmouse-starlight-12"],
-  ["logicool-g-pro-x-superlight-2", "pulsar-xlite-v3"],
-  ["logicool-g-pro-x-superlight-2", "razer-viper-v2-pro"],
-  ["logicool-g-pro-x-superlight-2", "logicool-g-pro-x2-lightspeed"],
-  ["logicool-g-pro-x-superlight-2", "attack-shark-x6"],
-  ["razer-viper-v3-pro", "finalmouse-starlight-12"],
-  ["razer-viper-v3-pro", "pulsar-xlite-v3"],
-  ["razer-viper-v3-pro", "zowie-ec2-c"],
-  ["razer-viper-v3-pro", "razer-viper-v2-pro"],
-  ["razer-viper-v3-pro", "logicool-g-pro-x2-lightspeed"],
-  ["razer-deathadder-v3", "pulsar-xlite-v3"],
-  ["razer-deathadder-v3", "zowie-ec2-c"],
-  ["razer-deathadder-v3", "endgame-gear-xm2we"],
-  ["pulsar-xlite-v3", "endgame-gear-xm2we"],
-  ["pulsar-xlite-v3", "ninjutso-sora-v2"],
-  ["pulsar-xlite-v3", "lamzu-atlantis-mini"],
-  ["pulsar-xlite-v3", "pulsar-x2-mini"],
-  ["finalmouse-starlight-12", "pulsar-xlite-v3"],
-  ["finalmouse-starlight-12", "ninjutso-sora-v2"],
-  ["ninjutso-sora-v2", "lamzu-atlantis-mini"],
-  ["ninjutso-sora-v2", "endgame-gear-xm2we"],
-  ["zowie-ec2-c", "zowie-ec1-c"],
-  ["zowie-ec2-c", "zowie-s2-c"],
-  ["logicool-g502x-plus", "razer-basilisk-v3-pro"],
-  ["logicool-g304", "razer-basilisk-x-hyperspeed"],
-  ["razer-viper-v2-pro", "pulsar-xlite-v3"],
-  ["attack-shark-x6", "pulsar-xlite-v3"],
-  ["lamzu-atlantis-mini", "endgame-gear-xm2we"],
-  ["logicool-g-pro-x2-lightspeed", "finalmouse-starlight-12"],
-];
+import { MICE_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = MICE_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(mice.map((m) => m.slug));

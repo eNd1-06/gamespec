@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["steelseries-qck-heavy-l", "logicool-g640"],
-  ["steelseries-qck-heavy-l", "razer-gigantus-v2-l"],
-  ["steelseries-qck-heavy-l", "artisan-hayate-otsu-mid-m"],
-  ["steelseries-qck-heavy-l", "zowie-g-sr"],
-  ["steelseries-qck-heavy-l", "pulsar-es1-l"],
-  ["logicool-g640", "razer-gigantus-v2-l"],
-  ["logicool-g640", "artisan-hayate-otsu-mid-m"],
-  ["logicool-g640", "zowie-g-sr"],
-  ["artisan-hayate-otsu-mid-m", "artisan-zero-soft-xl"],
-  ["artisan-hayate-otsu-mid-m", "artisan-hien-soft-l"],
-  ["artisan-hayate-otsu-mid-m", "zowie-g-sr"],
-  ["razer-gigantus-v2-l", "razer-strider-xl"],
-  ["razer-gigantus-v2-xxl", "logicool-g840"],
-  ["pulsar-es1-l", "pulsar-es2-l"],
-  ["pulsar-es1-l", "zowie-g-sr"],
-  ["hyperx-fury-s-pro-xl", "steelseries-qck-heavy-l"],
-  ["corsair-mm300-xl", "steelseries-qck-heavy-l"],
-  ["glorious-g-xxl", "logicool-g840"],
-  ["endgame-gear-mpc890", "steelseries-qck-heavy-l"],
-  ["razer-atlas", "artisan-hayate-otsu-mid-m"],
-];
+import { MOUSEPAD_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = MOUSEPAD_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(mousepads.map((m) => m.slug));

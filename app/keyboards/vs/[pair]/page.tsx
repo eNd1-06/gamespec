@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["logicool-g-pro-x-tkl-lightspeed", "razer-huntsman-v3-pro-tkl"],
-  ["logicool-g-pro-x-tkl-lightspeed", "steelseries-apex-pro-tkl-wireless"],
-  ["logicool-g-pro-x-tkl-lightspeed", "asus-rog-falchion-ace"],
-  ["razer-huntsman-v3-pro-tkl", "steelseries-apex-pro-tkl-wireless"],
-  ["razer-huntsman-v3-pro-tkl", "wooting-60he-v2"],
-  ["steelseries-apex-pro-tkl-wireless", "wooting-two-he"],
-  ["steelseries-apex-pro-tkl-wireless", "logicool-g913-tkl"],
-  ["wooting-60he-v2", "wooting-60he"],
-  ["wooting-60he-v2", "razer-huntsman-mini"],
-  ["wooting-60he-v2", "hyperx-alloy-origins-60"],
-  ["wooting-two-he", "razer-huntsman-v3-pro-tkl"],
-  ["corsair-k70-rgb-pro", "razer-blackwidow-v4-pro"],
-  ["ducky-one-3-tkl", "hyperx-alloy-origins-core"],
-  ["hyperx-alloy-origins-60", "corsair-k65-rgb-mini"],
-  ["razer-huntsman-mini", "hyperx-alloy-origins-60"],
-  ["logicool-g913-tkl", "razer-blackwidow-v4-pro"],
-  ["asus-rog-falchion-ace", "asus-rog-scope-ii-96-wireless"],
-  ["fnatic-ministreak", "ducky-one-3-tkl"],
-  ["roccat-vulcan-ii-mini-air", "asus-rog-falchion-ace"],
-  ["logicool-g815-tkl", "corsair-k70-rgb-pro"],
-];
+import { KEYBOARD_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = KEYBOARD_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(keyboards.map((k) => k.slug));

@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["steelseries-arctis-nova-pro-wireless", "logicool-g-pro-x-2-lightspeed"],
-  ["steelseries-arctis-nova-pro-wireless", "razer-blackshark-v2-pro"],
-  ["steelseries-arctis-nova-pro-wireless", "sony-inzone-h9"],
-  ["logicool-g-pro-x-2-lightspeed", "razer-blackshark-v2-pro"],
-  ["logicool-g-pro-x-2-lightspeed", "hyperx-cloud-alpha-wireless"],
-  ["razer-blackshark-v2-pro", "astro-a50-x"],
-  ["hyperx-cloud-alpha-wireless", "corsair-hs80-rgb-wireless"],
-  ["hyperx-cloud-alpha-wireless", "steelseries-arctis-nova-7"],
-  ["steelseries-arctis-nova-7", "logicool-g-pro-x-2-lightspeed"],
-  ["steelseries-arctis-nova-7", "corsair-hs80-rgb-wireless"],
-  ["sony-inzone-h9", "astro-a50-x"],
-  ["sony-inzone-h9", "logicool-g-pro-x-2-lightspeed"],
-  ["logicool-g435", "corsair-hs80-rgb-wireless"],
-  ["steelseries-arctis-7-plus", "corsair-hs80-rgb-wireless"],
-  ["steelseries-arctis-7-plus", "hyperx-cloud-alpha-wireless"],
-  ["razer-blackshark-v2", "hyperx-cloud-alpha"],
-  ["hyperx-cloud-ii-wireless", "corsair-hs80-rgb-wireless"],
-  ["epos-h6pro-closed", "razer-blackshark-v2"],
-  ["corsair-virtuoso-rgb-wireless-xt", "astro-a50-x"],
-  ["sony-inzone-h7", "hyperx-cloud-alpha-wireless"],
-];
+import { HEADSET_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = HEADSET_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(headsets.map((h) => h.slug));

@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["final-vr3000", "razer-moray"],
-  ["final-vr3000", "kz-zs10-pro-x"],
-  ["razer-hammerhead-hyperspeed", "sony-inzone-buds"],
-  ["sony-inzone-buds", "asus-rog-cetra-true-wireless-speednova"],
-  ["final-e500", "final-vr3000"],
-  ["moondrop-aria-2", "final-vr3000"],
-  ["sennheiser-ie-300", "shure-se215"],
-  ["razer-hammerhead-hyperspeed", "asus-rog-cetra-true-wireless-speednova"],
-  ["hyperx-cirro-buds-pro", "sony-inzone-buds"],
-  ["final-vr2000-gaming", "final-vr3000"],
-  ["hyperx-cloud-earbuds-2", "razer-hammerhead-duo"],
-  ["kz-zs10-pro-x", "moondrop-aria-2"],
-  ["steelseries-arctis-nova-pro-wireless-earbuds", "sony-inzone-buds"],
-  ["logicool-fits-gaming", "razer-hammerhead-hyperspeed"],
-  ["7hz-salnotes-zero-2", "final-e500"],
-  ["razer-moray-wired", "final-vr3000"],
-  ["steelseries-tusq", "hyperx-cloud-earbuds-2"],
-  ["jabra-evolve2-buds-gaming", "sony-inzone-buds"],
-  ["soundpeats-capsule3-pro", "razer-hammerhead-hyperspeed"],
-  ["shure-se215", "moondrop-aria-2"],
-];
+import { EARPHONE_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = EARPHONE_VS_PAIRS;
 
 const connectionLabel = (c: string) =>
   c === "wireless" ? "無線" : c === "wired" ? "有線" : "有線/無線両対応";

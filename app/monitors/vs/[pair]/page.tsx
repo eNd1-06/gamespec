@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["lg-27gp850-b", "asus-rog-swift-pg259qn"],
-  ["lg-27gp850-b", "samsung-odyssey-g7-27"],
-  ["lg-27gp850-b", "msi-mag274qrf"],
-  ["lg-27gp850-b", "gigabyte-m27q"],
-  ["benq-zowie-xl2546k", "asus-rog-swift-pg259qn"],
-  ["benq-zowie-xl2546k", "alienware-aw2523hf"],
-  ["benq-zowie-xl2546k", "benq-zowie-xl2566k"],
-  ["benq-zowie-xl2411k", "aoc-24g2"],
-  ["asus-rog-swift-pg259qn", "alienware-aw2523hf"],
-  ["asus-rog-swift-pg259qn", "asus-rog-swift-pg259qnr"],
-  ["asus-rog-pg27aqdm", "lg-27gr95qe"],
-  ["asus-rog-pg27aqdm", "samsung-odyssey-oled-g8"],
-  ["alienware-aw3423dwf", "samsung-odyssey-oled-g8"],
-  ["lg-27gp950-b", "asus-rog-strix-xg27aqm"],
-  ["samsung-odyssey-g4-25", "aoc-24g2"],
-  ["lg-24gn600-b", "aoc-24g2"],
-  ["gigabyte-m27q", "msi-mag274qrf"],
-  ["benq-zowie-xl2566k", "alienware-aw2523hf"],
-  ["samsung-odyssey-g7-27", "lg-27gp950-b"],
-  ["corsair-xeneon-27qhd240", "asus-rog-pg27aqdm"],
-];
+import { MONITOR_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = MONITOR_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(monitors.map((m) => m.slug));

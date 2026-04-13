@@ -8,15 +8,17 @@ import { gpus } from "@/data/gpus";
 import { controllers } from "@/data/controllers";
 import { earphones } from "@/data/earphones";
 import { chairs } from "@/data/chairs";
-import { VS_PAIRS } from "@/app/mice/vs/[pair]/page";
-import { VS_PAIRS as MONITOR_VS_PAIRS } from "@/app/monitors/vs/[pair]/page";
-import { VS_PAIRS as KEYBOARD_VS_PAIRS } from "@/app/keyboards/vs/[pair]/page";
-import { VS_PAIRS as HEADSET_VS_PAIRS } from "@/app/headsets/vs/[pair]/page";
-import { VS_PAIRS as MOUSEPAD_VS_PAIRS } from "@/app/mousepads/vs/[pair]/page";
-import { VS_PAIRS as GPU_VS_PAIRS } from "@/app/gpus/vs/[pair]/page";
-import { VS_PAIRS as CONTROLLER_VS_PAIRS } from "@/app/controllers/vs/[pair]/page";
-import { VS_PAIRS as EARPHONE_VS_PAIRS } from "@/app/earphones/vs/[pair]/page";
-import { VS_PAIRS as CHAIR_VS_PAIRS } from "@/app/chairs/vs/[pair]/page";
+import {
+  MICE_VS_PAIRS as VS_PAIRS,
+  MONITOR_VS_PAIRS,
+  KEYBOARD_VS_PAIRS,
+  HEADSET_VS_PAIRS,
+  MOUSEPAD_VS_PAIRS,
+  GPU_VS_PAIRS,
+  CONTROLLER_VS_PAIRS,
+  EARPHONE_VS_PAIRS,
+  CHAIR_VS_PAIRS,
+} from "@/data/vs-pairs";
 
 const BASE_URL = "https://gamespec.vercel.app"; // updated 2026-04-10
 

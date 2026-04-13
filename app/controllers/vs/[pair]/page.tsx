@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["sony-dualsense-white", "microsoft-xbox-wireless-carbon"],
-  ["sony-dualsense-edge", "microsoft-xbox-elite-series2"],
-  ["sony-dualsense-white", "sony-dualsense-edge"],
-  ["microsoft-xbox-wireless-carbon", "microsoft-xbox-elite-series2"],
-  ["razer-wolverine-v3-pro", "scuf-instinct-pro"],
-  ["razer-wolverine-v3-pro", "sony-dualsense-edge"],
-  ["microsoft-xbox-elite-series2", "razer-wolverine-v3-pro"],
-  ["sony-dualsense-white", "nintendo-pro-controller"],
-  ["microsoft-xbox-wireless-carbon", "8bitdo-pro2-bluetooth"],
-  ["sony-dualsense-edge", "scuf-instinct-pro"],
-  ["razer-wolverine-v2-pro", "microsoft-xbox-elite-series2-core"],
-  ["8bitdo-pro2-bluetooth", "nintendo-pro-controller"],
-  ["microsoft-xbox-elite-series2", "victrix-pro-bfg"],
-  ["sony-dualsense-white", "razer-wolverine-v2-chroma"],
-  ["nacon-revolution-x", "microsoft-xbox-elite-series2-core"],
-  ["gulikit-kingkong-3-pro", "8bitdo-ultimate-2c"],
-  ["thrustmaster-eswap-x-pro", "microsoft-xbox-elite-series2"],
-  ["powera-fusion-pro3", "razer-wolverine-v2-pro"],
-  ["8bitdo-ultimate-bluetooth", "nintendo-pro-controller"],
-  ["razer-wolverine-v2-chroma", "microsoft-xbox-elite-series2-core"],
-];
+import { CONTROLLER_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = CONTROLLER_VS_PAIRS;
 
 const connectionLabel = (c: string) =>
   c === "wireless" ? "無線" : c === "wired" ? "有線" : "有線/無線両対応";

@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["akracing-wolf", "secretlab-titan-evo-2022"],
-  ["secretlab-titan-evo-2022", "dxracer-formula-series"],
-  ["akracing-premium-v2", "secretlab-titan-evo-2022"],
-  ["herman-miller-aeron-gaming", "secretlab-titan-evo-2022"],
-  ["herman-miller-aeron-gaming", "steelcase-leap-v2"],
-  ["razer-iskur-v2", "secretlab-titan-evo-2022"],
-  ["razer-iskur-v2", "akracing-wolf"],
-  ["cougar-armor-titan-pro", "akracing-wolf"],
-  ["secretlab-magnus-pro", "secretlab-titan-evo-2022"],
-  ["noblechairs-hero-black", "secretlab-titan-evo-2022"],
-  ["akracing-nitro-v2", "dxracer-formula-series"],
-  ["akracing-overture", "dxracer-formula-series"],
-  ["herman-miller-aeron-gaming", "flexispot-oc14-ergonomic"],
-  ["bauhutte-rsm-900rr", "akracing-wolf"],
-  ["secretlab-titan-evo-2022-fabric", "secretlab-titan-evo-2022"],
-  ["akracing-pro-x-v2", "secretlab-titan-evo-2022"],
-  ["dxracer-craft-series", "akracing-wolf"],
-  ["cougar-fusion-s", "akracing-nitro-v2"],
-  ["ikea-matchspel-gaming", "akracing-overture"],
-  ["akracing-gyokuza-v2", "bauhutte-bsl-900-gaming"],
-];
+import { CHAIR_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = CHAIR_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(chairs.map((c) => c.slug));

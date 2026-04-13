@@ -7,28 +7,8 @@ type Props = { params: Promise<{ pair: string }> };
 
 const BASE_URL = "https://gamespec.vercel.app";
 
-export const VS_PAIRS: [string, string][] = [
-  ["msi-rtx5090-gaming-trio", "asus-rtx5080-rog-strix"],
-  ["asus-rtx4090-rog-strix", "msi-rtx4080super-gaming-x-trio"],
-  ["gigabyte-rtx4070tisuper-gaming-oc", "zotac-rtx4070super-amp-airo"],
-  ["msi-rtx4070-gaming-x-trio", "asus-rtx4060ti-dual-oc"],
-  ["sapphire-rx9070xt-nitro", "powercolor-rx9070-hellhound"],
-  ["sapphire-rx9070xt-nitro", "gigabyte-rtx4070tisuper-gaming-oc"],
-  ["msi-rtx5090-gaming-trio", "asus-rtx4090-rog-strix"],
-  ["gigabyte-rtx5070ti-gaming-oc", "zotac-rtx4070super-amp-airo"],
-  ["msi-rtx4060-gaming-x", "gigabyte-rtx4060-eagle-oc"],
-  ["sapphire-rx7900xtx-nitro", "asus-rtx4090-rog-strix"],
-  ["powercolor-rx7900xt-red-devil", "msi-rtx4080super-gaming-x-trio"],
-  ["xfx-rx7800xt-speedster", "msi-rtx4070-gaming-x-trio"],
-  ["sapphire-rx7700xt-pulse", "asus-rtx4060ti-dual-oc"],
-  ["powercolor-rx7600xt-hellhound", "msi-rtx4060-gaming-x"],
-  ["asus-rtx5080-rog-strix", "msi-rtx4080super-gaming-x-trio"],
-  ["zotac-rtx5070-twin-edge", "msi-rtx4070-gaming-x-trio"],
-  ["msi-rtx5060ti-gaming-x", "asus-rtx4060ti-dual-oc"],
-  ["sapphire-rx9070xt-nitro", "powercolor-rx7900xt-red-devil"],
-  ["asus-rtx4090-rog-strix", "sapphire-rx7900xtx-nitro"],
-  ["gigabyte-rtx4060-eagle-oc", "powercolor-rx7600xt-hellhound"],
-];
+import { GPU_VS_PAIRS } from "@/data/vs-pairs";
+export const VS_PAIRS = GPU_VS_PAIRS;
 
 function parsePair(pair: string): [string, string] | null {
   const slugSet = new Set(gpus.map((g) => g.slug));
