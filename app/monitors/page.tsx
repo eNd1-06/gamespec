@@ -325,6 +325,49 @@ export default function MonitorPage() {
           )}
         </main>
       </div>
+
+      {/* 比較セクション */}
+      <section className="max-w-6xl mx-auto px-4 pb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-gray-300">人気の比較</h2>
+            <Link href="/monitors/vs" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              ["lg-27gp850-b", "asus-rog-swift-pg259qn", "27GP850-B vs PG259QN"],
+              ["benq-zowie-xl2546k", "alienware-aw2523hf", "XL2546K vs AW2523HF"],
+              ["asus-rog-pg27aqdm", "lg-27gr95qe", "PG27AQDM vs 27GR95QE（OLED対決）"],
+              ["alienware-aw3423dwf", "samsung-odyssey-oled-g8", "AW3423DWF vs Odyssey OLED G8"],
+            ].map(([a, b, label]) => (
+              <Link key={`${a}-${b}`} href={`/monitors/vs/${a}-vs-${b}`}
+                className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-3 py-2 transition-all group">
+                <span className="text-xs text-white group-hover:text-blue-400 truncate">{label}</span>
+                <span className="text-xs text-gray-500 shrink-0 ml-2">比較 →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングモニターの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">リフレッシュレートで選ぶ</h3>
+            <p>FPS・APEXなど競技向けには240Hz以上が推奨されます。144Hzは入門〜ミドルレンジのゲーマーに最適で、360Hz・500Hzはプロ・上位競技プレイヤー向けです。リフレッシュレートが高いほど残像が少なく、敵を素早く視認できます。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">解像度・パネルで選ぶ</h3>
+            <p>1080p（FHD）はGPU負荷が低く高フレームレートを出しやすい競技向け解像度。1440p（QHD）は画質と性能のバランスが優れ、4KはRPGや映像鑑賞に最適です。パネルはIPSが色再現性・視野角に優れ、OLEDは最高の黒表現を実現します。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">サイズ・応答速度で選ぶ</h3>
+            <p>24〜25インチは競技プレイの定番サイズ。27インチ以上はMMO・作業兼用に向いています。応答速度は1ms以下（GtG）が理想で、残像感の少ないゲームプレイが可能です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

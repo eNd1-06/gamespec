@@ -304,6 +304,49 @@ export default function HeadsetPage() {
           )}
         </main>
       </div>
+
+      {/* 比較セクション */}
+      <section className="max-w-6xl mx-auto px-4 pb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-gray-300">人気の比較</h2>
+            <Link href="/headsets/vs" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              ["steelseries-arctis-nova-pro-wireless", "logicool-g-pro-x-2-lightspeed", "Arctis Nova Pro vs G Pro X 2"],
+              ["logicool-g-pro-x-2-lightspeed", "razer-blackshark-v2-pro", "G Pro X 2 vs BlackShark V2 Pro"],
+              ["hyperx-cloud-alpha-wireless", "corsair-hs80-rgb-wireless", "Cloud Alpha Wireless vs HS80"],
+              ["sony-inzone-h9", "astro-a50-x", "INZONE H9 vs A50 X"],
+            ].map(([a, b, label]) => (
+              <Link key={`${a}-${b}`} href={`/headsets/vs/${a}-vs-${b}`}
+                className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-3 py-2 transition-all group">
+                <span className="text-xs text-white group-hover:text-blue-400 truncate">{label}</span>
+                <span className="text-xs text-gray-500 shrink-0 ml-2">比較 →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングヘッドセットの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">重さ・装着感で選ぶ</h3>
+            <p>長時間のゲームプレイでは300g以下の軽量モデルが快適です。ヘッドバンドの調整機能やイヤーパッドの素材（メッシュ・合成皮革）も重要な選択基準です。eスポーツプロは軽量で疲れにくいモデルを好む傾向があります。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">接続方式・音質で選ぶ</h3>
+            <p>無線（2.4GHz）は低遅延で競技向けにも使えます。有線は安定した音質とゼロレイテンシーが魅力。バーチャルサラウンド（7.1ch）搭載モデルは足音の方向を把握しやすくFPS向けです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">マイク・ANCで選ぶ</h3>
+            <p>ボイスチャットを多用するなら単一指向性マイク搭載モデルが声を明瞭に拾います。ANC（アクティブノイズキャンセリング）は周囲の騒音を低減し、集中してゲームに臨めます。取り外し可能マイクは普段使いにも便利です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

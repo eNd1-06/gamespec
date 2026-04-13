@@ -320,6 +320,49 @@ export default function KeyboardPage() {
           )}
         </main>
       </div>
+
+      {/* 比較セクション */}
+      <section className="max-w-6xl mx-auto px-4 pb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-gray-300">人気の比較</h2>
+            <Link href="/keyboards/vs" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              ["logicool-g-pro-x-tkl-lightspeed", "razer-huntsman-v3-pro-tkl", "G Pro X TKL vs Huntsman V3 Pro TKL"],
+              ["steelseries-apex-pro-tkl-wireless", "wooting-two-he", "Apex Pro TKL vs Wooting Two HE"],
+              ["wooting-60he-v2", "razer-huntsman-mini", "Wooting 60HE v2 vs Huntsman Mini"],
+              ["corsair-k70-rgb-pro", "razer-blackwidow-v4-pro", "K70 RGB Pro vs BlackWidow V4 Pro"],
+            ].map(([a, b, label]) => (
+              <Link key={`${a}-${b}`} href={`/keyboards/vs/${a}-vs-${b}`}
+                className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-3 py-2 transition-all group">
+                <span className="text-xs text-white group-hover:text-blue-400 truncate">{label}</span>
+                <span className="text-xs text-gray-500 shrink-0 ml-2">比較 →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングキーボードの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">スイッチで選ぶ</h3>
+            <p>赤軸（リニア）は静かでスムーズな押し心地でゲームに人気。青軸（クリッキー）はタイピング感が強くOA向け。茶軸（タクタイル）は両立タイプです。銀軸・光軸は高速入力に特化した競技向けスイッチです。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">サイズ・レイアウトで選ぶ</h3>
+            <p>フルサイズはテンキー付きで作業兼用に最適。TKL（テンキーレス）はマウスのスペースを広く確保でき、ゲームに人気。60%・65%はコンパクトで持ち運びしやすく、デスクをすっきりさせたい方に向いています。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">無線・ホットスワップで選ぶ</h3>
+            <p>無線キーボードはケーブルなしで快適に使えます。ホットスワップ対応モデルはスイッチをはんだなしで交換でき、好みの打鍵感に自由にカスタマイズできます。ポーリングレート8000Hz対応の高性能モデルも登場しています。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

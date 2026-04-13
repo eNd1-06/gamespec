@@ -304,6 +304,52 @@ export default function MicePage() {
           )}
         </main>
       </div>
+
+      {/* 比較セクション */}
+      <section className="max-w-6xl mx-auto px-4 pb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-gray-300">人気の比較</h2>
+            <Link href="/mice/vs" className="text-xs text-blue-400 hover:text-blue-300">一覧を見る →</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              ["logicool-g-pro-x-superlight-2", "razer-viper-v3-pro", "G Pro X Superlight 2 vs Viper V3 Pro"],
+              ["razer-viper-v3-pro", "pulsar-xlite-v3", "Viper V3 Pro vs Xlite V3"],
+              ["logicool-g-pro-x-superlight-2", "finalmouse-starlight-12", "G Pro X Superlight 2 vs Starlight-12"],
+              ["razer-deathadder-v3", "zowie-ec2-c", "DeathAdder V3 vs EC2-C"],
+            ].map(([a, b, label]) => (
+              <Link
+                key={`${a}-${b}`}
+                href={`/mice/vs/${a}-vs-${b}`}
+                className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-3 py-2 transition-all group"
+              >
+                <span className="text-xs text-white group-hover:text-blue-400 truncate">{label}</span>
+                <span className="text-xs text-gray-500 shrink-0 ml-2">比較 →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEOフッター */}
+      <section className="max-w-6xl mx-auto px-4 py-10 border-t border-gray-800 mt-4">
+        <h2 className="text-base font-bold text-gray-300 mb-6">ゲーミングマウスの選び方</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-400">
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">重さで選ぶ</h3>
+            <p>FPS・APEXなど素早いエイムが必要なゲームには50〜70gの軽量マウスが最適です。60g以下の超軽量モデルはHoneycomb構造を採用しており、長時間のプレイでも疲れにくいのが特徴です。MOBAや戦略ゲームなら90〜120gの重めのモデルでも問題ありません。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">接続方式で選ぶ</h3>
+            <p>無線マウスはケーブルの引っかかりがなく自由に動かせるため、大きなマウス操作をするFPSプレイヤーに人気です。現在の無線技術は有線と同等の遅延を実現しています。有線はバッテリー管理不要で安定性を重視する競技プレイヤーに選ばれています。</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-300 mb-2">センサー・ポーリングレートで選ぶ</h3>
+            <p>PAW3395・HERO 25K・Razer Focus Pro 35Kなどの高精度センサーは高DPIでも追従性が高く、競技向けに最適です。ポーリングレートは通常1000Hzですが、8000Hz対応モデルはより滑らかな入力が可能です。</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
