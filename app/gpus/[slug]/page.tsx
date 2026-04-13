@@ -72,6 +72,15 @@ export default async function GpuDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - gpu.price) - Math.abs(b.price - gpu.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${gpu.chipset}のVRAMは何GBですか？`, a: `${gpu.vram}GB（${gpu.memoryType}・${gpu.memoryBus}bit）です。` },
+    { q: `${gpu.name}のTDPは？`, a: `${gpu.tdp}Wです。推奨電源容量の目安は${gpu.tdp + 150}W以上です。` },
+    { q: `${gpu.chipset}は4Kゲームに対応していますか？`, a: gpu.recommendFor.includes("4k") ? "はい、4K環境でのゲームプレイに適した性能を持っています。" : gpu.recommendFor.includes("1440p") ? "主に1440p環境向けです。4Kでは設定を下げる必要があります。" : "主に1080p・競技ゲーム向けです。" },
+    { q: `${gpu.chipset}のブーストクロックは？`, a: `${gpu.boostClock.toLocaleString()}MHzです。` },
+    { q: `${gpu.chipset}はNVIDIA・AMD、どちらですか？`, a: `${gpu.gpuBrand}製の${gpu.chipset}です。${gpu.tier}グレードに分類されます。` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -95,6 +104,15 @@ export default async function GpuDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "グラフィックボード", "item": `${BASE_URL}/gpus` },
         { "@type": "ListItem", "position": 3, "name": gpu.name, "item": `${BASE_URL}/gpus/${gpu.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -212,6 +230,19 @@ export default async function GpuDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

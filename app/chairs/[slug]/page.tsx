@@ -71,6 +71,15 @@ export default async function ChairDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - chair.price) - Math.abs(b.price - chair.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${chair.name}の耐荷重は何kgですか？`, a: `最大${chair.maxLoadWeight}kgです。` },
+    { q: `${chair.name}のリクライニング角度は？`, a: `最大${chair.recliningAngle}°までリクライニング可能です。` },
+    { q: `${chair.name}にランバーサポートはありますか？`, a: chair.lumbarSupport ? "はい、ランバーサポートクッションが付属しています。腰への負担を軽減します。" : "ランバーサポートは付属していません。" },
+    { q: `${chair.name}のアームレストは調整できますか？`, a: chair.armrest === "なし" ? "アームレストは付属していません。" : `${chair.armrest}アームレストを搭載しています。${chair.armrest === "4D" ? "上下・前後・左右・回転の4方向に調整できます。" : chair.armrest === "3D" ? "上下・前後・左右の3方向に調整できます。" : "上下・左右の2方向に調整できます。"}` },
+    { q: `${chair.name}はフットレスト付きですか？`, a: chair.footrest ? "はい、フットレストが付属しています。足を伸ばしてリラックスしながらプレイできます。" : "フットレストは付属していません。" },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -94,6 +103,15 @@ export default async function ChairDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングチェア", "item": `${BASE_URL}/chairs` },
         { "@type": "ListItem", "position": 3, "name": chair.name, "item": `${BASE_URL}/chairs/${chair.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -209,6 +227,19 @@ export default async function ChairDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

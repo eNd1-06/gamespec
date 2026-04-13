@@ -72,6 +72,15 @@ export default async function EarphoneDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - ep.price) - Math.abs(b.price - ep.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${ep.name}は有線ですか無線ですか？`, a: `${connectionLabel}です。` },
+    { q: `${ep.name}のドライバーは？`, a: `${ep.driver}を採用しています。${ep.impedance ? `インピーダンスは${ep.impedance}Ωです。` : ""}` },
+    { q: `${ep.name}にマイクはありますか？`, a: ep.microphone ? "はい、マイクを内蔵しています。ゲーム中のボイスチャットやストリーミングに使用できます。" : "マイクは内蔵していません。" },
+    { q: `${ep.name}はANC対応ですか？`, a: ep.anc ? "はい、アクティブノイズキャンセリング（ANC）を搭載しています。" : "ANCには対応していません。" },
+    { q: `${ep.name}の重さは？`, a: `約${ep.weight}g（片耳）の軽量設計です。${ep.batteryLife ? `ワイヤレス時のバッテリー持続時間は最大${ep.batteryLife}時間です。` : ""}` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -95,6 +104,15 @@ export default async function EarphoneDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングイヤホン", "item": `${BASE_URL}/earphones` },
         { "@type": "ListItem", "position": 3, "name": ep.name, "item": `${BASE_URL}/earphones/${ep.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -210,6 +228,19 @@ export default async function EarphoneDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );
