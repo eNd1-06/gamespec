@@ -56,7 +56,16 @@ const ancTop = [...earphones].filter((e) => e.anc).sort((a, b) => calcScore(b) -
 
 const connectionLabel = (c: string) => c === "wireless" ? "無線" : c === "wired" ? "有線" : "両対応";
 
-function RankCard({ rank, earphone, badge }: { rank: number; earphone: (typeof earphones)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "final-vr3000": "ゲーミング特化設計のFinal製イヤホン。広い音場と定位感の良さでFPSに強い。",
+  "razer-moray": "Razer初の有線ゲーミングイヤホン。THX認定の音質で足音の方向感が明確。",
+  "kz-zs10-pro-x": "5ドライバー構成で驚異的なコスパ。3,000円台でハイエンド並みのサウンドを体験。",
+  "shure-se215": "老舗オーディオブランドのエントリー機。高い遮音性と安定した装着感でゲーム集中に最適。",
+  "sony-wf-1000xm5": "業界最高クラスのANC搭載TWS。没入感と音質の両立でゲームと音楽を最高品質で楽しめる。",
+  "steelseries-tusq": "純正ゲーミングマイク内蔵イヤホン。コンパクトながらDiscord認定の通話品質を確保。",
+};
+
+function RankCard({ rank, earphone, badge, comment }: { rank: number; earphone: (typeof earphones)[0]; badge?: string; comment?: string }) {
   return (
     <Link href={`/earphones/${earphone.slug}`} className="flex items-start gap-4 bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group">
       <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg font-bold text-lg bg-gray-800 text-gray-400"
@@ -84,6 +93,9 @@ function RankCard({ rank, earphone, badge }: { rank: number; earphone: (typeof e
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -117,22 +129,22 @@ export default function EarphonesRankingPage() {
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">接続方式・重さ・ドライバー方式・マイク・発売年を総合スコア化して順位付け</p>
-          <div className="space-y-3">{overall.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} />)}</div>
+          <div className="space-y-3">{overall.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} comment={comments[e.slug]}/>)}</div>
         </section>
         <section id="wired" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">有線イヤホン ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">遅延ゼロで安定した音質。FPSや競技ゲームで足音を正確に聞き取りたい方向け。</p>
-          <div className="space-y-3">{wired.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="有線" />)}</div>
+          <div className="space-y-3">{wired.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="有線" comment={comments[e.slug]}/>)}</div>
         </section>
         <section id="wireless" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">無線イヤホン ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">コードなしで自由に動ける。低遅延モデルならゲームでも快適。</p>
-          <div className="space-y-3">{wireless.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="無線" />)}</div>
+          <div className="space-y-3">{wireless.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="無線" comment={comments[e.slug]}/>)}</div>
         </section>
         <section id="anc" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">ANC対応イヤホン TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">アクティブノイズキャンセリングで周囲の騒音を遮断。集中してゲームに臨める。</p>
-          <div className="space-y-3">{ancTop.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="ANC" />)}</div>
+          <div className="space-y-3">{ancTop.map((e, i) => <RankCard key={e.slug} rank={i + 1} earphone={e} badge="ANC" comment={comments[e.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
           <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>

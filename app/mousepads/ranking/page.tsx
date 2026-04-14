@@ -52,7 +52,17 @@ const largeSize = [...mousepads].filter((p) => p.size === "XL" || p.size === "XX
 const speedType = [...mousepads].filter((p) => p.surface === "速度系").sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 const cospa = [...mousepads].filter((p) => p.price <= 3000).sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 
-function RankCard({ rank, pad, badge }: { rank: number; pad: (typeof mousepads)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "steelseries-qck-heavy-l": "厚さ6mmのクッション性が手首への負担を軽減。長時間プレイでも疲れにくい定番Lサイズ。",
+  "steelseries-qck-plus": "ゲーミングマウスパッドの不動の定番。滑らかなコントロール系表面で精密エイムを支援。",
+  "logicool-g640": "コントロール系の王道。635×300mmの広めサイズでローセンシプレイヤーにも対応。",
+  "razer-gigantus-v2-l": "デスク全体をカバーするLサイズ。テクスチャ加工でスピードとコントロールを両立。",
+  "artisan-hayate-otsu-mid-m": "国産プレミアムパッドの頂点。速度・コントロール・耐久性すべてが別次元の仕上がり。",
+  "artisan-zero-soft-xl": "Artisanの超速系フラッグシップ。薄くてスムーズな滑りはスピード重視ゲーマーの最高峰。",
+  "hyperx-fury-s-pro-xl": "滑らかな速度系表面とXLサイズの組み合わせ。コスパよく大型パッドを試したい方に最適。",
+};
+
+function RankCard({ rank, pad, badge, comment }: { rank: number; pad: (typeof mousepads)[0]; badge?: string; comment?: string }) {
   return (
     <Link href={`/mousepads/${pad.slug}`} className="flex items-start gap-4 bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group">
       <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg font-bold text-lg bg-gray-800 text-gray-400"
@@ -79,6 +89,9 @@ function RankCard({ rank, pad, badge }: { rank: number; pad: (typeof mousepads)[
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -112,23 +125,23 @@ export default function MousepadsRankingPage() {
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">サイズ・厚さ・ステッチ有無・価格・発売年を総合スコア化して順位付け</p>
-          <div className="space-y-3">{overall.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} />)}</div>
+          <div className="space-y-3">{overall.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} comment={comments[p.slug]}/>)}</div>
         </section>
         <section id="large" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">大型（XL・XXL）ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">デスク全体をカバーする大型マウスパッド。マウスを大きく動かすローセンシプレイヤーに最適。</p>
-          <div className="space-y-3">{largeSize.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge={p.size} />)}</div>
+          <div className="space-y-3">{largeSize.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge={p.size} comment={comments[p.slug]}/>)}</div>
           <div className="mt-4 text-center"><Link href="/mousepads" className="text-sm text-blue-400 hover:text-blue-300">大型マウスパッドをすべて見る →</Link></div>
         </section>
         <section id="speed" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">速度系マウスパッド TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">滑りが良く素早いエイムに対応。高感度（ハイセンシ）プレイヤーやFPS向け。</p>
-          <div className="space-y-3">{speedType.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge="速度系" />)}</div>
+          <div className="space-y-3">{speedType.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge="速度系" comment={comments[p.slug]}/>)}</div>
         </section>
         <section id="cospa" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">3,000円以下で買えるコスパ重視のマウスパッド。</p>
-          <div className="space-y-3">{cospa.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge="コスパ◎" />)}</div>
+          <div className="space-y-3">{cospa.map((p, i) => <RankCard key={p.slug} rank={i + 1} pad={p} badge="コスパ◎" comment={comments[p.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
           <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>

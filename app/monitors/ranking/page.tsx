@@ -92,7 +92,18 @@ const highHz = [...monitors].sort((a, b) => b.refreshRate - a.refreshRate).slice
 const cospa = [...monitors].filter((m) => m.price <= 50000).sort((a, b) => (b.refreshRate / b.price) - (a.refreshRate / a.price)).slice(0, 5);
 const oled = [...monitors].filter((m) => m.panelType === "OLED" || m.panelType === "QD-OLED").sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 
-function RankCard({ rank, monitor, badge }: { rank: number; monitor: (typeof monitors)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "lg-27gp850-b": "27インチ165HzのFPS定番モニター。応答速度1msと高コスパで多くのゲーマーに選ばれ続ける。",
+  "asus-tuf-vg27aq": "27インチWQHD165Hz。解像度と滑らかさを両立したコスパ優秀なミドルレンジ。",
+  "benq-zowie-xl2546k": "DyAc+搭載の競技特化モニター。プロシーンでも採用実績あり、ブレ軽減が別格。",
+  "benq-zowie-xl2411k": "24インチ144HzのZowieスタンダード。競技志向でシンプルに使いたい方の定番。",
+  "asus-rog-swift-pg259qn": "360Hz駆動の超高リフレッシュレート機。VALORANTやCSプロも愛用する最速モニター。",
+  "msi-mag274qrf": "WQHDでコスパ抜群。165Hz駆動と高解像度を手頃な価格で実現したミドルレンジの最適解。",
+  "samsung-odyssey-g7-27": "240Hz VAパネルで深い黒と高コントラストが特徴。迫力の映像とゲーミング性能を両立。",
+  "alienware-aw2524h": "360Hz IPS搭載。高輝度と速い応答速度でFPS競技シーンに強い一台。",
+};
+
+function RankCard({ rank, monitor, badge, comment }: { rank: number; monitor: (typeof monitors)[0]; badge?: string; comment?: string }) {
   return (
     <Link
       href={`/monitors/${monitor.slug}`}
@@ -124,6 +135,9 @@ function RankCard({ rank, monitor, badge }: { rank: number; monitor: (typeof mon
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -161,7 +175,7 @@ export default function MonitorsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">Hz・解像度・パネル・価格・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">
-            {overall.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} />)}
+            {overall.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} comment={comments[m.slug]}/>)}
           </div>
         </section>
 
@@ -169,7 +183,7 @@ export default function MonitorsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">高リフレッシュレート ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">FPS・APEXなど競技向け。高Hzほど映像が滑らかになり、有利なシーンが増える。</p>
           <div className="space-y-3">
-            {highHz.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge={`${m.refreshRate}Hz`} />)}
+            {highHz.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge={`${m.refreshRate}Hz`} comment={comments[m.slug]}/>)}
           </div>
           <div className="mt-4 text-center">
             <Link href="/monitors" className="text-sm text-blue-400 hover:text-blue-300">高リフレッシュレートモニターをすべて見る →</Link>
@@ -180,7 +194,7 @@ export default function MonitorsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">5万円以下のモニターをHz÷価格でスコア化。予算を抑えたい方向け。</p>
           <div className="space-y-3">
-            {cospa.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge="コスパ◎" />)}
+            {cospa.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge="コスパ◎" comment={comments[m.slug]}/>)}
           </div>
         </section>
 
@@ -188,7 +202,7 @@ export default function MonitorsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">OLED・QD-OLED ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">完全な黒と圧倒的なコントラスト。没入感重視・RPG・映像制作にも。</p>
           <div className="space-y-3">
-            {oled.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge={m.panelType} />)}
+            {oled.map((m, i) => <RankCard key={m.slug} rank={i + 1} monitor={m} badge={m.panelType} comment={comments[m.slug]}/>)}
           </div>
         </section>
 

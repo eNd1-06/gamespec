@@ -47,7 +47,17 @@ const backPain = [...chairs].filter((c) => c.lumbarSupport && c.recommendFor.inc
 const cospa = [...chairs].filter((c) => c.price <= 40000).sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 const fabric = [...chairs].filter((c) => c.material === "ファブリック" || c.material === "メッシュ").sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 
-function RankCard({ rank, chair, badge }: { rank: number; chair: (typeof chairs)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "akracing-wolf": "AKRacingのスタンダードモデル。頑丈なスチールフレームと長時間でも疲れにくいサポート設計。",
+  "akracing-premium-v2": "AKRacingの本革仕様プレミアム機。耐久性と高級感を両立した上位モデル。",
+  "akracing-nitro-v2": "コスパ重視のエントリー向け。ゲーミングチェア入門として外れのない定番の一台。",
+  "secretlab-titan-evo-2022": "世界No.1ゲーミングチェアブランドの主力機。磁気ヘッドピロー等の細部設計が際立つ。",
+  "noblechairs-hero": "ドイツ設計の高級ゲーミングチェア。本革の質感とランバーサポートで長時間プレイを支える。",
+  "dxracer-formula-series": "ゲーミングチェアの元祖。シリーズ豊富でサイズ展開が広く体型を選ばない安心の定番ブランド。",
+  "gt-racing-ace-series": "1万円台で買えるコスパ特化チェア。初めてゲーミングチェアを試す方の入口として最適。",
+};
+
+function RankCard({ rank, chair, badge, comment }: { rank: number; chair: (typeof chairs)[0]; badge?: string; comment?: string }) {
   return (
     <Link href={`/chairs/${chair.slug}`} className="flex items-start gap-4 bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group">
       <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg font-bold text-lg bg-gray-800 text-gray-400"
@@ -75,6 +85,9 @@ function RankCard({ rank, chair, badge }: { rank: number; chair: (typeof chairs)
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -108,22 +121,22 @@ export default function ChairsRankingPage() {
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">ランバーサポート・アームレスト自由度・素材・発売年を総合スコア化して順位付け</p>
-          <div className="space-y-3">{overall.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} />)}</div>
+          <div className="space-y-3">{overall.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="backpain" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">腰痛対策・長時間向け TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">ランバーサポート付きで腰への負担を軽減。長時間のゲームセッションにおすすめ。</p>
-          <div className="space-y-3">{backPain.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge="腰痛対策" />)}</div>
+          <div className="space-y-3">{backPain.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge="腰痛対策" comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="cospa" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">4万円以下でしっかりした機能を持つゲーミングチェア。</p>
-          <div className="space-y-3">{cospa.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge="コスパ◎" />)}</div>
+          <div className="space-y-3">{cospa.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge="コスパ◎" comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="fabric" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">ファブリック・メッシュ素材 TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">通気性が高く夏でも蒸れにくい。長時間プレイ時の快適さを重視したい方に。</p>
-          <div className="space-y-3">{fabric.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge={c.material} />)}</div>
+          <div className="space-y-3">{fabric.map((c, i) => <RankCard key={c.slug} rank={i + 1} chair={c} badge={c.material} comment={comments[c.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
           <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>

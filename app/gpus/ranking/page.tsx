@@ -50,7 +50,17 @@ const cospa = [...gpus].filter((g) => g.tier === "エントリー" || g.tier ===
 }).slice(0, 5);
 const gaming1440p = [...gpus].filter((g) => g.recommendFor.includes("1440p")).sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 
-function RankCard({ rank, gpu, badge }: { rank: number; gpu: (typeof gpus)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "msi-rtx5090-gaming-trio": "現行最強の化け物スペック。4K240fpsも現実にするフラッグシップGPUの頂点。",
+  "asus-rtx5080-rog-strix": "RTX5080の最上位AIBモデル。4Kゲームを余裕でこなす実用最強クラス。",
+  "gigabyte-rtx5070ti-gaming-oc": "ハイエンドと価格帯の妥協点。1440p〜4Kを高fps維持できるバランス型の最適解。",
+  "zotac-rtx5070-twin-edge": "RTX5070のコンパクト設計モデル。小型PCにも搭載できる取り回しの良さが魅力。",
+  "msi-rtx4090-gaming-x-trio": "前世代最強GPU。今でも4K144fpsを余裕でこなす底知れぬパフォーマンス。",
+  "asus-rtx4070ti-super-rog-strix": "1440p最強クラスのコスパ機。FPS重視ゲーマーに最も支持されるミドルハイ。",
+  "gigabyte-rtx4060ti-gaming-oc": "1080p〜1440p向けのコスパ最強枠。FPS系タイトルで高フレームレートを手軽に実現。",
+};
+
+function RankCard({ rank, gpu, badge, comment }: { rank: number; gpu: (typeof gpus)[0]; badge?: string; comment?: string }) {
   return (
     <Link href={`/gpus/${gpu.slug}`} className="flex items-start gap-4 bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group">
       <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg font-bold text-lg bg-gray-800 text-gray-400"
@@ -77,6 +87,9 @@ function RankCard({ rank, gpu, badge }: { rank: number; gpu: (typeof gpus)[0]; b
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -110,22 +123,22 @@ export default function GpusRankingPage() {
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">ブーストクロック・VRAM・TDP・価格・発売年を総合スコア化して順位付け</p>
-          <div className="space-y-3">{overall.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} />)}</div>
+          <div className="space-y-3">{overall.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="highend" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">ハイエンド・フラッグシップ TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">4K・高fps・レイトレーシングを最高品質で楽しみたい方向け。</p>
-          <div className="space-y-3">{highend.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge={g.tier} />)}</div>
+          <div className="space-y-3">{highend.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge={g.tier} comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="cospa" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強（エントリー・ミドル）TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">予算を抑えながら1080p〜1440pを快適に遊べるGPU。コスパ重視の方向け。</p>
-          <div className="space-y-3">{cospa.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="コスパ◎" />)}</div>
+          <div className="space-y-3">{cospa.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="コスパ◎" comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="1440p" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">1440pゲーミング向け TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">WQHDで高フレームレートを維持できるGPU。ゲーミングモニターと合わせて使いたい方に。</p>
-          <div className="space-y-3">{gaming1440p.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="1440p向け" />)}</div>
+          <div className="space-y-3">{gaming1440p.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="1440p向け" comment={comments[g.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
           <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>

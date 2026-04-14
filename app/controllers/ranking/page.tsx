@@ -48,7 +48,16 @@ const cospa = [...controllers].filter((c) => c.price <= 8000).sort((a, b) => cal
 
 const connectionLabel = (c: string) => c === "wireless" ? "無線" : c === "wired" ? "有線" : "両対応";
 
-function RankCard({ rank, controller, badge }: { rank: number; controller: (typeof controllers)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "sony-dualsense-white": "PS5純正コントローラー。ハプティックとアダプティブトリガーの没入感は唯一無二。",
+  "sony-dualsense-edge": "PS5プロコンの決定版。トリガーストップ・背面ボタン・スティック感度調整で競技プレイを最適化。",
+  "xbox-elite-series-2": "Xbox最上位コントローラー。40時間バッテリーと豊富なカスタマイズでPC・Xbox両対応。",
+  "razer-wolverine-v2-pro": "PS5対応のサードパーティプロコン。6つのエクストラボタンで操作効率が大幅に向上。",
+  "nacon-revolution-5-pro": "ホールエフェクトスティック採用でドリフト問題を根本解決。長期使用での信頼性が高い。",
+  "scuf-instinct-pro": "SCUF独自の背面パドルシステム。プロゲーマー愛用のカスタムコントローラーの代表格。",
+};
+
+function RankCard({ rank, controller, badge, comment }: { rank: number; controller: (typeof controllers)[0]; badge?: string; comment?: string }) {
   return (
     <Link href={`/controllers/${controller.slug}`} className="flex items-start gap-4 bg-gray-900 border border-gray-800 hover:border-blue-500 rounded-xl p-4 transition-all group">
       <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg font-bold text-lg bg-gray-800 text-gray-400"
@@ -76,6 +85,9 @@ function RankCard({ rank, controller, badge }: { rank: number; controller: (type
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -109,22 +121,22 @@ export default function ControllersRankingPage() {
         <section id="overall" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">重さ・背面ボタン・ハプティック・トリガーストップ・価格を総合スコア化</p>
-          <div className="space-y-3">{overall.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} />)}</div>
+          <div className="space-y-3">{overall.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="ps5" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">PS5対応コントローラー TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">PS5またはマルチプラットフォーム対応のコントローラー。純正の代替や競技向けプロコンも掲載。</p>
-          <div className="space-y-3">{ps5.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="PS5対応" />)}</div>
+          <div className="space-y-3">{ps5.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="PS5対応" comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="backbuttons" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">背面ボタン付きコントローラー TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">背面ボタンで操作の幅が広がる。FPS・格ゲーなど競技シーンで人気。</p>
-          <div className="space-y-3">{backButtons.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="背面ボタン" />)}</div>
+          <div className="space-y-3">{backButtons.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="背面ボタン" comment={comments[c.slug]}/>)}</div>
         </section>
         <section id="cospa" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">8,000円以下で買えるコスパ重視コントローラー。</p>
-          <div className="space-y-3">{cospa.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="コスパ◎" />)}</div>
+          <div className="space-y-3">{cospa.map((c, i) => <RankCard key={c.slug} rank={i + 1} controller={c} badge="コスパ◎" comment={comments[c.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
           <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>

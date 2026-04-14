@@ -86,7 +86,16 @@ const ancTop = [...headsets].filter((h) => h.anc).sort((a, b) => calcScore(b) - 
 
 const connectionLabel = (c: string) => c === "wireless" ? "無線" : c === "wired" ? "有線" : "両対応";
 
-function RankCard({ rank, headset, badge }: { rank: number; headset: (typeof headsets)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "steelseries-arctis-nova-pro-wireless": "フラッグシップの完成形。デュアルバッテリーで無制限プレイ、ANC搭載で集中力を維持。",
+  "steelseries-arctis-nova-7": "コスパ最強クラスの無線ヘッドセット。38時間バッテリーとDTS7.1が魅力。",
+  "logicool-g-pro-x-2-lightspeed": "LIGHTSPEED無線でプロ使用率も高い。GRADEスピーカーで音の定位が抜群。",
+  "razer-blackshark-v2-pro": "THX空間オーディオ対応。足音の方向感が明確でFPS競技向きの高精度ヘッドセット。",
+  "sony-inzone-h9": "ANC×PS5最適化の最強コンボ。PCゲーマーにも360空間サウンドで没入感が段違い。",
+  "hyperx-cloud-alpha-wireless": "300時間バッテリーが業界最長クラス。充電を気にせず使い続けられる実用重視モデル。",
+};
+
+function RankCard({ rank, headset, badge, comment }: { rank: number; headset: (typeof headsets)[0]; badge?: string; comment?: string }) {
   return (
     <Link
       href={`/headsets/${headset.slug}`}
@@ -118,6 +127,9 @@ function RankCard({ rank, headset, badge }: { rank: number; headset: (typeof hea
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -155,7 +167,7 @@ export default function HeadsetsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">重さ・無線対応・ANC・価格・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">
-            {overall.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} />)}
+            {overall.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} comment={comments[h.slug]}/>)}
           </div>
         </section>
 
@@ -163,7 +175,7 @@ export default function HeadsetsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">軽量ヘッドセット ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">長時間ゲームでも頭・首への負担が少ない軽量モデル。重さ順に掲載。</p>
           <div className="space-y-3">
-            {lightweight.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge={`${h.weight}g`} />)}
+            {lightweight.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge={`${h.weight}g`} comment={comments[h.slug]}/>)}
           </div>
         </section>
 
@@ -171,7 +183,7 @@ export default function HeadsetsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">無線ヘッドセット ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">ケーブル不要で自由に動ける。2.4GHzの低遅延モデルならFPS・APEXでも使える。</p>
           <div className="space-y-3">
-            {wirelessTop.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge="無線" />)}
+            {wirelessTop.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge="無線" comment={comments[h.slug]}/>)}
           </div>
         </section>
 
@@ -179,7 +191,7 @@ export default function HeadsetsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">ANC対応ヘッドセット ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">アクティブノイズキャンセリング搭載。周囲の騒音を遮断して集中できる環境に。</p>
           <div className="space-y-3">
-            {ancTop.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge="ANC" />)}
+            {ancTop.map((h, i) => <RankCard key={h.slug} rank={i + 1} headset={h} badge="ANC" comment={comments[h.slug]}/>)}
           </div>
         </section>
 

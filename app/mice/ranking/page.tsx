@@ -23,6 +23,30 @@ export const metadata: Metadata = {
   },
 };
 
+// 推薦コメント（ランキングカードに表示）
+const comments: Record<string, string> = {
+  "razer-viper-v3-pro":               "プロゲーマー使用率No.1。軽量・高精度・2.4GHz無線の三拍子が揃った現役最強クラス。",
+  "logicool-g-pro-x-superlight-2":    "Logicool史上最軽量の60g。HERO 2センサーの精度とトッププロの実績が信頼の証。",
+  "pulsar-x2-mini":                   "小手・中手に最適なコンパクト競技マウス。軽量設計でAPEXやVALORANTに強い。",
+  "pulsar-x2v2-wireless":             "X2の正常進化版。安定した無線接続と軽量ボディで長時間プレイも快適。",
+  "lamzu-thorn":                      "54gの超軽量ボディにPAW3395搭載。コスパと性能を両立した注目の新世代マウス。",
+  "logicool-g-pro-x-superlight":      "初代Superlightも現役。61gの実績モデルで今もプロに支持される安定の一台。",
+  "finalmouse-starlight-12":          "マグネシウム合金ボディで超軽量化。唯一無二の素材感とプレミアムな所有感。",
+  "razer-viper-v2-pro":               "前世代のプロ標準機。今も多くのプレイヤーが信頼する完成度の高い定番モデル。",
+  "zowie-ec2-c":                      "右手エルゴノミクスの名機。ドライバー不要で即使えるシンプルさがFPS向きの設計。",
+  "razer-deathadder-v3":              "エルゴノミクス設計の傑作。82gの重量バランスと大型ボタンが長時間プレイを支える。",
+  "ninjutso-sora-v2":                 "競技コミュニティで急速に評価上昇中の穴あきマウス。軽量×高性能でコスパも優秀。",
+  "zowie-s2-c":                       "小〜中手向けアンビデクストラス形状。ドライバー不要のシンプル設計がZowie流。",
+  "pulsar-xlite-v3":                  "穴あきデザインで極限の軽量化を実現。握り方を選ばないユニバーサルシェイプ。",
+  "hyperx-pulsefire-haste-2-wireless":"穴あき＋無線の組み合わせで軽量・快適を両立。ケーブルのストレスがゼロに。",
+  "attack-shark-x5":                  "1万円以下で4Kポーリングレートを実現。コスパ最優先のゲーマーの最有力候補。",
+  "attack-shark-r3-pro":              "エントリー価格でPAW3395センサー搭載。初めて本格マウスを買う方に最適な一台。",
+  "logicool-g502x-plus":              "多ボタン設計のMMO・MOBA向け高機能モデル。操作効率を最大化したい方に。",
+  "asus-rog-keris-ii-ace":            "ROGの競技フラッグシップ。軽量・高剛性シェルとHotSwap機能が特徴の本格派。",
+  "endgame-gear-xm2we":               "「クリック感」に徹底的にこだわったマウス。OptiSwitch採用で応答速度が別次元。",
+  "corsair-m75-air-wireless":         "Corsair初の穴あき無線マウス。高品質なビルドクオリティと60gの軽量設計が魅力。",
+};
+
 // コミュニティ評価スコア（0-100）
 // 出典: ProSettings.net（2248人のプロゲーマー使用率, 2025年末）・r/MouseReview・価格.com
 // 未収集製品はデフォルト70。プロ使用率が高いほど高スコア。
@@ -136,10 +160,12 @@ function RankCard({
   rank,
   mouse,
   badge,
+  comment,
 }: {
   rank: number;
   mouse: (typeof mice)[0];
   badge?: string;
+  comment?: string;
 }) {
   const weightLabel =
     mouse.weight <= 55 ? "超軽量" : mouse.weight <= 70 ? "軽量" : mouse.weight <= 90 ? "標準" : "重め";
@@ -171,6 +197,9 @@ function RankCard({
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -211,7 +240,7 @@ export default function MiceRankingPage() {
           <p className="text-xs text-gray-500 mb-4">重さ・ポーリングレート・価格・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">
             {overall.map((mouse, i) => (
-              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} />
+              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} comment={comments[mouse.slug]} />
             ))}
           </div>
         </section>
@@ -222,7 +251,7 @@ export default function MiceRankingPage() {
           <p className="text-xs text-gray-500 mb-4">70g以下の軽量マウスを重さ順に掲載。FPS・APEXプレイヤーにおすすめ。</p>
           <div className="space-y-3">
             {lightweight.map((mouse, i) => (
-              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge={`${mouse.weight}g`} />
+              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge={`${mouse.weight}g`} comment={comments[mouse.slug]} />
             ))}
           </div>
           <div className="mt-4 text-center">
@@ -238,7 +267,7 @@ export default function MiceRankingPage() {
           <p className="text-xs text-gray-500 mb-4">15,000円以下のマウスを「軽さ÷価格」でスコア化。予算を抑えたい方向け。</p>
           <div className="space-y-3">
             {cospa.map((mouse, i) => (
-              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge="コスパ◎" />
+              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge="コスパ◎" comment={comments[mouse.slug]} />
             ))}
           </div>
           <div className="mt-4 text-center">
@@ -254,7 +283,7 @@ export default function MiceRankingPage() {
           <p className="text-xs text-gray-500 mb-4">ワイヤレス対応マウスを総合スコア順に掲載。コード不要で快適な操作が可能。</p>
           <div className="space-y-3">
             {wireless.map((mouse, i) => (
-              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge="無線" />
+              <RankCard key={mouse.slug} rank={i + 1} mouse={mouse} badge="無線" comment={comments[mouse.slug]} />
             ))}
           </div>
           <div className="mt-4 text-center">

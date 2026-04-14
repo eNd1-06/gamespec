@@ -87,7 +87,16 @@ const hotswap = [...keyboards].filter((k) => k.hotswap).sort((a, b) => calcScore
 const connectionLabel = (k: (typeof keyboards)[0]) =>
   k.connection === "wireless" ? "無線" : k.connection === "wired" ? "有線" : "両対応";
 
-function RankCard({ rank, keyboard, badge }: { rank: number; keyboard: (typeof keyboards)[0]; badge?: string }) {
+const comments: Record<string, string> = {
+  "logicool-g-pro-x-tkl-lightspeed": "プロゲーマー向けTKLの定番。GX系スイッチ換装可能でカスタム性も高い。",
+  "razer-huntsman-v3-pro-tkl": "アナログオプティカルスイッチ搭載。アクチュエーション調整でFPS入力を最適化。",
+  "steelseries-apex-pro-tkl-wireless": "業界唯一の磁気センサースイッチ。0.1mm単位の感度調整が可能な革新的なキーボード。",
+  "asus-rog-falchion-ace": "65%コンパクトながら無線対応。タッチパネル搭載の独自インターフェースが特徴。",
+  "wooting-60he": "ラピッドトリガー搭載の先駆者。0.1mm単位の感度調整でVALORANTプロにも人気急上昇。",
+  "ducky-one-3-tkl": "カスタムキーボード入門の定番。豊富なカラーバリエーションとビルドクオリティの高さが評価される。",
+};
+
+function RankCard({ rank, keyboard, badge, comment }: { rank: number; keyboard: (typeof keyboards)[0]; badge?: string; comment?: string }) {
   return (
     <Link
       href={`/keyboards/${keyboard.slug}`}
@@ -119,6 +128,9 @@ function RankCard({ rank, keyboard, badge }: { rank: number; keyboard: (typeof k
               <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
             ))}
           </div>
+        )}
+        {comment && (
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
       </div>
     </Link>
@@ -156,7 +168,7 @@ export default function KeyboardsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
           <p className="text-xs text-gray-500 mb-4">ポーリングレート・価格・ホットスワップ・無線・発売年を総合スコア化して順位付け</p>
           <div className="space-y-3">
-            {overall.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} />)}
+            {overall.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} comment={comments[k.slug]}/>)}
           </div>
         </section>
 
@@ -164,7 +176,7 @@ export default function KeyboardsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">無線キーボード ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">ワイヤレス対応キーボードを総合スコア順に掲載。デスク周りをスッキリさせたい方向け。</p>
           <div className="space-y-3">
-            {wirelessTop.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="無線" />)}
+            {wirelessTop.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="無線" comment={comments[k.slug]}/>)}
           </div>
           <div className="mt-4 text-center">
             <Link href="/keyboards?conn=wireless" className="text-sm text-blue-400 hover:text-blue-300">無線キーボードをすべて見る →</Link>
@@ -175,7 +187,7 @@ export default function KeyboardsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">コスパ最強ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">15,000円以下のキーボードをスペックスコアで比較。コストを抑えたい方向け。</p>
           <div className="space-y-3">
-            {cospa.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="コスパ◎" />)}
+            {cospa.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="コスパ◎" comment={comments[k.slug]}/>)}
           </div>
         </section>
 
@@ -183,7 +195,7 @@ export default function KeyboardsRankingPage() {
           <h2 className="text-lg font-bold text-white mb-1">ホットスワップ対応 ランキング TOP5</h2>
           <p className="text-xs text-gray-500 mb-4">工具なしでスイッチ交換ができるキーボード。打鍵感をカスタマイズしたい方に。</p>
           <div className="space-y-3">
-            {hotswap.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="ホットスワップ" />)}
+            {hotswap.map((k, i) => <RankCard key={k.slug} rank={i + 1} keyboard={k} badge="ホットスワップ" comment={comments[k.slug]}/>)}
           </div>
         </section>
 
