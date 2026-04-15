@@ -205,6 +205,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/mousepads/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/mousepads/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/mousepads/fps`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE_URL}/mousepads/guide`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/gpus`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/gpus/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/gpus/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
