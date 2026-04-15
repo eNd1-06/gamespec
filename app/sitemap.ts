@@ -171,6 +171,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/mice/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/mice/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/mice/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE_URL}/mice/guide`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/mice/apex`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/mice/lightweight`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/mice/wireless`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
