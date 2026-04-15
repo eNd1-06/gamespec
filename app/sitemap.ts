@@ -199,6 +199,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/headsets/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/headsets/fps`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/headsets/wireless`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE_URL}/headsets/guide`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/mousepads`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/mousepads/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/mousepads/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
