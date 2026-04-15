@@ -192,6 +192,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/keyboards/tkl`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/keyboards/wireless`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/keyboards/60percent`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE_URL}/keyboards/guide`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/headsets`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/headsets/ranking`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/headsets/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
