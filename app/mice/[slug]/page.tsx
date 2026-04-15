@@ -86,6 +86,15 @@ export default async function MousePage({ params }: Props) {
     .sort((a, b) => a.price - b.price)
     .slice(0, 3);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${mouse.name}の重さは何グラムですか？`, a: `${mouse.weight}gです。ゲーミングマウスとして${weightLabel}に分類されます。` },
+    { q: `${mouse.name}の接続方式は？`, a: `${connectionLabel}に対応しています。` },
+    { q: `${mouse.name}のポーリングレートは？`, a: `最大${mouse.pollingRate}Hzに対応しています。` },
+    { q: `${mouse.name}のセンサーは？`, a: `${mouse.sensor}センサーを搭載しています。最大${mouse.maxDpi.toLocaleString()} DPIに対応しています。` },
+    { q: `${mouse.name}はFPS・APEXに向いていますか？`, a: mouse.recommendFor.some((t) => t === "fps" || t === "apex") ? `はい、${tags}向けに設計されています。軽量かつ高ポーリングレートで競技プレイに適しています。` : `主に${tags}向けです。FPS用途でも使用可能ですが、より特化したモデルもあります。` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -109,6 +118,15 @@ export default async function MousePage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングマウス", "item": `${BASE_URL}/mice` },
         { "@type": "ListItem", "position": 3, "name": mouse.name, "item": `${BASE_URL}/mice/${mouse.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -276,6 +294,19 @@ export default async function MousePage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

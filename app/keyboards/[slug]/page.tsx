@@ -87,6 +87,15 @@ export default async function KeyboardDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - kb.price) - Math.abs(b.price - kb.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${kb.name}のスイッチは？`, a: `${switchLabel}を採用しています。アクチュエーションは${kb.actuation}mmです。` },
+    { q: `${kb.name}は無線対応ですか？`, a: kb.wireless ? `はい、無線（ワイヤレス）に対応しています。${kb.batteryLife ? `バッテリー持続時間は最大${kb.batteryLife}時間です。` : ""}` : "有線接続のみ対応しています。" },
+    { q: `${kb.name}のレイアウトは？`, a: `${kb.layout}サイズです。` },
+    { q: `${kb.name}はホットスワップ対応ですか？`, a: kb.hotswap ? "はい、ホットスワップに対応しています。はんだなしでスイッチを交換できます。" : "ホットスワップには対応していません。" },
+    { q: `${kb.name}のポーリングレートは？`, a: `${kb.pollingRate}Hzです。${kb.pollingRate >= 4000 ? "超高ポーリングレートで入力遅延を極限まで削減できます。" : ""}` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -110,6 +119,15 @@ export default async function KeyboardDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングキーボード", "item": `${BASE_URL}/keyboards` },
         { "@type": "ListItem", "position": 3, "name": kb.name, "item": `${BASE_URL}/keyboards/${kb.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -281,6 +299,19 @@ export default async function KeyboardDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

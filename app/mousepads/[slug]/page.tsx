@@ -67,6 +67,15 @@ export default async function MousepadDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - pad.price) - Math.abs(b.price - pad.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${pad.name}のサイズは？`, a: `${sizeLabel}で、${pad.width}×${pad.height}mmです。` },
+    { q: `${pad.name}の表面タイプは？`, a: `${pad.surface}タイプです。${pad.surface === "速度系" ? "マウスが滑らかに動き、素早いエイム操作に向いています。" : pad.surface === "コントロール系" ? "マウスの止まりがよく、エイムを安定させやすい特性です。" : "速度とコントロールのバランスが取れたタイプです。"}` },
+    { q: `${pad.name}の素材は？`, a: `${pad.material}製です。` },
+    { q: `${pad.name}の厚さは？`, a: `${pad.thickness}mmです。${pad.thickness >= 5 ? "厚みがありクッション性が高く、長時間プレイでも手首への負担を軽減します。" : "薄型設計でデスク上のスペースを取りません。"}` },
+    { q: `${pad.name}はステッチ加工されていますか？`, a: pad.stitchedEdge ? "はい、縁部分はステッチ加工されており、ほつれを防いで長期間使用できます。" : "ステッチ加工はされていません。" },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -90,6 +99,15 @@ export default async function MousepadDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングマウスパッド", "item": `${BASE_URL}/mousepads` },
         { "@type": "ListItem", "position": 3, "name": pad.name, "item": `${BASE_URL}/mousepads/${pad.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -224,6 +242,19 @@ export default async function MousepadDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

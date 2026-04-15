@@ -71,6 +71,15 @@ export default async function ControllerDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - ctrl.price) - Math.abs(b.price - ctrl.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${ctrl.name}は無線ですか？`, a: ctrl.connection === "wireless" ? `はい、無線（ワイヤレス）対応です。${ctrl.batteryLife ? `バッテリー持続時間は約${ctrl.batteryLife}時間です。` : ""}` : ctrl.connection === "both" ? `有線・無線両対応です。${ctrl.batteryLife ? `無線時のバッテリー持続時間は約${ctrl.batteryLife}時間です。` : ""}` : "有線接続のみ対応しています。" },
+    { q: `${ctrl.name}の重さは？`, a: `約${ctrl.weight}gです。` },
+    { q: `${ctrl.name}は何のプラットフォームに対応していますか？`, a: `${ctrl.platform}向けのコントローラーです。` },
+    { q: `${ctrl.name}に背面ボタンはありますか？`, a: ctrl.backButtons ? "はい、背面ボタンを搭載しています。スティックから親指を離さずに操作できます。" : "背面ボタンは搭載していません。" },
+    { q: `${ctrl.name}はFPS・APEXに向いていますか？`, a: ctrl.recommendFor.some((t) => t === "fps" || t === "competitive") ? `はい、${tags}向けに設計されています。${ctrl.triggerStop ? "トリガーストップで素早い射撃が可能です。" : ""}` : `主に${tags}向けです。` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -94,6 +103,15 @@ export default async function ControllerDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲームコントローラー", "item": `${BASE_URL}/controllers` },
         { "@type": "ListItem", "position": 3, "name": ctrl.name, "item": `${BASE_URL}/controllers/${ctrl.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -217,6 +235,19 @@ export default async function ControllerDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

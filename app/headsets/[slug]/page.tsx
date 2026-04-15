@@ -73,6 +73,15 @@ export default async function HeadsetDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - headset.price) - Math.abs(b.price - headset.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${headset.name}の重さは？`, a: `${headset.weight}gです。${weightLabel}クラスのヘッドセットです。` },
+    { q: `${headset.name}は無線対応ですか？`, a: headset.connection === "wireless" ? `はい、無線に対応しています。${headset.batteryLife ? `バッテリー持続時間は最大${headset.batteryLife}時間です。` : ""}` : headset.connection === "both" ? `有線・無線両対応です。${headset.batteryLife ? `無線時のバッテリー持続時間は最大${headset.batteryLife}時間です。` : ""}` : "有線接続のみ対応しています。" },
+    { q: `${headset.name}にマイクはありますか？`, a: headset.microphone ? `はい、マイクを搭載しています。${headset.micDetachable ? "マイクは取り外し可能です。" : ""}` : "マイクは搭載していません。" },
+    { q: `${headset.name}はバーチャルサラウンドに対応していますか？`, a: headset.virtualSurround ? "はい、バーチャルサラウンドに対応しています。FPS・APEXで敵の足音の方向を把握しやすくなります。" : "バーチャルサラウンドには対応していません。" },
+    { q: `${headset.name}はFPS向けですか？`, a: headset.recommendFor.some((t) => t === "fps" || t === "competitive") ? `はい、${tags}向けに設計されています。` : `主に${tags}向けです。` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -96,6 +105,15 @@ export default async function HeadsetDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングヘッドセット", "item": `${BASE_URL}/headsets` },
         { "@type": "ListItem", "position": 3, "name": headset.name, "item": `${BASE_URL}/headsets/${headset.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -227,6 +245,19 @@ export default async function HeadsetDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );

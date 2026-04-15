@@ -70,6 +70,15 @@ export default async function MonitorDetailPage({ params }: Props) {
     .sort((a, b) => Math.abs(a.price - monitor.price) - Math.abs(b.price - monitor.price))
     .slice(0, 4);
 
+  // FAQ生成
+  const faqs: { q: string; a: string }[] = [
+    { q: `${monitor.name}のリフレッシュレートは？`, a: `${monitor.refreshRate}Hzです。${monitor.refreshRate >= 240 ? "高リフレッシュレートでFPS・APEXなど競技ゲームに最適です。" : "標準的なゲーミング用途に十分なリフレッシュレートです。"}` },
+    { q: `${monitor.name}のパネルは何ですか？`, a: `${monitor.panelType}パネルを採用しています。応答速度は${monitor.responseTime}ms（GTG）です。` },
+    { q: `${monitor.name}の解像度は？`, a: `${monitor.resolution}（${monitor.size}型）です。` },
+    { q: `${monitor.name}はHDR対応ですか？`, a: monitor.hdr ? "はい、HDRに対応しています。" : "HDRには対応していません。" },
+    { q: `${monitor.name}はFPS向けですか？`, a: monitor.recommendFor.some((t) => t === "fps" || t === "competitive") ? `はい、${tags}向けに設計されています。高リフレッシュレートと低遅延で競技プレイに適しています。` : `主に${tags}向けです。` },
+  ];
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -93,6 +102,15 @@ export default async function MonitorDetailPage({ params }: Props) {
         { "@type": "ListItem", "position": 2, "name": "ゲーミングモニター", "item": `${BASE_URL}/monitors` },
         { "@type": "ListItem", "position": 3, "name": monitor.name, "item": `${BASE_URL}/monitors/${monitor.slug}` },
       ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(({ q, a }) => ({
+        "@type": "Question",
+        "name": q,
+        "acceptedAnswer": { "@type": "Answer", "text": a },
+      })),
     },
   ];
 
@@ -222,6 +240,19 @@ export default async function MonitorDetailPage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* FAQ */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+          <h2 className="text-lg font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-4">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="border-b border-gray-800 pb-4 last:border-b-0 last:pb-0">
+                <p className="text-sm font-bold text-white mb-1">Q. {q}</p>
+                <p className="text-sm text-gray-400">A. {a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );
