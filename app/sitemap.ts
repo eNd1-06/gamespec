@@ -181,6 +181,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/monitors/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/monitors/vs`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/monitors/fps`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE_URL}/monitors/guide`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/monitors/1440p`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/monitors/oled`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
     { url: `${BASE_URL}/monitors/budget`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
