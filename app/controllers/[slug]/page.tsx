@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { controllers, getControllerBySlug } from "@/data/controllers";
+import { CONTROLLER_VS_PAIRS } from "@/data/vs-pairs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -70,6 +71,8 @@ export default async function ControllerDetailPage({ params }: Props) {
     })
     .sort((a, b) => Math.abs(a.price - ctrl.price) - Math.abs(b.price - ctrl.price))
     .slice(0, 4);
+
+  const relatedVs = CONTROLLER_VS_PAIRS.filter(([a, b]) => a === ctrl.slug || b === ctrl.slug);
 
   // FAQ生成
   const faqs: { q: string; a: string }[] = [
@@ -232,6 +235,29 @@ export default async function ControllerDetailPage({ params }: Props) {
                   <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* 他のコントローラーと比較する */}
+        {relatedVs.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <h2 className="text-lg font-bold text-white mb-4">他のコントローラーと比較する</h2>
+            <div className="space-y-2">
+              {relatedVs.map(([a, b]) => {
+                const itemA = controllers.find((x) => x.slug === a)!;
+                const itemB = controllers.find((x) => x.slug === b)!;
+                return (
+                  <Link
+                    key={`${a}-${b}`}
+                    href={`/controllers/vs/${a}-vs-${b}`}
+                    className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-4 py-2.5 transition-all group"
+                  >
+                    <span className="text-sm text-white group-hover:text-blue-400">{itemA.name} vs {itemB.name}</span>
+                    <span className="text-xs text-gray-500 shrink-0">比較する →</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { mice, getMouseBySlug } from "@/data/mice";
 import { mousepads } from "@/data/mousepads";
 import { headsets } from "@/data/headsets";
+import { MICE_VS_PAIRS } from "@/data/vs-pairs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -85,6 +86,8 @@ export default async function MousePage({ params }: Props) {
     .filter((h) => h.recommendFor.some((t) => (mouse.recommendFor as string[]).includes(t)))
     .sort((a, b) => a.price - b.price)
     .slice(0, 3);
+
+  const relatedVs = MICE_VS_PAIRS.filter(([a, b]) => a === mouse.slug || b === mouse.slug);
 
   // FAQ生成
   const faqs: { q: string; a: string }[] = [
@@ -291,6 +294,29 @@ export default async function MousePage({ params }: Props) {
                   <p className="text-xs text-white font-bold">¥{h.price.toLocaleString()}</p>
                 </Link>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* 他のマウスと比較する */}
+        {relatedVs.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <h2 className="text-lg font-bold text-white mb-4">他のマウスと比較する</h2>
+            <div className="space-y-2">
+              {relatedVs.map(([a, b]) => {
+                const itemA = mice.find((x) => x.slug === a)!;
+                const itemB = mice.find((x) => x.slug === b)!;
+                return (
+                  <Link
+                    key={`${a}-${b}`}
+                    href={`/mice/vs/${a}-vs-${b}`}
+                    className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-4 py-2.5 transition-all group"
+                  >
+                    <span className="text-sm text-white group-hover:text-blue-400">{itemA.name} vs {itemB.name}</span>
+                    <span className="text-xs text-gray-500 shrink-0">比較する →</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

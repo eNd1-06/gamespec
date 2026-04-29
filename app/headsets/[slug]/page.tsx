@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { headsets, getHeadsetBySlug } from "@/data/headsets";
+import { HEADSET_VS_PAIRS } from "@/data/vs-pairs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -72,6 +73,8 @@ export default async function HeadsetDetailPage({ params }: Props) {
     })
     .sort((a, b) => Math.abs(a.price - headset.price) - Math.abs(b.price - headset.price))
     .slice(0, 4);
+
+  const relatedVs = HEADSET_VS_PAIRS.filter(([a, b]) => a === headset.slug || b === headset.slug);
 
   // FAQ生成
   const faqs: { q: string; a: string }[] = [
@@ -242,6 +245,29 @@ export default async function HeadsetDetailPage({ params }: Props) {
                   <p className="text-xs text-blue-400 group-hover:text-blue-300 mt-1">比較 →</p>
                 </Link>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* 他のヘッドセットと比較する */}
+        {relatedVs.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mt-4">
+            <h2 className="text-lg font-bold text-white mb-4">他のヘッドセットと比較する</h2>
+            <div className="space-y-2">
+              {relatedVs.map(([a, b]) => {
+                const itemA = headsets.find((x) => x.slug === a)!;
+                const itemB = headsets.find((x) => x.slug === b)!;
+                return (
+                  <Link
+                    key={`${a}-${b}`}
+                    href={`/headsets/vs/${a}-vs-${b}`}
+                    className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-4 py-2.5 transition-all group"
+                  >
+                    <span className="text-sm text-white group-hover:text-blue-400">{itemA.name} vs {itemB.name}</span>
+                    <span className="text-xs text-gray-500 shrink-0">比較する →</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
