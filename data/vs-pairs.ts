@@ -206,26 +206,63 @@ export const MOUSEPAD_VS_PAIRS: [string, string][] = [
 ];
 
 export const GPU_VS_PAIRS: [string, string][] = [
+  // ── フラッグシップ対決 ──
   ["msi-rtx5090-gaming-trio", "asus-rtx5080-rog-strix"],
+  ["msi-rtx5090-gaming-trio", "asus-rtx4090-rog-strix"],
+  ["msi-rtx5090-gaming-trio", "msi-rtx5090-suprim-x"],
+  ["asus-rtx5080-rog-strix", "msi-rtx4080super-gaming-x-trio"],
+  ["asus-rtx5080-rog-strix", "gigabyte-rtx5070ti-gaming-oc"],
+  ["asus-rtx5080-rog-strix", "sapphire-rx7900xtx-nitro"],
   ["asus-rtx4090-rog-strix", "msi-rtx4080super-gaming-x-trio"],
-  ["gigabyte-rtx4070tisuper-gaming-oc", "zotac-rtx4070super-amp-airo"],
-  ["msi-rtx4070-gaming-x-trio", "asus-rtx4060ti-dual-oc"],
+  ["sapphire-rx7900xtx-nitro", "asus-rtx4090-rog-strix"],
+  ["sapphire-rx7900xtx-nitro", "powercolor-rx7900xt-red-devil"],
+  ["powercolor-rx7900xt-red-devil", "msi-rtx4080super-gaming-x-trio"],
+
+  // ── RTX 50 vs RTX 40 新旧比較（検索急増クエリ）──
+  ["gigabyte-rtx5070ti-gaming-oc", "gigabyte-rtx4070tisuper-gaming-oc"],
+  ["gigabyte-rtx5070ti-gaming-oc", "zotac-rtx4070super-amp-airo"],
+  ["zotac-rtx5070-twin-edge", "msi-rtx4070-gaming-x-trio"],
+  ["zotac-rtx5070-twin-edge", "zotac-rtx4070super-amp-airo"],
+  ["msi-rtx5070-ventus-3x", "msi-rtx4070-gaming-x-trio"],
+  ["msi-rtx5070-ventus-3x", "gigabyte-rtx4070tisuper-gaming-oc"],
+  ["msi-rtx5060ti-gaming-x", "asus-rtx4060ti-dual-oc"],
+  ["asus-rtx5060ti-dual-oc", "msi-rtx4060ti-gaming-x"],
+  ["asus-rtx5060-dual-oc", "msi-rtx4060-gaming-x"],
+
+  // ── RX 9000 vs RTX 5000（2025年最注目比較）──
   ["sapphire-rx9070xt-nitro", "powercolor-rx9070-hellhound"],
   ["sapphire-rx9070xt-nitro", "gigabyte-rtx4070tisuper-gaming-oc"],
-  ["msi-rtx5090-gaming-trio", "asus-rtx4090-rog-strix"],
-  ["gigabyte-rtx5070ti-gaming-oc", "zotac-rtx4070super-amp-airo"],
-  ["msi-rtx4060-gaming-x", "gigabyte-rtx4060-eagle-oc"],
-  ["sapphire-rx7900xtx-nitro", "asus-rtx4090-rog-strix"],
-  ["powercolor-rx7900xt-red-devil", "msi-rtx4080super-gaming-x-trio"],
-  ["xfx-rx7800xt-speedster", "msi-rtx4070-gaming-x-trio"],
-  ["sapphire-rx7700xt-pulse", "asus-rtx4060ti-dual-oc"],
-  ["powercolor-rx7600xt-hellhound", "msi-rtx4060-gaming-x"],
-  ["asus-rtx5080-rog-strix", "msi-rtx4080super-gaming-x-trio"],
-  ["zotac-rtx5070-twin-edge", "msi-rtx4070-gaming-x-trio"],
-  ["msi-rtx5060ti-gaming-x", "asus-rtx4060ti-dual-oc"],
+  ["sapphire-rx9070xt-nitro", "zotac-rtx5070-twin-edge"],
+  ["sapphire-rx9070xt-nitro", "msi-rtx5070-ventus-3x"],
+  ["sapphire-rx9070xt-nitro", "asus-rtx5080-rog-strix"],
   ["sapphire-rx9070xt-nitro", "powercolor-rx7900xt-red-devil"],
-  ["asus-rtx4090-rog-strix", "sapphire-rx7900xtx-nitro"],
+  ["powercolor-rx9070-hellhound", "zotac-rtx5070-twin-edge"],
+  ["powercolor-rx9070-hellhound", "msi-rtx4070-gaming-x-trio"],
+
+  // ── ハイエンド・ミドルレンジ比較 ──
+  ["gigabyte-rtx4070tisuper-gaming-oc", "zotac-rtx4070super-amp-airo"],
+  ["gigabyte-rtx4070tisuper-gaming-oc", "msi-rtx4070-gaming-x-trio"],
+  ["msi-rtx4080super-gaming-x-trio", "gigabyte-rtx4070tisuper-gaming-oc"],
+  ["xfx-rx7800xt-speedster", "msi-rtx4070-gaming-x-trio"],
+  ["xfx-rx7800xt-speedster", "zotac-rtx4070super-amp-airo"],
+  ["xfx-rx7800xt-speedster", "gigabyte-rtx4070tisuper-gaming-oc"],
+  ["sapphire-rx7700xt-pulse", "asus-rtx4060ti-dual-oc"],
+  ["sapphire-rx7700xt-pulse", "msi-rtx4060ti-gaming-x"],
+  ["sapphire-rx7700xt-pulse", "zotac-rtx4070super-amp-airo"],
+  ["powercolor-rx7600xt-hellhound", "sapphire-rx7700xt-pulse"],
+  ["msi-rtx4070-gaming-x-trio", "asus-rtx4060ti-dual-oc"],
+
+  // ── エントリー帯（FPS入門・コスパ比較）──
+  ["msi-rtx4060-gaming-x", "gigabyte-rtx4060-eagle-oc"],
+  ["msi-rtx4060-gaming-x", "sapphire-rx7600-pulse"],
+  ["msi-rtx4060-gaming-x", "asus-rtx4060-rog-strix-oc"],
   ["gigabyte-rtx4060-eagle-oc", "powercolor-rx7600xt-hellhound"],
+  ["gigabyte-rtx4060-eagle-oc", "sapphire-rx7600-pulse"],
+  ["powercolor-rx7600xt-hellhound", "msi-rtx4060-gaming-x"],
+  ["powercolor-rx7600xt-hellhound", "sapphire-rx7600-pulse"],
+  ["sapphire-rx7600-pulse", "asus-rx7500xt-dual"],
+  ["asus-rtx5060-dual-oc", "sapphire-rx7600-pulse"],
+  ["asus-rx7500xt-dual", "msi-rtx4060-gaming-x"],
 ];
 
 export const CONTROLLER_VS_PAIRS: [string, string][] = [
