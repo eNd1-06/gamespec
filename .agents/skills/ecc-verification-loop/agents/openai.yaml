@@ -1,0 +1,6 @@
+interface:
+  display_name: "GameSpec Verification (ECC-derived)"
+  short_description: "変更範囲に応じて検証し、未実施・失敗・合格を区別"
+  default_prompt: "Use $ecc-verification-loop to verify the requested GameSpec changes and report checks not run explicitly."
+policy:
+  allow_implicit_invocation: false

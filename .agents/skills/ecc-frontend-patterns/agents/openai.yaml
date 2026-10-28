@@ -1,0 +1,6 @@
+interface:
+  display_name: "GameSpec Frontend (ECC-derived)"
+  short_description: "Next.js 16とReact 19の既存構成に沿って開発・レビュー"
+  default_prompt: "Use $ecc-frontend-patterns for the requested GameSpec UI work; read the bundled Next.js docs first."
+policy:
+  allow_implicit_invocation: false
