@@ -1,0 +1,6 @@
+interface:
+  display_name: "GameSpec SEO (ECC-derived)"
+  short_description: "GameSpecの技術SEOと商品ページを根拠付きで監査"
+  default_prompt: "Use $ecc-seo to audit the requested GameSpec pages and separate verified facts from hypotheses."
+policy:
+  allow_implicit_invocation: false
