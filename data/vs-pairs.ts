@@ -139,7 +139,6 @@ export const MONITOR_VS_PAIRS: [string, string][] = [
   // ── OLED対決 ──
   ["asus-rog-pg27aqdm", "lg-27gr95qe"],
   ["asus-rog-pg27aqdm", "samsung-odyssey-oled-g8"],
-  ["asus-rog-pg27aqdm", "corsair-xeneon-27qhd240"],
   ["lg-27gr95qe", "samsung-odyssey-g7-27"],
   ["lg-27gr95qe", "asus-rog-strix-xg27aqm"],
   ["lg-27gr95qe", "alienware-aw3423dwf"],
@@ -147,7 +146,6 @@ export const MONITOR_VS_PAIRS: [string, string][] = [
   ["lg-45gr95qe", "alienware-aw3423dwf"],
   ["lg-45gr95qe", "msi-meg-342c-qdoled"],
   ["asus-rog-swift-oled-pg32ucdm", "samsung-odyssey-oled-g8"],
-  ["corsair-xeneon-27qhd240", "asus-rog-pg27aqdm"],
 
   // ── 1440p コスパ帯 ──
   ["lg-27gp850-b", "asus-rog-swift-pg259qn"],
