@@ -1,36 +1,40 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { mousepads } from "@/data/mousepads";
 import type { MousepadSurface, MousepadMaterial, MousepadSize, MousepadTag } from "@/data/mousepads";
 
 export default function MousepadPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(20000);
-  const [size, setSize] = useState<MousepadSize | "all">("all");
-  const [surface, setSurface] = useState<MousepadSurface | "all">("all");
-  const [material, setMaterial] = useState<MousepadMaterial | "all">("all");
-  const [tag, setTag] = useState<MousepadTag | "all">("all");
-  const [stitchedOnly, setStitchedOnly] = useState(false);
-  const [rgbOnly, setRgbOnly] = useState(false);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "size">("price");
+  return (
+    <Suspense fallback={<MousepadPageFilters initialSearch={null} />}>
+      <MousepadPageFromUrl />
+    </Suspense>
+  );
+}
+
+function MousepadPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <MousepadPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function MousepadPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 20000);
+  const [size, setSize] = useState<MousepadSize | "all">(() => p.get("size") ? p.get("size") as MousepadSize | "all" : "all");
+  const [surface, setSurface] = useState<MousepadSurface | "all">(() => p.get("surface") ? p.get("surface") as MousepadSurface | "all" : "all");
+  const [material, setMaterial] = useState<MousepadMaterial | "all">(() => p.get("mat") ? p.get("mat") as MousepadMaterial | "all" : "all");
+  const [tag, setTag] = useState<MousepadTag | "all">(() => p.get("tag") ? p.get("tag") as MousepadTag | "all" : "all");
+  const [stitchedOnly, setStitchedOnly] = useState(() => p.get("stitch") ? p.get("stitch") === "1" : false);
+  const [rgbOnly, setRgbOnly] = useState(() => p.get("rgb") ? p.get("rgb") === "1" : false);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "size">(() => p.get("sort") ? p.get("sort") as "price" | "size" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("size")) setSize(p.get("size") as MousepadSize | "all");
-    if (p.get("surface")) setSurface(p.get("surface") as MousepadSurface | "all");
-    if (p.get("mat")) setMaterial(p.get("mat") as MousepadMaterial | "all");
-    if (p.get("tag")) setTag(p.get("tag") as MousepadTag | "all");
-    if (p.get("stitch")) setStitchedOnly(p.get("stitch") === "1");
-    if (p.get("rgb")) setRgbOnly(p.get("rgb") === "1");
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "size");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 20000) p.set("price", String(maxPrice));
     if (size !== "all") p.set("size", size);
@@ -43,7 +47,7 @@ export default function MousepadPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, size, surface, material, tag, stitchedOnly, rgbOnly, search, sortBy]);
+  }, [initialSearch, maxPrice, size, surface, material, tag, stitchedOnly, rgbOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return mousepads

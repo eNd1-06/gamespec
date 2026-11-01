@@ -1,34 +1,39 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { chairs } from "@/data/chairs";
 import type { ChairType, ChairMaterial, ChairTag } from "@/data/chairs";
 
 export default function ChairPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(200000);
-  const [type, setType] = useState<ChairType | "all">("all");
-  const [material, setMaterial] = useState<ChairMaterial | "all">("all");
-  const [tag, setTag] = useState<ChairTag | "all">("all");
-  const [backButtonsOnly, setBackButtonsOnly] = useState(false);
-  const [footrestOnly, setFootrestOnly] = useState(false);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "load">("price");
+  return (
+    <Suspense fallback={<ChairPageFilters initialSearch={null} />}>
+      <ChairPageFromUrl />
+    </Suspense>
+  );
+}
+
+function ChairPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <ChairPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function ChairPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 200000);
+  const [type, setType] = useState<ChairType | "all">(() => p.get("type") ? p.get("type") as ChairType | "all" : "all");
+  const [material, setMaterial] = useState<ChairMaterial | "all">(() => p.get("mat") ? p.get("mat") as ChairMaterial | "all" : "all");
+  const [tag, setTag] = useState<ChairTag | "all">(() => p.get("tag") ? p.get("tag") as ChairTag | "all" : "all");
+  const [backButtonsOnly, setBackButtonsOnly] = useState(() => p.get("lumbar") ? p.get("lumbar") === "1" : false);
+  const [footrestOnly, setFootrestOnly] = useState(() => p.get("foot") ? p.get("foot") === "1" : false);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "load">(() => p.get("sort") ? p.get("sort") as "price" | "load" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("type")) setType(p.get("type") as ChairType | "all");
-    if (p.get("mat")) setMaterial(p.get("mat") as ChairMaterial | "all");
-    if (p.get("tag")) setTag(p.get("tag") as ChairTag | "all");
-    if (p.get("lumbar")) setBackButtonsOnly(p.get("lumbar") === "1");
-    if (p.get("foot")) setFootrestOnly(p.get("foot") === "1");
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "load");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 200000) p.set("price", String(maxPrice));
     if (type !== "all") p.set("type", type);
@@ -40,7 +45,7 @@ export default function ChairPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, type, material, tag, backButtonsOnly, footrestOnly, search, sortBy]);
+  }, [initialSearch, maxPrice, type, material, tag, backButtonsOnly, footrestOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return chairs

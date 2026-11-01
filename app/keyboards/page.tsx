@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { keyboards } from "@/data/keyboards";
 import type { KeyboardLayout, SwitchType, KeyboardTag } from "@/data/keyboards";
 
@@ -9,31 +10,34 @@ const LAYOUTS: Array<KeyboardLayout | "all"> = ["all", "60%", "65%", "75%", "テ
 const SWITCH_TYPES: Array<SwitchType | "all"> = ["all", "赤軸", "銀軸", "茶軸", "青軸", "光学式", "磁気式", "静電容量式"];
 
 export default function KeyboardPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(35000);
-  const [layout, setLayout] = useState<KeyboardLayout | "all">("all");
-  const [switchType, setSwitchType] = useState<SwitchType | "all">("all");
-  const [tag, setTag] = useState<KeyboardTag | "all">("all");
-  const [wirelessOnly, setWirelessOnly] = useState(false);
-  const [hotswapOnly, setHotswapOnly] = useState(false);
-  const [minPollingRate, setMinPollingRate] = useState<number>(0);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "actuation">("price");
+  return (
+    <Suspense fallback={<KeyboardPageFilters initialSearch={null} />}>
+      <KeyboardPageFromUrl />
+    </Suspense>
+  );
+}
+
+function KeyboardPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <KeyboardPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function KeyboardPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 35000);
+  const [layout, setLayout] = useState<KeyboardLayout | "all">(() => p.get("layout") ? p.get("layout") as KeyboardLayout | "all" : "all");
+  const [switchType, setSwitchType] = useState<SwitchType | "all">(() => p.get("sw") ? p.get("sw") as SwitchType | "all" : "all");
+  const [tag, setTag] = useState<KeyboardTag | "all">(() => p.get("tag") ? p.get("tag") as KeyboardTag | "all" : "all");
+  const [wirelessOnly, setWirelessOnly] = useState(() => p.get("wireless") ? p.get("wireless") === "1" : false);
+  const [hotswapOnly, setHotswapOnly] = useState(() => p.get("hotswap") ? p.get("hotswap") === "1" : false);
+  const [minPollingRate, setMinPollingRate] = useState<number>(() => p.get("poll") ? Number(p.get("poll")) : 0);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "actuation">(() => p.get("sort") ? p.get("sort") as "price" | "actuation" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("layout")) setLayout(p.get("layout") as KeyboardLayout | "all");
-    if (p.get("sw")) setSwitchType(p.get("sw") as SwitchType | "all");
-    if (p.get("tag")) setTag(p.get("tag") as KeyboardTag | "all");
-    if (p.get("wireless")) setWirelessOnly(p.get("wireless") === "1");
-    if (p.get("hotswap")) setHotswapOnly(p.get("hotswap") === "1");
-    if (p.get("poll")) setMinPollingRate(Number(p.get("poll")));
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "actuation");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 35000) p.set("price", String(maxPrice));
     if (layout !== "all") p.set("layout", layout);
@@ -46,7 +50,7 @@ export default function KeyboardPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, layout, switchType, tag, wirelessOnly, hotswapOnly, minPollingRate, search, sortBy]);
+  }, [initialSearch, maxPrice, layout, switchType, tag, wirelessOnly, hotswapOnly, minPollingRate, search, sortBy]);
 
   const filtered = useMemo(() => {
     return keyboards
