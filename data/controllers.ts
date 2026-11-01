@@ -425,21 +425,7 @@ export const controllers: GamingController[] = [
     recommendFor: ["fighting"],
     releaseYear: 2022,
   },
-  {
-    slug: "microsoft-xbox-elite-series2-core",
-    name: "Xbox Elite ワイヤレスコントローラー Series 2 Core",
-    brand: "Microsoft",
-    platform: "Xbox",
-    connection: "wireless",
-    batteryLife: 40,
-    weight: 345,
-    backButtons: true, triggerStop: true,
-    haptic: false, adaptiveTriggers: false, gyro: false,
-    price: 16478,
-    amazonUrl: "https://www.amazon.co.jp/s?k=Xbox+Elite+Series+2+Core&tag=gamespec-22",
-    recommendFor: ["fps", "competitive"],
-    releaseYear: 2021,
-  },
+
   {
     slug: "nintendo-switch-pro-controller",
     name: "Proコントローラー",
