@@ -72,7 +72,8 @@ jobs:
                   for m in row['messages']:
                       line = m.get('line', 0)
                       source = lines[line - 1].strip() if 0 < line <= len(lines) else ''
-                      findings.append((relative, m.get('ruleId'), m['severity'], m['message'], source))
+                      message = m['message'].replace(str(root / target) + '/', '')
+                      findings.append((relative, m.get('ruleId'), m['severity'], message, source))
               return collections.Counter(findings), rows
           before, before_rows = read('baseline')
           after, after_rows = read('integration')
