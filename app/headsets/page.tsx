@@ -1,34 +1,39 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { headsets } from "@/data/headsets";
 import type { HeadsetConnection, HeadsetTag } from "@/data/headsets";
 
 export default function HeadsetPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(55000);
-  const [connection, setConnection] = useState<HeadsetConnection | "all">("all");
-  const [maxWeight, setMaxWeight] = useState<number>(400);
-  const [tag, setTag] = useState<HeadsetTag | "all">("all");
-  const [ancOnly, setAncOnly] = useState(false);
-  const [wirelessOnly, setWirelessOnly] = useState(false);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "weight" | "battery">("price");
+  return (
+    <Suspense fallback={<HeadsetPageFilters initialSearch={null} />}>
+      <HeadsetPageFromUrl />
+    </Suspense>
+  );
+}
+
+function HeadsetPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <HeadsetPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function HeadsetPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 55000);
+  const [connection, setConnection] = useState<HeadsetConnection | "all">(() => p.get("conn") ? p.get("conn") as HeadsetConnection | "all" : "all");
+  const [maxWeight, setMaxWeight] = useState<number>(() => p.get("weight") ? Number(p.get("weight")) : 400);
+  const [tag, setTag] = useState<HeadsetTag | "all">(() => p.get("tag") ? p.get("tag") as HeadsetTag | "all" : "all");
+  const [ancOnly, setAncOnly] = useState(() => p.get("anc") ? p.get("anc") === "1" : false);
+  const [wirelessOnly, setWirelessOnly] = useState(() => p.get("wireless") ? p.get("wireless") === "1" : false);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "weight" | "battery">(() => p.get("sort") ? p.get("sort") as "price" | "weight" | "battery" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("conn")) setConnection(p.get("conn") as HeadsetConnection | "all");
-    if (p.get("weight")) setMaxWeight(Number(p.get("weight")));
-    if (p.get("tag")) setTag(p.get("tag") as HeadsetTag | "all");
-    if (p.get("anc")) setAncOnly(p.get("anc") === "1");
-    if (p.get("wireless")) setWirelessOnly(p.get("wireless") === "1");
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "weight" | "battery");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 55000) p.set("price", String(maxPrice));
     if (connection !== "all") p.set("conn", connection);
@@ -40,7 +45,7 @@ export default function HeadsetPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, connection, maxWeight, tag, ancOnly, wirelessOnly, search, sortBy]);
+  }, [initialSearch, maxPrice, connection, maxWeight, tag, ancOnly, wirelessOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return headsets

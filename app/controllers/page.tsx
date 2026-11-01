@@ -1,34 +1,39 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { controllers } from "@/data/controllers";
 import type { ControllerPlatform, ControllerConnection, ControllerTag } from "@/data/controllers";
 
 export default function ControllerPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(30000);
-  const [platform, setPlatform] = useState<ControllerPlatform | "all">("all");
-  const [connection, setConnection] = useState<ControllerConnection | "all">("all");
-  const [tag, setTag] = useState<ControllerTag | "all">("all");
-  const [backButtonsOnly, setBackButtonsOnly] = useState(false);
-  const [triggerStopOnly, setTriggerStopOnly] = useState(false);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "weight">("price");
+  return (
+    <Suspense fallback={<ControllerPageFilters initialSearch={null} />}>
+      <ControllerPageFromUrl />
+    </Suspense>
+  );
+}
+
+function ControllerPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <ControllerPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function ControllerPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 30000);
+  const [platform, setPlatform] = useState<ControllerPlatform | "all">(() => p.get("platform") ? p.get("platform") as ControllerPlatform | "all" : "all");
+  const [connection, setConnection] = useState<ControllerConnection | "all">(() => p.get("conn") ? p.get("conn") as ControllerConnection | "all" : "all");
+  const [tag, setTag] = useState<ControllerTag | "all">(() => p.get("tag") ? p.get("tag") as ControllerTag | "all" : "all");
+  const [backButtonsOnly, setBackButtonsOnly] = useState(() => p.get("back") ? p.get("back") === "1" : false);
+  const [triggerStopOnly, setTriggerStopOnly] = useState(() => p.get("trigger") ? p.get("trigger") === "1" : false);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "weight">(() => p.get("sort") ? p.get("sort") as "price" | "weight" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("platform")) setPlatform(p.get("platform") as ControllerPlatform | "all");
-    if (p.get("conn")) setConnection(p.get("conn") as ControllerConnection | "all");
-    if (p.get("tag")) setTag(p.get("tag") as ControllerTag | "all");
-    if (p.get("back")) setBackButtonsOnly(p.get("back") === "1");
-    if (p.get("trigger")) setTriggerStopOnly(p.get("trigger") === "1");
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "weight");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 30000) p.set("price", String(maxPrice));
     if (platform !== "all") p.set("platform", platform);
@@ -40,7 +45,7 @@ export default function ControllerPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, platform, connection, tag, backButtonsOnly, triggerStopOnly, search, sortBy]);
+  }, [initialSearch, maxPrice, platform, connection, tag, backButtonsOnly, triggerStopOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return controllers

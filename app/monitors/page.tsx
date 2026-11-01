@@ -1,38 +1,42 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { monitors } from "@/data/monitors";
 import type { Resolution, PanelType, MonitorTag } from "@/data/monitors";
 
 export default function MonitorPage() {
-  const [maxPrice, setMaxPrice] = useState<number>(150000);
-  const [resolution, setResolution] = useState<Resolution | "all">("all");
-  const [minHz, setMinHz] = useState<number>(60);
-  const [panelType, setPanelType] = useState<PanelType | "all">("all");
-  const [tag, setTag] = useState<MonitorTag | "all">("all");
-  const [sizeRange, setSizeRange] = useState<"all" | "small" | "mid" | "large" | "ultrawide">("all");
-  const [curvedOnly, setCurvedOnly] = useState(false);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"price" | "hz">("price");
+  return (
+    <Suspense fallback={<MonitorPageFilters initialSearch={null} />}>
+      <MonitorPageFromUrl />
+    </Suspense>
+  );
+}
+
+function MonitorPageFromUrl() {
+  const searchParams = useSearchParams();
+  return <MonitorPageFilters initialSearch={searchParams.toString()} />;
+}
+
+function MonitorPageFilters({ initialSearch }: { initialSearch: string | null }) {
+  const p = new URLSearchParams(initialSearch ?? "");
+  const [maxPrice, setMaxPrice] = useState<number>(() => p.get("price") ? Number(p.get("price")) : 150000);
+  const [resolution, setResolution] = useState<Resolution | "all">(() => p.get("res") ? p.get("res") as Resolution | "all" : "all");
+  const [minHz, setMinHz] = useState<number>(() => p.get("hz") ? Number(p.get("hz")) : 60);
+  const [panelType, setPanelType] = useState<PanelType | "all">(() => p.get("panel") ? p.get("panel") as PanelType | "all" : "all");
+  const [tag, setTag] = useState<MonitorTag | "all">(() => p.get("tag") ? p.get("tag") as MonitorTag | "all" : "all");
+  const [sizeRange, setSizeRange] = useState<"all" | "small" | "mid" | "large" | "ultrawide">(() => p.get("size") ? p.get("size") as "all" | "small" | "mid" | "large" | "ultrawide" : "all");
+  const [curvedOnly, setCurvedOnly] = useState(() => p.get("curved") ? p.get("curved") === "1" : false);
+  const [search, setSearch] = useState(() => p.get("q") ? p.get("q")! : "");
+  const [sortBy, setSortBy] = useState<"price" | "hz">(() => p.get("sort") ? p.get("sort") as "price" | "hz" : "price");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const PANEL_TYPES: Array<PanelType | "all"> = ["all", "IPS", "Fast IPS", "Nano IPS", "OLED", "QD-OLED", "VA", "TN", "Fast TN"];
 
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("price")) setMaxPrice(Number(p.get("price")));
-    if (p.get("res")) setResolution(p.get("res") as Resolution | "all");
-    if (p.get("hz")) setMinHz(Number(p.get("hz")));
-    if (p.get("panel")) setPanelType(p.get("panel") as PanelType | "all");
-    if (p.get("tag")) setTag(p.get("tag") as MonitorTag | "all");
-    if (p.get("size")) setSizeRange(p.get("size") as "all" | "small" | "mid" | "large" | "ultrawide");
-    if (p.get("curved")) setCurvedOnly(p.get("curved") === "1");
-    if (p.get("q")) setSearch(p.get("q")!);
-    if (p.get("sort")) setSortBy(p.get("sort") as "price" | "hz");
-  }, []);
-
-  useEffect(() => {
+    // The static fallback must not overwrite the incoming browser URL.
+    if (initialSearch === null) return;
     const p = new URLSearchParams();
     if (maxPrice !== 150000) p.set("price", String(maxPrice));
     if (resolution !== "all") p.set("res", resolution);
@@ -45,7 +49,7 @@ export default function MonitorPage() {
     if (sortBy !== "price") p.set("sort", sortBy);
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, search, sortBy]);
+  }, [initialSearch, maxPrice, resolution, minHz, panelType, tag, sizeRange, curvedOnly, search, sortBy]);
 
   const filtered = useMemo(() => {
     return monitors
