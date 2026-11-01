@@ -484,4 +484,3 @@ export const controllers: GamingController[] = [
     releaseYear: 2021,
   },
 ];
-
