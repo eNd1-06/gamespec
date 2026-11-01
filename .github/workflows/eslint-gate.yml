@@ -1,0 +1,97 @@
+name: Fixed-SHA ESLint verification
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths: ['.github/workflows/eslint-gate.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    if: github.head_ref == 'qa/eslint-gate-20261101'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Fetch fixed public commits and record environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          npm --version
+          git --version
+          git init source
+          git -C source remote add origin https://github.com/eNd1-06/gamespec.git
+          git -C source fetch --no-tags --depth=1 origin 140b04030ef58e548c66123b058ef028121ce410 fd2a43c6641f54dfa50b34b14e1949f07a46f2e3
+          git -C source worktree add --detach ../baseline 140b04030ef58e548c66123b058ef028121ce410
+          git -C source worktree add --detach ../integration fd2a43c6641f54dfa50b34b14e1949f07a46f2e3
+          git -C source diff --name-status 140b04030ef58e548c66123b058ef028121ce410 fd2a43c6641f54dfa50b34b14e1949f07a46f2e3
+          git -C source diff --exit-code 140b04030ef58e548c66123b058ef028121ce410 fd2a43c6641f54dfa50b34b14e1949f07a46f2e3 -- package.json package-lock.json eslint.config.mjs
+      - name: Run both ESLint checks and preserve exit codes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir evidence
+          for target in baseline integration; do
+            (
+              cd "$target"
+              git rev-parse HEAD | tee "../evidence/$target.sha"
+              sha256sum package-lock.json eslint.config.mjs
+              set +e
+              npm ci --ignore-scripts --no-audit --no-fund 2>&1 | tee "../evidence/$target.install.log"
+              install_rc=${PIPESTATUS[0]}
+              set -e
+              echo "INSTALL_EXIT_CODE=$install_rc"
+              test "$install_rc" -eq 0
+              ./node_modules/.bin/eslint --version
+              set +e
+              npm run lint -- --format json --output-file "../evidence/$target.eslint.json" 2>&1 | tee "../evidence/$target.lint.log"
+              lint_rc=${PIPESTATUS[0]}
+              set -e
+              echo "$lint_rc" > "../evidence/$target.exit-code"
+              echo "LINT_EXIT_CODE=$lint_rc"
+              echo "ESLINT_JSON_BEGIN=$target"
+              cat "../evidence/$target.eslint.json"
+              echo
+              echo "ESLINT_JSON_END=$target"
+            )
+          done
+      - name: Compare findings and report absolute gate
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import collections, json, os, pathlib, sys
+          root = pathlib.Path.cwd()
+          def read(target):
+              rows = json.loads((root / 'evidence' / f'{target}.eslint.json').read_text())
+              findings = []
+              for row in rows:
+                  relative = pathlib.Path(row['filePath']).relative_to(root / target).as_posix()
+                  lines = (root / target / relative).read_text().splitlines()
+                  for m in row['messages']:
+                      line = m.get('line', 0)
+                      source = lines[line - 1].strip() if 0 < line <= len(lines) else ''
+                      message = m['message'].replace(str(root / target) + '/', '')
+                      findings.append((relative, m.get('ruleId'), m['severity'], message, source))
+              return collections.Counter(findings), rows
+          before, before_rows = read('baseline')
+          after, after_rows = read('integration')
+          report = {'comparison': 'multiset of path, rule, severity, message and source line; ignores line-number shifts',
+                    'baseline_sha': (root / 'evidence/baseline.sha').read_text().strip(),
+                    'integration_sha': (root / 'evidence/integration.sha').read_text().strip(),
+                    'baseline_exit': int((root / 'evidence/baseline.exit-code').read_text()),
+                    'integration_exit': int((root / 'evidence/integration.exit-code').read_text()),
+                    'baseline_errors': sum(r['errorCount'] for r in before_rows),
+                    'baseline_warnings': sum(r['warningCount'] for r in before_rows),
+                    'integration_errors': sum(r['errorCount'] for r in after_rows),
+                    'integration_warnings': sum(r['warningCount'] for r in after_rows),
+                    'new_findings': list((after - before).elements()),
+                    'resolved_findings': list((before - after).elements()),
+                    'unchanged_findings': sum((before & after).values())}
+          text = json.dumps(report, indent=2, ensure_ascii=False)
+          print(text)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('## Fixed-SHA ESLint comparison\n```json\n' + text + '\n```\n')
+          sys.exit(0 if report['integration_exit'] == 0 else 1)
+          PY
