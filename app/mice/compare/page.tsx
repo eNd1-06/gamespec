@@ -3,7 +3,20 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
-import { mice } from "@/data/mice";
+import { mice, type GamingMouse } from "@/data/mice";
+import { mouseEvidence, priceObservations, type MouseSpec } from "@/data/spec-evidence/mice";
+import { specState, priceNote } from "@/lib/spec-evidence";
+
+function EvidenceNote({ mouse, field }: { mouse: GamingMouse; field: MouseSpec }) {
+  const state = specState(mouse[field], field === "weight" ? "g" : "Hz", mouseEvidence[mouse.slug]?.[field]);
+  return <span className="block text-xs text-gray-400 mt-1">{state.text}{state.status === "verified" && <>／<a href={state.source.url} target="_blank" rel="noopener noreferrer" className="underline">出典：{state.source.locator}</a></>}</span>;
+}
+function RowNote({ mouse, label }: { mouse: GamingMouse; label: string }) {
+  if (label === "重さ") return <EvidenceNote mouse={mouse} field="weight" />;
+  if (label === "ポーリングレート") return <EvidenceNote mouse={mouse} field="pollingRate" />;
+  if (label === "価格") return <span className="block text-xs text-gray-400 mt-1">{priceNote(mouse.price, priceObservations[mouse.slug])}</span>;
+  return null;
+}
 
 const connectionLabel = (c: string) =>
   c === "wireless" ? "無線" : c === "wired" ? "有線" : "両対応";
@@ -105,6 +118,7 @@ function CompareContent() {
             </Link>
           </div>
 
+          <p className="px-4 py-2 text-xs text-gray-400">✓は登録数値の大小を示し、出典確認や総合優劣を意味しません。</p>
           {/* スペック行 */}
           {rows.map((row) => {
             const winA = getWinner(row, "a");
@@ -116,12 +130,12 @@ function CompareContent() {
                 </div>
                 <div className={`px-4 py-3 border-r border-gray-800 flex items-center justify-center ${winA ? "bg-blue-950" : ""}`}>
                   <span className={`text-sm font-medium ${winA ? "text-blue-300" : "text-gray-300"}`}>
-                    {winA && "✓ "}{row.a ?? "—"}
+                    {winA && "✓ "}{row.a ?? "—"}<RowNote mouse={mouseA} label={row.label} />
                   </span>
                 </div>
                 <div className={`px-4 py-3 flex items-center justify-center ${winB ? "bg-blue-950" : ""}`}>
                   <span className={`text-sm font-medium ${winB ? "text-blue-300" : "text-gray-300"}`}>
-                    {winB && "✓ "}{row.b ?? "—"}
+                    {winB && "✓ "}{row.b ?? "—"}<RowNote mouse={mouseB} label={row.label} />
                   </span>
                 </div>
               </div>
