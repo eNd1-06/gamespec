@@ -6,10 +6,10 @@ const BASE_URL = "https://gamespec.vercel.app";
 
 export const metadata: Metadata = {
   title: "グラフィックボード おすすめランキング2026【コスパ・VRAM・ゲーム用途別】",
-  description: "2026年版グラフィックボード（GPU）おすすめランキング。コスパTOP5・ハイエンドTOP5・1440pゲーミングTOP5・総合TOP10をスペックデータで比較。",
+  description: "グラフィックボード（GPU）の登録仕様による独自指標ランキング。総合・ハイエンド・コスパ・1440pタグ別に掲載。実測ゲーム性能を示すものではありません。",
   alternates: { canonical: `${BASE_URL}/gpus/ranking` },
-  openGraph: { title: "グラフィックボード おすすめランキング2026 | GameSpec", description: "コスパ・VRAM・ゲーム用途別のGPUランキング。スペックデータで客観的に比較。", type: "website", url: `${BASE_URL}/gpus/ranking`, siteName: "GameSpec", locale: "ja_JP" },
-  twitter: { card: "summary", title: "グラフィックボード おすすめランキング2026 | GameSpec", description: "コスパ・VRAM・ゲーム用途別のGPUランキング。" },
+  openGraph: { title: "グラフィックボード おすすめランキング2026 | GameSpec", description: "登録仕様による独自指標のGPUランキング。実測ゲーム性能を示すものではありません。", type: "website", url: `${BASE_URL}/gpus/ranking`, siteName: "GameSpec", locale: "ja_JP" },
+  twitter: { card: "summary", title: "グラフィックボード おすすめランキング2026 | GameSpec", description: "登録仕様による独自指標のGPUランキング。実測ゲーム性能は未検証。" },
 };
 
 // 総合スコア算出の考え方:
@@ -51,13 +51,13 @@ const cospa = [...gpus].filter((g) => g.tier === "エントリー" || g.tier ===
 const gaming1440p = [...gpus].filter((g) => g.recommendFor.includes("1440p")).sort((a, b) => calcScore(b) - calcScore(a)).slice(0, 5);
 
 const comments: Record<string, string> = {
-  "msi-rtx5090-gaming-trio": "現行最強の化け物スペック。4K240fpsも現実にするフラッグシップGPUの頂点。",
-  "asus-rtx5080-rog-strix": "RTX5080の最上位AIBモデル。4Kゲームを余裕でこなす実用最強クラス。",
-  "gigabyte-rtx5070ti-gaming-oc": "ハイエンドと価格帯の妥協点。1440p〜4Kを高fps維持できるバランス型の最適解。",
-  "zotac-rtx5070-twin-edge": "RTX5070のコンパクト設計モデル。小型PCにも搭載できる取り回しの良さが魅力。",
-  "msi-rtx4090-gaming-x-trio": "前世代最強GPU。今でも4K144fpsを余裕でこなす底知れぬパフォーマンス。",
-  "asus-rtx4070ti-super-rog-strix": "1440p最強クラスのコスパ機。FPS重視ゲーマーに最も支持されるミドルハイ。",
-  "gigabyte-rtx4060ti-gaming-oc": "1080p〜1440p向けのコスパ最強枠。FPS系タイトルで高フレームレートを手軽に実現。",
+  "msi-rtx5090-gaming-trio": "RTX 5090搭載モデル。登録仕様は製品詳細で確認できます。",
+  "asus-rtx5080-rog-strix": "RTX 5080搭載モデル。登録仕様は製品詳細で確認できます。",
+  "gigabyte-rtx5070ti-gaming-oc": "RTX 5070 Ti搭載モデル。登録仕様は製品詳細で確認できます。",
+  "zotac-rtx5070-twin-edge": "RTX 5070搭載モデル。ケースへの適合はメーカーの寸法情報をご確認ください。",
+  "msi-rtx4090-gaming-x-trio": "RTX 4090搭載モデル。登録仕様は製品詳細で確認できます。",
+  "asus-rtx4070ti-super-rog-strix": "RTX 4070 Ti SUPER搭載モデル。登録仕様は製品詳細で確認できます。",
+  "gigabyte-rtx4060ti-gaming-oc": "RTX 4060 Ti搭載モデル。登録仕様は製品詳細で確認できます。",
 };
 
 function RankCard({ rank, gpu, badge, comment }: { rank: number; gpu: (typeof gpus)[0]; badge?: string; comment?: string }) {
@@ -81,13 +81,6 @@ function RankCard({ rank, gpu, badge, comment }: { rank: number; gpu: (typeof gp
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">{gpu.tier}</span>
           <span className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full">¥{gpu.price.toLocaleString()}</span>
         </div>
-        {gpu.feelTags && gpu.feelTags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {gpu.feelTags.map((tag) => (
-              <span key={tag} className="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">{tag}</span>
-            ))}
-          </div>
-        )}
         {comment && (
           <p className="text-xs text-gray-400 mt-2 leading-relaxed">{comment}</p>
         )}
@@ -110,39 +103,40 @@ export default function GpusRankingPage() {
       </header>
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-white mb-2">グラフィックボード おすすめランキング2026</h1>
-        <p className="text-sm text-gray-400 mb-8">ブーストクロック・VRAM・TDP・価格のスペックデータをもとに算出したランキング。全{gpus.length}製品から厳選。</p>
+        <p className="text-sm text-gray-400 mb-8">登録されたブーストクロック・ティア区分・VRAM・発売年から算出する独自の仕様指標です。実測ゲーム性能や人気を示すものではありません。登録データ{gpus.length}件を対象に集計しています。</p>
+        <p className="text-sm text-gray-400 mb-8">価格・仕様の出典と検証日時は未整備です。掲載価格は現在の販売価格を保証しません。購入前にメーカー・販売店の情報をご確認ください。</p>
         <nav className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-10">
           <p className="text-xs text-gray-500 mb-2">目次</p>
           <ul className="space-y-1">
-            <li><a href="#overall" className="text-sm text-blue-400 hover:text-blue-300">▶ 総合おすすめランキング TOP10</a></li>
+            <li><a href="#overall" className="text-sm text-blue-400 hover:text-blue-300">▶ 総合仕様指標ランキング TOP10</a></li>
             <li><a href="#highend" className="text-sm text-blue-400 hover:text-blue-300">▶ ハイエンド・フラッグシップ TOP5</a></li>
-            <li><a href="#cospa" className="text-sm text-blue-400 hover:text-blue-300">▶ コスパ最強（エントリー・ミドル）TOP5</a></li>
-            <li><a href="#1440p" className="text-sm text-blue-400 hover:text-blue-300">▶ 1440pゲーミング向け TOP5</a></li>
+            <li><a href="#cospa" className="text-sm text-blue-400 hover:text-blue-300">▶ コスパ指標（エントリー・ミドル）TOP5</a></li>
+            <li><a href="#1440p" className="text-sm text-blue-400 hover:text-blue-300">▶ 1440pタグ登録製品 TOP5</a></li>
           </ul>
         </nav>
         <section id="overall" className="mb-12">
-          <h2 className="text-lg font-bold text-white mb-1">総合おすすめランキング TOP10</h2>
-          <p className="text-xs text-gray-500 mb-4">ブーストクロック・VRAM・TDP・価格・発売年を総合スコア化して順位付け</p>
+          <h2 className="text-lg font-bold text-white mb-1">総合仕様指標ランキング TOP10</h2>
+          <p className="text-xs text-gray-500 mb-4">ブーストクロックにティア倍率を掛けた項目と、VRAM・発売年の配点を合計した総合スコア順。TDP・価格は総合スコアに含みません。</p>
           <div className="space-y-3">{overall.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="highend" className="mb-12">
           <h2 className="text-lg font-bold text-white mb-1">ハイエンド・フラッグシップ TOP5</h2>
-          <p className="text-xs text-gray-500 mb-4">4K・高fps・レイトレーシングを最高品質で楽しみたい方向け。</p>
+          <p className="text-xs text-gray-500 mb-4">登録ティアがハイエンド・フラッグシップの製品を、総合スコア順に掲載しています。</p>
           <div className="space-y-3">{highend.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge={g.tier} comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="cospa" className="mb-12">
-          <h2 className="text-lg font-bold text-white mb-1">コスパ最強（エントリー・ミドル）TOP5</h2>
-          <p className="text-xs text-gray-500 mb-4">予算を抑えながら1080p〜1440pを快適に遊べるGPU。コスパ重視の方向け。</p>
-          <div className="space-y-3">{cospa.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="コスパ◎" comment={comments[g.slug]}/>)}</div>
+          <h2 className="text-lg font-bold text-white mb-1">コスパ指標（エントリー・ミドル）TOP5</h2>
+          <p className="text-xs text-gray-500 mb-4">登録ティアがエントリー・ミドルの製品を対象に、総合スコア ÷ 登録価格 × 10000 の別式で順位付けしています。実測性能あたりの価格ではありません。</p>
+          <div className="space-y-3">{cospa.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="価格比の独自指標" comment={comments[g.slug]}/>)}</div>
         </section>
         <section id="1440p" className="mb-12">
-          <h2 className="text-lg font-bold text-white mb-1">1440pゲーミング向け TOP5</h2>
-          <p className="text-xs text-gray-500 mb-4">WQHDで高フレームレートを維持できるGPU。ゲーミングモニターと合わせて使いたい方に。</p>
-          <div className="space-y-3">{gaming1440p.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="1440p向け" comment={comments[g.slug]}/>)}</div>
+          <h2 className="text-lg font-bold text-white mb-1">1440pタグ登録製品 TOP5</h2>
+          <p className="text-xs text-gray-500 mb-4">登録用途タグに1440pを含む製品を、総合スコア順に掲載しています。解像度別の実測やフレームレートの保証ではありません。</p>
+          <div className="space-y-3">{gaming1440p.map((g, i) => <RankCard key={g.slug} rank={i + 1} gpu={g} badge="1440pタグ" comment={comments[g.slug]}/>)}</div>
         </section>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
-          <p className="text-sm text-gray-400 mb-3">スペックで細かく絞り込みたい方はこちら</p>
-          <Link href="/gpus" className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all">グラフィックボード {gpus.length}製品をすべて見る</Link>
+          <p className="text-sm text-gray-400 mb-3">価格・VRAMなどで絞り込み、TDP順でも並べ替えられるGPU一覧をご利用ください。</p>
+          <Link href="/gpus" className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all">GPU一覧で登録仕様を絞り込む</Link>
         </div>
       </main>
     </div>
