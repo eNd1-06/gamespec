@@ -17,7 +17,7 @@ class FixedDate extends Date { static now() { return now; } }
 
 function load(file, overrides = {}, baseline = false) {
   const source = baseline
-    ? execFileSync('git', ['show', `67c9dc42ea687cf42a537dc88a3738eb0ec73762:${file}`], { cwd: root, encoding: 'utf8' })
+    ? execFileSync('git', ['show', `094e38f49805013f5ef3739e81e8b5edd6da62fc:${file}`], { cwd: root, encoding: 'utf8' })
     : readFileSync(resolve(root, file), 'utf8');
   const compiled = ts.transpileModule(source, {
     fileName: file, reportDiagnostics: true,
@@ -85,7 +85,10 @@ function render(mice, pair, baseline = false) {
 
 for (const pair of [slugs, [...slugs].reverse(), [slugs[0], slugs[0]], [], [slugs[0]]]) {
   test(`normal HTML unchanged: ${pair.join(' / ') || 'selection'}`, () => {
-    assert.equal(render(originalMice, pair), render(originalMice, pair, true));
+    const html = render(originalMice, pair);
+    const note = '<p class="px-4 py-2 text-xs text-gray-400">ポーリングレートは既存登録値です。発売時の公称値・ファームウェア更新後の最大対応値・標準設定値は同じとは限りません。表示値が最大値か標準値か、適用するファームウェア・レシーバー・接続条件は未確認で、現行の最大対応値を示すとは限りません。</p>';
+    assert.equal(html.split(note).length - 1, pair.length === 2 ? 1 : 0);
+    assert.equal(html.replace(note, ''), render(originalMice, pair, true));
   });
 }
 

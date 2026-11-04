@@ -121,6 +121,7 @@ function CompareContent() {
           </div>
 
           <p className="px-4 py-2 text-xs text-gray-400">✓は登録数値の大小を示し、出典確認や総合優劣を意味しません。</p>
+          <p className="px-4 py-2 text-xs text-gray-400">ポーリングレートは既存登録値です。発売時の公称値・ファームウェア更新後の最大対応値・標準設定値は同じとは限りません。表示値が最大値か標準値か、適用するファームウェア・レシーバー・接続条件は未確認で、現行の最大対応値を示すとは限りません。</p>
           {/* スペック行 */}
           {rows.map((row) => {
             const winA = getWinner(row, "a");
