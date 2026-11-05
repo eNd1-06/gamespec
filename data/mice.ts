@@ -46,7 +46,7 @@ export const mice: GamingMouse[] = [
     recommendFor: ["apex", "fps"],
     releaseYear: 2023,
     isNew: false,
-    feelTags: ["プロ使用率世界2位", "60g超軽量", "バッテリー70時間", "2000Hz対応", "FPS定番"],
+    feelTags: ["プロ使用率世界2位", "60g超軽量", "バッテリー70時間", "FPS定番"],
   },
   {
     slug: "razer-deathadder-v3-hyperspeed",
