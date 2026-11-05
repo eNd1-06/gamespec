@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { mice } from "@/data/mice";
+import { priceObservations } from "@/data/spec-evidence/mice";
+import { priceNote } from "@/lib/spec-evidence";
 
 type Props = { params: Promise<{ pair: string }> };
 
@@ -36,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const mA = mice.find((m) => m.slug === slugA)!;
   const mB = mice.find((m) => m.slug === slugB)!;
   const title = `${mA.name} vs ${mB.name} 比較【2025年】スペック・重さ・価格`;
-  const description = `${mA.name}（${mA.weight}g・¥${mA.price.toLocaleString()}）と${mB.name}（${mB.weight}g・¥${mB.price.toLocaleString()}）のスペックを徹底比較。重さ・センサー・ポーリングレート・価格の違いを解説。`;
+  const description = `${mA.name}と${mB.name}のスペックを比較。重さ・センサー・ポーリングレートなどの登録値を掲載。`;
   return {
     title,
     description,
@@ -72,7 +74,7 @@ export default async function MiceVsPage({ params }: Props) {
     { label: "RGB", a: mA.rgb ? "あり" : "なし", b: mB.rgb ? "あり" : "なし" },
     { label: "サイズ", a: `${mA.length}×${mA.width}×${mA.height}mm`, b: `${mB.length}×${mB.width}×${mB.height}mm` },
     { label: "発売年", a: `${mA.releaseYear}年`, b: `${mB.releaseYear}年`, winHigh: true },
-    { label: "価格", a: `¥${mA.price.toLocaleString()}`, b: `¥${mB.price.toLocaleString()}`, winLow: true },
+    { label: "参考価格", a: `¥${mA.price.toLocaleString()}`, b: `¥${mB.price.toLocaleString()}` },
   ];
 
   const getWinner = (row: typeof rows[0], side: "a" | "b"): boolean => {
@@ -89,10 +91,8 @@ export default async function MiceVsPage({ params }: Props) {
 
   if (mA.weight < mB.weight) {
     recommendA.push(`軽さ重視（${mA.weight}g vs ${mB.weight}g）`);
-    recommendB.push(`少し重くても安定感が欲しい`);
   } else if (mB.weight < mA.weight) {
     recommendB.push(`軽さ重視（${mB.weight}g vs ${mA.weight}g）`);
-    recommendA.push(`少し重くても安定感が欲しい`);
   }
 
   if (mA.connection === "wireless" && mB.connection !== "wireless") {
@@ -105,20 +105,12 @@ export default async function MiceVsPage({ params }: Props) {
 
   if (mA.shape !== mB.shape) {
     if (mA.shape === "symmetrical") {
-      recommendA.push("左右対称形状が好み（両手対応）");
+      recommendA.push("左右対称形状が好み");
       recommendB.push("エルゴノミクス形状が手にフィットする");
     } else {
-      recommendB.push("左右対称形状が好み（両手対応）");
+      recommendB.push("左右対称形状が好み");
       recommendA.push("エルゴノミクス形状が手にフィットする");
     }
-  }
-
-  if (mA.price < mB.price) {
-    recommendA.push(`コスパ重視（¥${mA.price.toLocaleString()}）`);
-    recommendB.push(`予算に余裕があり最高スペックを求める`);
-  } else if (mB.price < mA.price) {
-    recommendB.push(`コスパ重視（¥${mB.price.toLocaleString()}）`);
-    recommendA.push(`予算に余裕があり最高スペックを求める`);
   }
 
   // 関連比較（同じマウスを含むペア）
@@ -167,11 +159,14 @@ export default async function MiceVsPage({ params }: Props) {
                 <span className="bg-gray-800 text-gray-300 text-xs px-2 py-0.5 rounded">{connectionLabel(m.connection)}</span>
               </div>
               <p className="text-base font-bold text-yellow-400">¥{m.price.toLocaleString()}</p>
+              <p className="text-xs text-gray-400">{priceNote(m.price, priceObservations[m.slug])}／現在価格・在庫は販売先で確認</p>
             </Link>
           ))}
         </div>
 
         <p className="text-xs text-gray-400 mb-4">ポーリングレートは既存登録値です。出典・時点・最大値か標準値か、ファームウェア・レシーバー・接続条件は未確認です。数値だけで製品の優劣は判断できません。</p>
+
+        <p className="text-xs text-gray-400 mb-4">価格は各製品の参考価格です。取得時点は上記をご確認ください。現在の価格・在庫は販売先でご確認ください。</p>
 
         {/* 比較テーブル */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden mb-8">

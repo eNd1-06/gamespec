@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { mice, getMouseBySlug } from "@/data/mice";
+import { priceObservations } from "@/data/spec-evidence/mice";
+import { priceNote } from "@/lib/spec-evidence";
 import { mousepads } from "@/data/mousepads";
 import { headsets } from "@/data/headsets";
 import { MICE_VS_PAIRS } from "@/data/vs-pairs";
@@ -19,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const mouse = getMouseBySlug(slug);
   if (!mouse) return {};
   const title = `${mouse.name}（${mouse.brand}）スペック・レビュー・価格`;
-  const description = `${mouse.name}のスペック詳細。重さ${mouse.weight}g・${mouse.sensor}・${mouse.connection === "wireless" ? "無線" : mouse.connection === "wired" ? "有線" : "有線/無線両対応"}・¥${mouse.price.toLocaleString()}。`;
+  const description = `${mouse.name}のスペック詳細。重さ${mouse.weight}g・${mouse.sensor}・${mouse.connection === "wireless" ? "無線" : mouse.connection === "wired" ? "有線" : "有線/無線両対応"}。`;
   return {
     title,
     description,
@@ -52,7 +54,7 @@ export default async function MousePage({ params }: Props) {
 
   const weightLabel = mouse.weight <= 55 ? "超軽量" : mouse.weight <= 70 ? "軽量" : mouse.weight <= 90 ? "標準" : "重め";
   const tags = mouse.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "moba" ? "MOBA" : "カジュアル").join("・");
-  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIに対応。ポーリングレートの既存登録値は${mouse.pollingRate}Hzです（出典・条件未確認）。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
+  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIに対応。ポーリングレートの既存登録値は${mouse.pollingRate}Hzです（出典・条件未確認）。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}（${priceNote(mouse.price, priceObservations[mouse.slug])}）です。現在の価格・在庫は販売先でご確認ください。`;
 
   // こんな人におすすめ テキスト生成
   const forWhom: string[] = [];
@@ -105,13 +107,6 @@ export default async function MousePage({ params }: Props) {
       "name": mouse.name,
       "brand": { "@type": "Brand", "name": mouse.brand },
       "description": description,
-      "offers": {
-        "@type": "Offer",
-        "price": mouse.price.toString(),
-        "priceCurrency": "JPY",
-        "availability": "https://schema.org/InStock",
-        "url": mouse.amazonUrl,
-      },
     },
     {
       "@context": "https://schema.org",
@@ -182,7 +177,7 @@ export default async function MousePage({ params }: Props) {
 
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <p className="text-xs text-gray-500 mb-1">Amazon参考価格</p>
+              <p className="text-xs text-gray-500 mb-1">{priceNote(mouse.price, priceObservations[mouse.slug])}／現在価格・在庫は販売先で確認</p>
               <p className="text-3xl font-bold text-white">¥{mouse.price.toLocaleString()}</p>
             </div>
             <a
@@ -239,9 +234,10 @@ export default async function MousePage({ params }: Props) {
         {related.length > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-white">同価格帯・同用途のマウス</h2>
+              <h2 className="text-lg font-bold text-white">関連するマウス</h2>
               <Link href={`/mice/compare?a=${mouse.slug}`} className="text-xs text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-3 py-1.5">比較する</Link>
             </div>
+            <p className="text-xs text-gray-400 mb-3">価格は参考価格です。取得日や現在の価格・在庫は各製品と販売先でご確認ください。</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {related.map((m) => (
                 <div key={m.slug} className="border border-gray-800 hover:border-blue-500 rounded-xl p-3 text-center transition-all group">
