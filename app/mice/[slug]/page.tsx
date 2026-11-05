@@ -52,7 +52,7 @@ export default async function MousePage({ params }: Props) {
 
   const weightLabel = mouse.weight <= 55 ? "超軽量" : mouse.weight <= 70 ? "軽量" : mouse.weight <= 90 ? "標準" : "重め";
   const tags = mouse.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "moba" ? "MOBA" : "カジュアル").join("・");
-  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIを搭載。ポーリングレートの既存登録値は${mouse.pollingRate}Hzです（出典・条件未確認）。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
+  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIに対応。ポーリングレートの既存登録値は${mouse.pollingRate}Hzです（出典・条件未確認）。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
 
   // こんな人におすすめ テキスト生成
   const forWhom: string[] = [];
@@ -167,6 +167,10 @@ export default async function MousePage({ params }: Props) {
             ))}
           </div>
 
+          {mouse.slug === "logicool-g-pro-x-superlight-2" && (
+            <p className="text-xs text-gray-400 mb-4">ポーリングレートの2000Hzは既存登録値で、出典・時点・最大値か標準値か、ファームウェア・レシーバー・接続条件は未確認です。<a href="https://press.logicool.co.jp/ja-jp/g-pro-x-series/" target="_blank" rel="noopener noreferrer" className="underline">2023年のメーカー発表</a>では対象型番のUSBレポートレートを1000〜2000Hzと記載しています。<a href="https://www.logitechg.com/en-ph/shop/p/pro-x2-superlight-wireless-mouse" target="_blank" rel="noopener noreferrer" className="underline">メーカー製品ページ</a>には最大8kHzの記載がありますが、対象型番・更新条件は未照合です。</p>
+          )}
+
           {/* 使用感タグ */}
           {mouse.feelTags && mouse.feelTags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-5">
@@ -220,6 +224,7 @@ export default async function MousePage({ params }: Props) {
         {/* スペック一覧 */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-white mb-4">スペック詳細</h2>
+          {mouse.slug === "logicool-g-pro-x-superlight-2" && <p className="text-xs text-gray-400 mb-3">ポーリングレートは既存登録値です。出典・時点・最大値か標準値か、ファームウェア・レシーバー・接続条件は未確認です。</p>}
           <div className="divide-y divide-gray-800">
             {specs.map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between py-3">

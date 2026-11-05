@@ -65,7 +65,7 @@ export default async function MiceVsPage({ params }: Props) {
     { label: "重さ", a: `${mA.weight}g`, b: `${mB.weight}g`, winLow: true },
     { label: "センサー", a: mA.sensor, b: mB.sensor },
     { label: "最大DPI", a: mA.maxDpi.toLocaleString(), b: mB.maxDpi.toLocaleString(), winHigh: true },
-    { label: "ポーリングレート", a: `${mA.pollingRate}Hz`, b: `${mB.pollingRate}Hz`, winHigh: true },
+    { label: "ポーリングレート", a: `${mA.pollingRate}Hz`, b: `${mB.pollingRate}Hz` },
     { label: "接続方式", a: connectionLabel(mA.connection), b: connectionLabel(mB.connection) },
     { label: "形状", a: shapeLabel(mA.shape), b: shapeLabel(mB.shape) },
     { label: "ボタン数", a: `${mA.buttons}個`, b: `${mB.buttons}個` },
@@ -93,14 +93,6 @@ export default async function MiceVsPage({ params }: Props) {
   } else if (mB.weight < mA.weight) {
     recommendB.push(`軽さ重視（${mB.weight}g vs ${mA.weight}g）`);
     recommendA.push(`少し重くても安定感が欲しい`);
-  }
-
-  if (mA.pollingRate > mB.pollingRate) {
-    recommendA.push(`超高ポーリングレート（${mA.pollingRate}Hz）が欲しい`);
-    recommendB.push(`標準ポーリングレートで十分`);
-  } else if (mB.pollingRate > mA.pollingRate) {
-    recommendB.push(`超高ポーリングレート（${mB.pollingRate}Hz）が欲しい`);
-    recommendA.push(`標準ポーリングレートで十分`);
   }
 
   if (mA.connection === "wireless" && mB.connection !== "wireless") {
@@ -178,6 +170,8 @@ export default async function MiceVsPage({ params }: Props) {
             </Link>
           ))}
         </div>
+
+        <p className="text-xs text-gray-400 mb-4">ポーリングレートは既存登録値です。出典・時点・最大値か標準値か、ファームウェア・レシーバー・接続条件は未確認です。数値だけで製品の優劣は判断できません。</p>
 
         {/* 比較テーブル */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden mb-8">
