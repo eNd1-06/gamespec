@@ -167,9 +167,9 @@ function CompareContent() {
       {/* 別の製品と比較 */}
       {mouseA && mouseB && (
         <div className="mb-8 text-center">
-          <Link href="/mice/compare" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-4 py-2 inline-block">
+          <a href="/mice/compare" className="text-sm text-blue-400 hover:text-blue-300 border border-gray-700 rounded-lg px-4 py-2 inline-block">
             別のマウスを比較する
-          </Link>
+          </a>
         </div>
       )}
 

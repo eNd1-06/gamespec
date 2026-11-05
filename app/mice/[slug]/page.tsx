@@ -52,7 +52,7 @@ export default async function MousePage({ params }: Props) {
 
   const weightLabel = mouse.weight <= 55 ? "超軽量" : mouse.weight <= 70 ? "軽量" : mouse.weight <= 90 ? "標準" : "重め";
   const tags = mouse.recommendFor.map((t) => t === "apex" ? "APEX" : t === "fps" ? "FPS" : t === "moba" ? "MOBA" : "カジュアル").join("・");
-  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIと${mouse.pollingRate}Hzポーリングレートに対応。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
+  const description = `${mouse.name}は${mouse.brand}が${mouse.releaseYear}年に発売した${weightLabel}（${mouse.weight}g）の${connectionLabel}ゲーミングマウスです。${mouse.sensor}センサーを搭載し、最大${mouse.maxDpi.toLocaleString()} DPIを搭載。ポーリングレートの既存登録値は${mouse.pollingRate}Hzです（出典・条件未確認）。${shapeLabel}形状で${tags}向けに設計されており、参考価格は¥${mouse.price.toLocaleString()}です。`;
 
   // こんな人におすすめ テキスト生成
   const forWhom: string[] = [];
@@ -93,7 +93,7 @@ export default async function MousePage({ params }: Props) {
   const faqs: { q: string; a: string }[] = [
     { q: `${mouse.name}の重さは何グラムですか？`, a: `${mouse.weight}gです。ゲーミングマウスとして${weightLabel}に分類されます。` },
     { q: `${mouse.name}の接続方式は？`, a: `${connectionLabel}に対応しています。` },
-    { q: `${mouse.name}のポーリングレートは？`, a: `最大${mouse.pollingRate}Hzに対応しています。` },
+    { q: `${mouse.name}のポーリングレートは？`, a: `既存登録値は${mouse.pollingRate}Hzです。出典、最大値か標準値か、ファームウェア・レシーバー・接続条件は未確認です。` },
     { q: `${mouse.name}のセンサーは？`, a: `${mouse.sensor}センサーを搭載しています。最大${mouse.maxDpi.toLocaleString()} DPIに対応しています。` },
     { q: `${mouse.name}はFPS・APEXに向いていますか？`, a: mouse.recommendFor.some((t) => t === "fps" || t === "apex") ? `はい、${tags}向けに設計されています。軽量かつ高ポーリングレートで競技プレイに適しています。` : `主に${tags}向けです。FPS用途でも使用可能ですが、より特化したモデルもあります。` },
   ];
